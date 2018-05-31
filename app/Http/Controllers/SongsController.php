@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\AdminResource;
 use App\Http\Resources\SongResource;
-use App\Song;
-use App\Http\Resources\Songs;
+use App\Http\Resources\UserResource;
+use App\Models\Song;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreSongRequest;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,16 @@ class SongsController extends Controller
 
     public function index()
     {
-        return view('songs.index');
+        return view('songs.index')->with([
+            'currentUser' => auth()->user(),
+        ]);
+    }
+
+    public function user($user_id)
+    {
+        return view('user.index')->with([
+            'user' => $user_id,
+        ]);
     }
 
     public function store(StoreSongRequest $request, Song $song)
@@ -35,18 +45,24 @@ class SongsController extends Controller
 
     }
 
-    public function getUserData($user_id)
+    public function getUserData(Request $request)
     {
 
-        if (Auth::user()) {
-            $songs = Song::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
-            return SongResource::collection($songs);
+        $user = User::findOrFail(Auth()->guard('api')->user()->id);
+
+        if ($user->hasRole('admin')) {
+            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->get();
+            return AdminResource::collection($songs);
+        } elseif ($user->hasRole('user')) {
+            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->get();
+            return UserResource::collection($songs);
         } else {
-            $songs = Song::where('user_id', $user_id)->orderBy('id', 'desc')->get();
+            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->get();
             return SongResource::collection($songs);
         }
 
     }
+
 
     public function editIndex($song_id)
     {

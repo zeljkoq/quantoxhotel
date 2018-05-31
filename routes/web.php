@@ -23,4 +23,5 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function(){
     Route::get('/', 'SongsController@index')->name('song.index');
     Route::get('/edit/{song_id}', 'SongsController@editIndex')->name('song.edit.index');
+    Route::get('/user/{user_id}', 'SongsController@user')->name('user.view');
 });

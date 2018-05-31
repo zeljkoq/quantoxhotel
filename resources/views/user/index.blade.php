@@ -65,42 +65,48 @@
     <script>
         function getIndexData() {
             $.ajax({
-                url: "{{route('song.get.user.data', $currentUser->id)}}",
+                url: "{{route('song.get.user.data', auth()->user()->id)}}",
                 contentType: "application/json",
                 success: function (songs) {
-                    console.log(songs);
-                    var html = '';
-                    for (i = 0; i < songs.data.length; i++) {
-                        if (songs.data[i].admin === '1') {
-                            html += '<tr>' +
-                                '<td hidden class="songId">' + songs.data[i].id + '</td>' +
-                                '<td id="art">' + songs.data[i].artist + '</td>' +
-                                '<td id="trck">' + songs.data[i].track + '</td>' +
-                                '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
-                                '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
-                                '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
-                                '</tr>';
+                    $.ajax({
+                        url: "{{route('song.get.user.data', $user)}}",
+                        contentType: "application/json",
+                        success: function (data) {
+                            console.log(data);
+                            var html = '';
+                            for (i = 0; i < data.data.length; i++) {
+                                if (songs.data[i].admin === '1') {
+                                    html += '<tr>' +
+                                        '<td hidden class="songId">' + data.data[i].id + '</td>' +
+                                        '<td id="art">' + data.data[i].artist + '</td>' +
+                                        '<td id="trck">' + data.data[i].track + '</td>' +
+                                        '<td id="lnk"><a id="atr" target="_blank" href="' + data.data[i].link + '">' + data.data[i].link + '</a></td>' +
+                                        '<td><a href="' + data.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
+                                        '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                                        '</tr>';
+                                }
+                                else if (songs.data[i].admin === '2') {
+                                    html += '<tr>' +
+                                        '<td hidden class="songId">' + data.data[i].id + '</td>' +
+                                        '<td id="art">' + data.data[i].artist + '</td>' +
+                                        '<td id="trck">' + data.data[i].track + '</td>' +
+                                        '<td id="lnk"><a id="atr" target="_blank" href="' + data.data[i].link + '">' + data.data[i].link + '</a></td>' +
+                                        '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
+                                        '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                                        '</tr>';
+                                }
+                                else {
+                                    html += '<tr>' +
+                                        '<td hidden class="songId">' + data.data[i].id + '</td>' +
+                                        '<td id="art">' + data.data[i].artist + '</td>' +
+                                        '<td id="trck">' + data.data[i].track + '</td>' +
+                                        '<td id="lnk"><a id="atr" target="_blank" href="' + data.data[i].link + '">' + data.data[i].link + '</a></td>' +
+                                        '</tr>';
+                                }
+                            }
+                            $('#songsList').html(html);
                         }
-                        else if (songs.data[i].admin === '2') {
-                            html += '<tr>' +
-                                '<td hidden class="songId">' + songs.data[i].id + '</td>' +
-                                '<td id="art">' + songs.data[i].artist + '</td>' +
-                                '<td id="trck">' + songs.data[i].track + '</td>' +
-                                '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
-                                '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
-                                '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
-                                '</tr>';
-                        }
-                        else {
-                            html += '<tr>' +
-                                '<td hidden class="songId">' + songs.data[i].id + '</td>' +
-                                '<td id="art">' + songs.data[i].artist + '</td>' +
-                                '<td id="trck">' + songs.data[i].track + '</td>' +
-                                '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
-                                '</tr>';
-                        }
-                    }
-                    $('#songsList').html(html);
+                    });
                 }
             });
         }
