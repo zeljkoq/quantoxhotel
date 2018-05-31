@@ -38,17 +38,12 @@ class SongsController extends Controller
     public function getUserData($user_id)
     {
 
-        if (Auth::user())
-        {
-            $songs = Song::where('user_id', $request->user()->id)->orderBy('id', 'desc')->get();
+        if (Auth::user()) {
+            $songs = Song::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
             return SongResource::collection($songs);
-
-        }
-        else
-        {
+        } else {
             $songs = Song::where('user_id', $user_id)->orderBy('id', 'desc')->get();
             return SongResource::collection($songs);
-
         }
 
     }
