@@ -1,0 +1,7 @@
+.messages {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 20px;
+    margin-left: 20px;
+}

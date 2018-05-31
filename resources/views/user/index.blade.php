@@ -71,14 +71,15 @@
                 url: "{{route('song.get.user.data', auth()->user()->id)}}",
                 contentType: "application/json",
                 success: function (songs) {
+                    console.log(songs);
                     $.ajax({
                         url: "{{route('song.get.user.data', $user)}}",
                         contentType: "application/json",
                         success: function (data) {
-                            console.log(data);
+                            // console.log(data);
                             var html = '';
                             for (i = 0; i < data.data.length; i++) {
-                                if (songs.data[i].admin === '1') {
+                                if (data.data[i].admin === '1') {
                                     html += '<tr>' +
                                         '<td hidden class="songId">' + data.data[i].id + '</td>' +
                                         '<td id="art">' + data.data[i].artist + '</td>' +
@@ -88,7 +89,7 @@
                                         '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                                         '</tr>';
                                 }
-                                else if (songs.data[i].admin === '2') {
+                                else if (data.data[i].admin === '2') {
                                     html += '<tr>' +
                                         '<td hidden class="songId">' + data.data[i].id + '</td>' +
                                         '<td id="art">' + data.data[i].artist + '</td>' +
@@ -152,7 +153,7 @@
         $('body').on('click', '#deleteSong', function () {
             var $row = $(this).closest("tr");
             var songId = $row.find(".songId").html();
-            console.log(songId);
+            // console.log(songId);
             $.ajax({
                 type: "GET",
                 url: '/api/song/delete/'+songId,

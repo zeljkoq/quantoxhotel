@@ -14,12 +14,15 @@
                             <div class="form-row">
                                 <div class="col-4">
                                     <input type="text" name="artist" id="artist" class="form-control" placeholder="">
+                                    <small id="errorArtist" style="color: red; font-weight: bold;"></small>
                                 </div>
                                 <div class="col">
                                     <input type="text" name="track" id="track" class="form-control" placeholder="">
+                                    <small id="errorTrack" style="color: red; font-weight: bold;"></small>
                                 </div>
                                 <div class="col">
                                     <input type="text" name="link" id="link" class="form-control" placeholder="">
+                                    <small id="errorLink" style="color: red; font-weight: bold;"></small>
                                 </div>
                                 <button class="btn btn-primary" type="button" id="addSong">Add</button>
                             </div>
@@ -75,7 +78,7 @@
                 url: "{{route('song.get.user.data', $currentUser->id)}}",
                 contentType: "application/json",
                 success: function (songs) {
-                    console.log(songs);
+                    // console.log(songs);
                     var html = '';
                     for (i = 0; i < songs.data.length; i++) {
                         if (songs.data[i].admin === '1') {
@@ -148,6 +151,14 @@
                         '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                         '</tr>';
                     $('#songsList').prepend(html);
+
+
+
+                },
+                error: function(errors) {
+
+                    var errorData = errors.responseJSON.errors;
+                    console.log(errorData);
                 }
             });
         });
@@ -155,7 +166,7 @@
         $('body').on('click', '#deleteSong', function () {
             var $row = $(this).closest("tr");
             var songId = $row.find(".songId").html();
-            console.log(songId);
+            // console.log(songId);
             $.ajax({
                 type: "GET",
                 url: '/api/song/delete/'+songId,
@@ -225,5 +236,7 @@
                 alert('Posts could not be loaded.');
             });
         }
+
+
     </script>
 @endsection
