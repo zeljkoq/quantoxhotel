@@ -36,12 +36,11 @@ class SongsController extends Controller
         $song->artist = $request->artist;
         $song->track = $request->track;
         $song->link = $request->link;
+
         $song->user_id = $request->user_id;
         $song->save();
 
-        return response()->json([
-            'song' => $song
-        ]);
+        return new SongResource($song);
 
     }
 
@@ -51,13 +50,13 @@ class SongsController extends Controller
         $user = User::findOrFail(Auth()->guard('api')->user()->id);
 
         if ($user->hasRole('admin')) {
-            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->get();
+            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->paginate(5);
             return AdminResource::collection($songs);
         } elseif ($user->hasRole('user')) {
-            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->get();
+            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->paginate(5);
             return UserResource::collection($songs);
         } else {
-            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->get();
+            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->paginate(5);
             return SongResource::collection($songs);
         }
 

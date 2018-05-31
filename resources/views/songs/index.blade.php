@@ -50,11 +50,18 @@
                                         <td></td>
                                     </tr>
                                     </thead>
-                                    <tbody id="songsList"></tbody>
+                                    <tbody id="songsList">
+
+                                    </tbody>
+
                                 </table>
                             </div>
                         </div>
+                        <div id="pagination">
+
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -100,7 +107,16 @@
                                 '</tr>';
                         }
                     }
+
+                    var pagination = '';
+                    pagination += '<nav aria-label="Page navigation example">' +
+                                    '<ul class="pagination">' +
+                                        '<li class="page-item"><a class="page-link" href="'+songs.links.prev+'">Previous</a></li>' +
+                                        '<li class="page-item"><a class="page-link" href="'+songs.links.next+'">Next</a></li>' +
+                                    '</ul>' +
+                                  '</nav>';
                     $('#songsList').html(html);
+                    $('#pagination').html(pagination);
                 }
             });
         }
@@ -124,10 +140,12 @@
                     $('#link').val('');
                     html = '';
                     html += '<tr>' +
-                        '<td hidden class="songId">' + response.song.id + '</td>' +
-                        '<td id="art">' + response.song.artist + '</td>' +
-                        '<td id="trck">' + response.song.track + '</td>' +
-                        '<td id="lnk"><a id="atr" target="_blank" href="' + response.song.link + '">' + response.song.link + '</a></td>' +
+                        '<td hidden class="songId">' + response.data.id + '</td>' +
+                        '<td id="art">' + response.data.artist + '</td>' +
+                        '<td id="trck">' + response.data.track + '</td>' +
+                        '<td id="lnk"><a id="atr" target="_blank" href="' + response.data.link + '">' + response.data.link + '</a></td>' +
+                        '<td><a href="' + response.data.edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
+                        '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                         '</tr>';
                     $('#songsList').prepend(html);
                 }
@@ -150,5 +168,64 @@
                 }
             });
         });
+
+        $(window).on('hashchange', function() {
+            if (window.location.hash) {
+                var page = window.location.hash.replace('#', '');
+                if (page == Number.NaN || page <= 0) {
+                    return false;
+                } else {
+                    getPosts(page);
+                }
+            }
+        });
+        $(document).ready(function() {
+            $(document).on('click', '#pagination a', function (e) {
+                getPosts($(this).attr('href').split('page=')[1]);
+                e.preventDefault();
+            });
+        });
+        function getPosts(page) {
+            $.ajax({
+                url : '/api/song/{{$currentUser->id}}?page=' + page,
+                dataType: 'json',
+            }).done(function (songs) {
+                var html = '';
+                for (i = 0; i < songs.data.length; i++) {
+                    if (songs.data[i].admin === '1') {
+                        html += '<tr>' +
+                            '<td hidden class="songId">' + songs.data[i].id + '</td>' +
+                            '<td id="art">' + songs.data[i].artist + '</td>' +
+                            '<td id="trck">' + songs.data[i].track + '</td>' +
+                            '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                            '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
+                            '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                            '</tr>';
+                    }
+                    else if (songs.data[i].admin === '2') {
+                        html += '<tr>' +
+                            '<td hidden class="songId">' + songs.data[i].id + '</td>' +
+                            '<td id="art">' + songs.data[i].artist + '</td>' +
+                            '<td id="trck">' + songs.data[i].track + '</td>' +
+                            '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                            '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
+                            '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                            '</tr>';
+                    }
+                    else {
+                        html += '<tr>' +
+                            '<td hidden class="songId">' + songs.data[i].id + '</td>' +
+                            '<td id="art">' + songs.data[i].artist + '</td>' +
+                            '<td id="trck">' + songs.data[i].track + '</td>' +
+                            '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                            '</tr>';
+                    }
+                }
+                $('#songsList').html(html);
+                location.hash = page;
+            }).fail(function () {
+                alert('Posts could not be loaded.');
+            });
+        }
     </script>
 @endsection
