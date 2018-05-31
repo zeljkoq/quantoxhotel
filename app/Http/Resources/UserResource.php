@@ -20,7 +20,8 @@ class UserResource extends JsonResource
             'link' => $this->link,
             'edit' => $this->edit_index,
             'id' => $this->id,
-            'admin' => '2'
+            'admin' => '2',
+            'own' => '1'
         ];
     }
 }

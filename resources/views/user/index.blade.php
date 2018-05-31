@@ -94,8 +94,6 @@
                                         '<td id="art">' + data.data[i].artist + '</td>' +
                                         '<td id="trck">' + data.data[i].track + '</td>' +
                                         '<td id="lnk"><a id="atr" target="_blank" href="' + data.data[i].link + '">' + data.data[i].link + '</a></td>' +
-                                        '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
-                                        '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                                         '</tr>';
                                 }
                                 else {
@@ -207,8 +205,6 @@
                             '<td id="art">' + songs.data[i].artist + '</td>' +
                             '<td id="trck">' + songs.data[i].track + '</td>' +
                             '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
-                            '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
-                            '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
                     }
                     else {
