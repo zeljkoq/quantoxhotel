@@ -17,15 +17,3 @@ function setMessage(type, data)
     }
 }
 
-function makePagination(links){
-    var html = '';
-    html += '<a onclick=getPaginate("'+links.first+'")>first</a>&nbsp&nbsp&nbsp';
-    if(links.prev) {
-        html += '<a onclick=getPaginate("' + links.prev + '")>prev</a>&nbsp&nbsp&nbsp';
-    }
-    if(links.next) {
-        html += '<a onclick=getPaginate("' + links.next + '")>next</a>&nbsp&nbsp&nbsp';
-    }
-    html += '<a onclick=getPaginate("'+links.last+'")>last</a>';
-    return html;
-}
