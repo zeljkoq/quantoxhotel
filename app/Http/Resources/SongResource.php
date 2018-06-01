@@ -15,6 +15,7 @@ class SongResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'artist' => $this->artist,
             'track' => $this->track,
             'link' => $this->link,

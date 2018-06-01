@@ -13,9 +13,16 @@ use App\Http\Requests\StoreSongRequest;
 use Illuminate\Support\Facades\Auth;
 
 
+/**
+ * Class SongsController
+ * @package App\Http\Controllers
+ */
 class SongsController extends Controller
 {
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('songs.index')->with([
@@ -23,6 +30,10 @@ class SongsController extends Controller
         ]);
     }
 
+    /**
+     * @param $user_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function user($user_id)
     {
         return view('user.index')->with([
@@ -30,6 +41,11 @@ class SongsController extends Controller
         ]);
     }
 
+    /**
+     * @param StoreSongRequest $request
+     * @param Song $song
+     * @return SongResource
+     */
     public function store(StoreSongRequest $request, Song $song)
     {
 
@@ -37,32 +53,48 @@ class SongsController extends Controller
         $song->track = $request->track;
         $song->link = $request->link;
 
-        $song->user_id = $request->user_id;
+        $song->user_id = $request->user()->id;
         $song->save();
 
         return new SongResource($song);
 
     }
 
-    public function getUserData(Request $request)
+    /**
+     * @param Request $request
+     * @param $user_id
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function getUserData(Request $request, $user_id)
     {
 
-        $user = User::findOrFail(Auth()->guard('api')->user()->id);
 
-        if ($user->hasRole('admin')) {
-            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->paginate(5);
-            return AdminResource::collection($songs);
-        } elseif ($user->hasRole('user')) {
-            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->paginate(5);
-            return UserResource::collection($songs);
-        } else {
-            $songs = Song::where('user_id', $request->user_id)->orderBy('id', 'desc')->paginate(5);
+        if (isset($user_id)) {
+
+            $user = User::find($user_id);
+
+            if ($user->hasRole('admin')) {
+                $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
+
+                return AdminResource::collection($songs);
+            }
+
+            if ($user->hasRole('user')) {
+                $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
+
+                return UserResource::collection($songs);
+            }
+            $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
             return SongResource::collection($songs);
-        }
 
+        }
     }
 
 
+    /**
+     * @param $song_id
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function editIndex($song_id)
     {
         return view('songs.edit')->with([
@@ -70,6 +102,10 @@ class SongsController extends Controller
         ]);
     }
 
+    /**
+     * @param $song_id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function editData($song_id)
     {
         $song = Song::where('id', $song_id)->first();
@@ -79,27 +115,78 @@ class SongsController extends Controller
 
     }
 
+    /**
+     * @param $song_id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function delete($song_id)
     {
-        Song::destroy($song_id);
+        if (isset($song_id)) {
 
-        return response()->json([
-            'song' => $song_id
-        ]);
+            $user = User::findOrFail(auth()->user()->id);
+
+            if ($user->hasRole('admin')) {
+                $song = Song::where('id', $song_id)->first();
+                $song->delete();
+                return new SongResource($song);
+            }
+
+            if ($user->hasRole('user')) {
+                $song = Song::where('id', $song_id)->first();
+                if ($song->user_id == $user->id) {
+                    $song->delete();
+                    return new SongResource($song);
+                }
+
+            }
+
+            return response()->json([
+                'message' => 'You don\'t have permission to delete this song.'
+            ]);
+
+        }
+
     }
 
+
+    /**
+     * @param StoreSongRequest $request
+     * @param $song_id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(StoreSongRequest $request, $song_id)
     {
-        $song = Song::findOrFail($song_id);
 
-        $song->artist = $request->artist;
-        $song->track = $request->track;
-        $song->link = $request->link;
+//        return auth()->user()->id;
 
-        $song->update();
+        if (isset($song_id)) {
 
-        return response()->json([
-            'song' => $song
-        ]);
+            $user = User::findOrFail(auth()->user()->id);
+
+            $song = Song::where('id', $song_id)->first();
+            $song->artist = $request->artist;
+            $song->track = $request->track;
+            $song->link = $request->link;
+
+            if ($user->hasRole('admin')) {
+                $song->update();
+                return new SongResource($song);
+            }
+
+            if ($user->hasRole('user')) {
+                $song = Song::where('id', $song_id)->first();
+                if ($song->user_id == $user->id) {
+                    $song->update();
+                    return new SongResource($song);
+                }
+
+            }
+
+            return response()->json([
+                'message' => 'You don\'t have permission to change this song.'
+            ]);
+
+        }
+
     }
 }

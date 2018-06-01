@@ -17,8 +17,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'song'], function(){
-    Route::post('/', 'SongsController@store')->middleware('auth:api')->name('song.store');
+Route::group(['prefix' => 'song', 'middleware' => 'auth:api'], function(){
+    Route::post('/', 'SongsController@store')->name('song.store');
     Route::get('/edit/{song_id}', 'SongsController@editData')->name('song.edit.data');
     Route::get('/delete/{song_id}', 'SongsController@delete')->name('song.delete');
     Route::post('/update/{song_id}', 'SongsController@update')->name('song.update');

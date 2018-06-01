@@ -20,7 +20,8 @@ class AdminResource extends JsonResource
             'link' => $this->link,
             'edit' => $this->edit_index,
             'id' => $this->id,
-            'admin' => '1'
+            'admin' => '1',
+            'user' => '0'
         ];
     }
 }
