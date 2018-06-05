@@ -17,10 +17,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Route::group(['prefix' => 'auth', 'middleware' => 'api'], function(){
-//	Route::post('/login', 'Auth\\AuthController@login')->name('login.api');
-//	Route::post('me', 'Auth\\AuthController@me')->name('login.me');
-//});
+Route::group(['prefix' => 'auth', 'middleware' => 'api'], function(){
+	Route::post('/login', 'Auth\\AuthController@login')->name('login.api');
+	Route::post('me', 'Auth\\AuthController@me')->name('login.me');
+});
 
 
 

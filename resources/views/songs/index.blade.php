@@ -3,64 +3,53 @@
 @section('content')
 
 @if (auth()->user()->hasRole('dj'))
-    <div id="allSongs">
-        <div class="panel panel-default">
-            <div class="panel-heading">Panel heading without title</div>
-            <div class="panel-body">
-                <div class="form-group">
-                    {{--<form action="{{route('addsong')}}" method="POST">--}}
-                    <div class="form-row">
-                        <div class="col-4">
-                            <input type="text" name="artist" id="artist" class="form-control" placeholder="">
-                            <small id="errorArtist" style="color: red; font-weight: bold;"></small>
-                        </div>
-                        <div class="col">
-                            <input type="text" name="track" id="track" class="form-control" placeholder="">
-                            <small id="errorTrack" style="color: red; font-weight: bold;"></small>
-                        </div>
-                        <div class="col">
-                            <input type="text" name="link" id="link" class="form-control" placeholder="">
-                            <small id="errorLink" style="color: red; font-weight: bold;"></small>
-                        </div>
-                        <button class="btn btn-primary" type="button" id="addSong">Add</button>
+    <div id="allSongs" class="pt-5">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Add song</div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <form class="form-inline">
+                            <div class="form-group">
+                                <input type="text" name="artist" id="artist" class="form-control" placeholder="Artist">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="track" id="track" class="form-control" placeholder="Track">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="link" id="link" class="form-control" placeholder="Link">
+                            </div>
+                            <button class="btn btn-primary" type="button" id="addSong">Add</button>
+                        </form>
                     </div>
-                    {{--</form>--}}
                 </div>
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-header">
-                        Songs
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Songs</div>
+                <div class="panel-body">
+                    <div id="emptySongs" class="table-responsive">
+                        <table class="table table-striped">
+                            <thead style="background-color: #ddd; font-weight: bold;">
+                            <tr>
+                                <td>Artist</td>
+                                <td>Track</td>
+                                <td>Link</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </thead>
+                            <tbody id="songsList">
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div id="pagination">
 
                     </div>
-                    <div class="card-body">
-                        <div>
-                            <div id="emptySongs" class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead style="background-color: #ddd; font-weight: bold;">
-                                    <tr>
-                                        <td>Artist</td>
-                                        <td>Track</td>
-                                        <td>Link</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="songsList">
-
-                                    </tbody>
-
-                                </table>
-                            </div>
-                        </div>
-                        <div id="pagination">
-
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -172,7 +161,7 @@
             success: function (response) {
                 // response = JSON.stringify(response);
                 console.log(response);
-                $('td:contains("' + response.song + '")').parent().css("display", "none");
+                $('td:contains("' + response.data.id + '")').parent().css("display", "none");
             }
         });
     });

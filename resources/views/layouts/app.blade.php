@@ -12,6 +12,7 @@
     @endif
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <!-- Scripts -->
 {{--    <script src="{{ asset('js/app.js') }}" defer></script>--}}
 
@@ -19,13 +20,6 @@
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <!-- Styles -->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -47,9 +41,15 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        @if (auth()->user()->hasRole('dj'))
-                            <li><a href="{{route('song.index')}}">Songs</a></li>
-                        @endif
+                        @guest
+                        @else
+                            @if (auth()->user()->hasRole('dj'))
+                                <li><a href="{{route('song.index')}}">Songs</a></li>
+                            @endif
+                                @if (auth()->user()->hasRole('party'))
+                                    <li><a href="{{route('organization.index')}}">Party organization</a></li>
+                                @endif
+                        @endguest
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         @guest
@@ -74,7 +74,7 @@
             </div><!-- /.container-fluid -->
         </nav>
 
-        <div class="container" class="pb-5">
+        <div class="container">
             @yield('content')
         </div>
         <div id="messages" class="">

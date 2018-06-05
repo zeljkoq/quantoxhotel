@@ -10,7 +10,6 @@ use App\Models\Song;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreSongRequest;
-use Illuminate\Support\Facades\Auth;
 
 
 /**
@@ -19,17 +18,21 @@ use Illuminate\Support\Facades\Auth;
  */
 class SongsController extends Controller
 {
-
+	
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index()
     {
-        if (auth()->user()->hasRole('dj'))
+        if (auth()->user())
         {
-	        return view('songs.index')->with([
-		        'currentUser' => auth()->user(),
-	        ]);
+	        if (auth()->user()->hasRole('dj'))
+	        {
+		        return view('songs.index')->with([
+			        'currentUser' => auth()->user(),
+		        ]);
+	        }
+	        return redirect('/');
         }
         return redirect('/');
     }
@@ -77,7 +80,7 @@ class SongsController extends Controller
 
             $user = User::find($user_id);
 
-            if ($user->hasRole('admin')) {
+            if ($user->hasRole('dj')) {
                 $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
 
                 return AdminResource::collection($songs);
@@ -133,7 +136,7 @@ class SongsController extends Controller
 
             $user = User::findOrFail(auth()->user()->id);
 
-            if ($user->hasRole('admin')) {
+            if ($user->hasRole('dj')) {
                 $song = Song::where('id', $song_id)->first();
                 $song->delete();
                 return new SongResource($song);
