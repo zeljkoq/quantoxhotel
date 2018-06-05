@@ -42,7 +42,7 @@
 </div>
 
 <div id="contact" class="row pt-5">
-    <div class="col-md-6">
+    <div class="col-md-4">
         <h4><strong>Contact Us</strong></h4>
         <form>
             <div class="form-group">
@@ -63,8 +63,17 @@
         </form>
     </div>
 
-    <div id="map" class="col-md-6" style="height: 300px;">
+    <div id="map" class="col-md-4" style="height: 300px;">
 
+    </div>
+    <div class="col-md-4">
+        <p class="text-info">
+        <b>Address: </b>Kneza Mihaila 112
+        <br>
+        <b>City: </b>Kragujevac 34000
+        <br>
+        <b>Phone: </b>034 205238
+            </p>
     </div>
 </div>
 
