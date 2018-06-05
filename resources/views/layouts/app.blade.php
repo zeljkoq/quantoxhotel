@@ -29,7 +29,7 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default navbar-fixed-top"">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -48,7 +48,7 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right">
                         @guest
-
+                            <li><a href="{{route('login')}}">Login</a></li>
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}
@@ -69,9 +69,9 @@
             </div><!-- /.container-fluid -->
         </nav>
 
-        <main class="py-4">
+        <div class="container" class="pb-5">
             @yield('content')
-        </main>
+        </div>
         <div id="messages" class="">
 
         </div>
