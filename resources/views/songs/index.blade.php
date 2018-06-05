@@ -1,68 +1,72 @@
 @extends('layouts.app')
 
 @section('content')
-<div id="allSongs">
-    <div class="panel panel-default">
-        <div class="panel-heading">Panel heading without title</div>
-        <div class="panel-body">
-            <div class="form-group">
-                {{--<form action="{{route('addsong')}}" method="POST">--}}
-                <div class="form-row">
-                    <div class="col-4">
-                        <input type="text" name="artist" id="artist" class="form-control" placeholder="">
-                        <small id="errorArtist" style="color: red; font-weight: bold;"></small>
+
+@if (auth()->user()->hasRole('dj'))
+    <div id="allSongs">
+        <div class="panel panel-default">
+            <div class="panel-heading">Panel heading without title</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    {{--<form action="{{route('addsong')}}" method="POST">--}}
+                    <div class="form-row">
+                        <div class="col-4">
+                            <input type="text" name="artist" id="artist" class="form-control" placeholder="">
+                            <small id="errorArtist" style="color: red; font-weight: bold;"></small>
+                        </div>
+                        <div class="col">
+                            <input type="text" name="track" id="track" class="form-control" placeholder="">
+                            <small id="errorTrack" style="color: red; font-weight: bold;"></small>
+                        </div>
+                        <div class="col">
+                            <input type="text" name="link" id="link" class="form-control" placeholder="">
+                            <small id="errorLink" style="color: red; font-weight: bold;"></small>
+                        </div>
+                        <button class="btn btn-primary" type="button" id="addSong">Add</button>
                     </div>
-                    <div class="col">
-                        <input type="text" name="track" id="track" class="form-control" placeholder="">
-                        <small id="errorTrack" style="color: red; font-weight: bold;"></small>
-                    </div>
-                    <div class="col">
-                        <input type="text" name="link" id="link" class="form-control" placeholder="">
-                        <small id="errorLink" style="color: red; font-weight: bold;"></small>
-                    </div>
-                    <button class="btn btn-primary" type="button" id="addSong">Add</button>
+                    {{--</form>--}}
                 </div>
-                {{--</form>--}}
             </div>
         </div>
-    </div>
 
-    <div class="row mt-4">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-header">
-                    Songs
+        <div class="row mt-4">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        Songs
 
-                </div>
-                <div class="card-body">
-                    <div>
-                        <div id="emptySongs" class="table-responsive">
-                            <table class="table table-striped">
-                                <thead style="background-color: #ddd; font-weight: bold;">
-                                <tr>
-                                    <td>Artist</td>
-                                    <td>Track</td>
-                                    <td>Link</td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                </thead>
-                                <tbody id="songsList">
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div id="emptySongs" class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead style="background-color: #ddd; font-weight: bold;">
+                                    <tr>
+                                        <td>Artist</td>
+                                        <td>Track</td>
+                                        <td>Link</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="songsList">
 
-                                </tbody>
+                                    </tbody>
 
-                            </table>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="pagination">
+
                         </div>
                     </div>
-                    <div id="pagination">
 
-                    </div>
                 </div>
-
             </div>
         </div>
     </div>
-</div>
+@endif
+
 @endsection
 
 @section('scripts')

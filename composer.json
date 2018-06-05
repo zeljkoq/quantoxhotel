@@ -11,7 +11,7 @@
         "laravel/passport": "^6.0",
         "laravel/tinker": "^1.0",
         "spatie/laravel-fractal": "^5.3",
-        "tymon/jwt-auth": "^0.5.12"
+        "tymon/jwt-auth": "^1.0.0-beta.3@dev"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

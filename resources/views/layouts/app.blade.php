@@ -46,6 +46,11 @@
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        @if (auth()->user()->hasRole('dj'))
+                            <li><a href="{{route('song.index')}}">Songs</a></li>
+                        @endif
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         @guest
                             <li><a href="{{route('login')}}">Login</a></li>
