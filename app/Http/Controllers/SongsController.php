@@ -24,17 +24,18 @@ class SongsController extends Controller
      */
     public function index()
     {
-        if (auth()->user())
-        {
-	        if (auth()->user()->hasRole('dj'))
-	        {
+
+//	    dd(\Cookie::get('token'));
+//        if (auth()->user())
+//        {
+//	        if (auth()->user()->hasRole('dj'))
+//	        {
 		        return view('songs.index')->with([
-			        'currentUser' => auth()->user(),
 		        ]);
-	        }
-	        return redirect('/');
-        }
-        return redirect('/');
+//	        }
+//	        return redirect('/');
+//        }
+//        return redirect('/');
     }
 
     /**
@@ -69,13 +70,15 @@ class SongsController extends Controller
 
     /**
      * @param Request $request
-     * @param $user_id
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function getUserData(Request $request, $user_id)
+    public function getUserData(Request $request)
     {
 
-
+//dd('asd');
+//	    dd($request->user()->id);
+	    $user_id = $request->user()->id;
+	    
         if (isset($user_id)) {
 
             $user = User::find($user_id);
@@ -95,8 +98,6 @@ class SongsController extends Controller
 
             $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
             return SongResource::collection($songs);
-
-
 
         }
     }
@@ -150,7 +151,6 @@ class SongsController extends Controller
                 }
 
             }
-
             return response()->json([
                 'message' => 'You don\'t have permission to delete this song.'
             ]);
@@ -168,15 +168,11 @@ class SongsController extends Controller
     public function update(StoreSongRequest $request, $song_id)
     {
 
-//        return auth()->user()->id;
-
         if (isset($song_id)) {
 
-            $user = User::findOrFail(auth()->user()->id);
-
-
-
-            if ($user->hasRole('admin')) {
+            $user = User::findOrFail($request->user()->id);
+            
+            if ($user->hasRole('dj')) {
                 $song = Song::where('id', $song_id)->first();
                 $song->artist = $request->artist;
                 $song->track = $request->track;
@@ -185,7 +181,7 @@ class SongsController extends Controller
                 return new SongResource($song);
             }
 
-            if ($user->hasRole('user')) {
+            if ($user->hasRole('party')) {
                 $song = Song::where('id', $song_id)->first();
                 if ($song->user_id == $user->id) {
                     $song = Song::where('id', $song_id)->first();
@@ -205,4 +201,5 @@ class SongsController extends Controller
         }
 
     }
+    
 }

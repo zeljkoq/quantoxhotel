@@ -6,10 +6,13 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class AuthController extends Controller
 {
-	use AuthenticatesUsers;
+//	use AuthenticatesUsers;
 	/**
 	 * Create a new AuthController instance.
 	 *
@@ -17,7 +20,7 @@ class AuthController extends Controller
 	 */
 	public function __construct()
 	{
-		$this->middleware('auth:api', ['except' => ['login']]);
+		$this->middleware('api', ['except' => ['login']]);
 	}
 	
 	/**
@@ -27,12 +30,15 @@ class AuthController extends Controller
 	 */
 	public function login()
 	{
+//		dd('aaa');
 		$credentials = request(['email', 'password']);
-		
+//		dd($credentials);
 		
 		if (! $token = auth()->attempt($credentials)) {
-			return response()->json(['error' => 'aUnauthorized'], 401);
+			return response()->json(['error' => 'Unauthorized'], 401);
 		}
+		
+//		return response()->json($this->respondWithToken($token));
 		
 		return $this->respondWithToken($token);
 	}
@@ -44,7 +50,7 @@ class AuthController extends Controller
 	 */
 	public function me()
 	{
-		return response()->json(auth()->guard('api')->user());
+		return response()->json(auth()->user());
 	}
 	
 	/**

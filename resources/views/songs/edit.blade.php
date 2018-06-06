@@ -63,6 +63,9 @@
                 type: "post",
                 url: '{{route('song.update', $song_id)}}',
                 data: ({artist: artist, track: track, link: link}),
+                headers: {
+                    "Authorization" : "Bearer " + localStorage.getItem('token'),
+                },
                 success: function(response) {
 
                 }

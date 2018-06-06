@@ -2,7 +2,8 @@
 
 @section('content')
 
-@if (auth()->user()->hasRole('dj'))
+
+
     <div id="allSongs" class="pt-5">
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -54,7 +55,7 @@
             </div>
         </div>
     </div>
-@endif
+{{--@endif--}}
 
 @endsection
 
@@ -62,10 +63,13 @@
 <script>
     function getIndexData() {
         $.ajax({
-            url: "{{route('song.get.user.data', $currentUser->id)}}",
-            contentType: "application/json",
+            url: "/api/song",
+            headers: {
+                "Authorization" : "Bearer " + localStorage.getItem('token'),
+            },
             success: function (songs) {
                 // console.log(songs);
+
                 var html = '';
                 for (i = 0; i < songs.data.length; i++) {
                     if (songs.data[i].admin === '1') {
@@ -119,11 +123,15 @@
         var artist = $('#artist').val();
         var track = $('#track').val();
         var link = $('#link').val();
-        var user_id = '{{ Auth()->user()->id }}';
+        var user_id = '1';
+
         $.ajax({
             type: "post",
-            url: '{{route('song.store')}}',
+            url: '/api/song/add',
             data: ({artist: artist, track: track, link: link, user_id: user_id}),
+            headers: {
+                "Authorization" : "Bearer " + + localStorage.getItem('token'),
+            },
             success: function (response) {
                 $('#artist').val('');
                 $('#track').val('');
@@ -153,11 +161,15 @@
         var $row = $(this).closest("tr");
         var songId = $row.find(".songId").html();
         // console.log(songId);
+
         $.ajax({
             type: "GET",
             url: '/api/song/delete/' + songId,
             data: $(this).serialize(),
             contentType: "application/json",
+            headers: {
+                "Authorization" : "Bearer " + localStorage.getItem('token'),
+            },
             success: function (response) {
                 // response = JSON.stringify(response);
                 console.log(response);
@@ -185,7 +197,7 @@
 
     function getPosts(page) {
         $.ajax({
-            url: '/api/song/{{$currentUser->id}}?page=' + page,
+            url: '/api/song/---------------?page=' + page,
             dataType: 'json',
         }).done(function (songs) {
             var html = '';

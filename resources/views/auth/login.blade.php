@@ -5,7 +5,7 @@
     <!-- <img class="profile-img-card" src="//lh3.googleusercontent.com/-6V8xOA6M7BA/AAAAAAAAAAI/AAAAAAAAAAA/rzlHcD0KYwo/photo.jpg?sz=120" alt="" /> -->
     <img id="profile-img" class="profile-img-card" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" />
     <p id="profile-name" class="profile-name-card"></p>
-    <form method="POST" action="{{ route('login.api') }}" class="form-signin">
+    {{--<form method="POST" action="{{ route('login.api') }}" class="form-signin">--}}
         <span id="reauth-email" class="reauth-email"></span>
 
         <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
@@ -27,14 +27,35 @@
                 <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember Me') }}
             </label>
         </div>
-        <button type="submit" class="btn btn-success">
+        <button id="loginButton" type="button" class="btn btn-success">
             {{ __('Login') }}
         </button>
         <a class="btn btn-link" href="{{ route('password.request') }}">
             {{ __('Forgot Your Password?') }}
         </a>
         {{csrf_field()}}
-    </form><!-- /form -->
+    {{--</form><!-- /form -->--}}
 </div>
+
+@endsection
+
+@section('scripts')
+
+    <script>
+        $('#loginButton').click(function(){
+            let email = $('#email').val();
+            let password = $('#password').val();
+            $.ajax({
+                type: "POST",
+                url: '{{route('login.api')}}',
+                data: ({email: email, password: password}),
+                success: function (response) {
+                    console.log(response);
+                    // setCookie('token', response.access_token);
+                    localStorage.setItem('token', response.access_token);
+                }
+            });
+        });
+    </script>
 
 @endsection

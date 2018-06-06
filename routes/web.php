@@ -15,11 +15,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function(){
-    Route::get('/songs', 'SongsController@index')->name('song.index');
-    Route::get('/party', 'OrganizationController@index')->name('organization.index');
-    Route::get('/edit/{song_id}', 'SongsController@editIndex')->name('song.edit.index');
-    Route::get('/user/{user_id}', 'SongsController@user')->name('user.view');
-});
+Route::get('/songs', 'SongsController@index')->name('song.index');
+Route::get('/party', 'OrganizationController@index')->name('organization.index');
+Route::get('/edit/{song_id}', 'SongsController@editIndex')->name('song.edit.index');
+Route::get('/user/{user_id}', 'SongsController@user')->name('user.view');
+
+//Route::group(['middleware' => 'auth:api'], function(){
+//
+//});
