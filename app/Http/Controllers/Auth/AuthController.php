@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class AuthController extends Controller
 {
+	use AuthenticatesUsers;
 	/**
 	 * Create a new AuthController instance.
 	 *
@@ -15,7 +17,7 @@ class AuthController extends Controller
 	 */
 	public function __construct()
 	{
-		$this->middleware('api', ['except' => ['login']]);
+		$this->middleware('auth:api', ['except' => ['login']]);
 	}
 	
 	/**
@@ -26,6 +28,7 @@ class AuthController extends Controller
 	public function login()
 	{
 		$credentials = request(['email', 'password']);
+		
 		
 		if (! $token = auth()->attempt($credentials)) {
 			return response()->json(['error' => 'aUnauthorized'], 401);
