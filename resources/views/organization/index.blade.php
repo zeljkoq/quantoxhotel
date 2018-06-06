@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Date</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="inputEmail3" placeholder="Date">
+                        <input type="text" class="form-control" id="datetimepicker4">
                     </div>
                 </div>
                 <div class="form-group">
@@ -22,9 +22,9 @@
                         <button type="submit" class="btn btn-default">Sign in</button>
                     </div>
                 </div>
+
             </form>
         </div>
     </div>
-
 
 @endsection
