@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSongRequest extends FormRequest
+class RegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,11 +13,7 @@ class StoreSongRequest extends FormRequest
      */
     public function authorize()
     {
-    	if (auth()->user()->hasRole('dj'))
-	    {
-		    return true;
-	    }
-	    return false;
+        return true;
     }
 
     /**
@@ -28,9 +24,12 @@ class StoreSongRequest extends FormRequest
     public function rules()
     {
         return [
-            'artist' => 'required',
-            'track' => 'required',
-            'link' => 'required',
+	        'name' => 'required',
+	        'email' => 'required|email',
+	        'password' => 'required',
+	        'passwordConfirm' => 'required|same:password'
         ];
     }
+    
+    
 }

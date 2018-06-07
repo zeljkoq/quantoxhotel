@@ -56,15 +56,15 @@ class Handler extends ExceptionHandler
 	    	return response()->json(['error' => 'Token is Expired', 400]);
 	    }
 	
-	    if ($exception instanceof TokenInvalidException)
-	    {
-		    return response()->json(['error' => 'Token is Invalid', 400]);
-	    }
+//	    if ($exception instanceof TokenInvalidException)
+//	    {
+//		    return response()->json(['error' => 'Token is Invalid', 400]);
+//	    }
 	
-	    if ($exception instanceof JWTException)
-	    {
-		    return response()->json(['error' => 'Problem with token', 400]);
-	    }
+//	    if ($exception instanceof JWTException)
+//	    {
+//		    return response()->json(['error' => 'Problem with token', 400]);
+//	    }
 	
 	    // the token is valid and we have found the user via the sub claim
 	    return response()->json(compact('user'));

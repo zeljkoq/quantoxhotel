@@ -11,10 +11,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->middleware('jwt');
-    }
+	public function __construct()
+	{
+//		$this->middleware('jwt', ['except' => ['login']]);
+	}
 
     /**
      * Show the application dashboard.
@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        dd(Auth()->user());
-        return view('home');
+//        dd(Auth()->user());
+        return view('welcome');
     }
 }

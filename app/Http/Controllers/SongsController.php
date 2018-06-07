@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\RoleRequest;
 use App\Http\Resources\AdminResource;
 use App\Http\Resources\SongResource;
 use App\Http\Resources\UserResource;
@@ -18,25 +19,13 @@ use App\Http\Requests\StoreSongRequest;
  */
 class SongsController extends Controller
 {
-	
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index(Request $request)
+    public function index()
     {
-//		dd($request->user()->id);
-//	    dd(\Cookie::get('token'));
-//        if ($request->user())
-//        {
-//	    dd($request->user()->id);
-//	        if ($request->user()->hasRole('dj'))
-//	        {
-		        return view('songs.index')->with([
-		        ]);
-//	        }
-//	        return redirect('/');
-////        }
-//        return redirect('/');
+
+        return view('songs.index')->with([]);
     }
 
     /**
@@ -57,16 +46,16 @@ class SongsController extends Controller
      */
     public function store(StoreSongRequest $request, Song $song)
     {
-
-        $song->artist = $request->artist;
-        $song->track = $request->track;
-        $song->link = $request->link;
-
-        $song->user_id = $request->user()->id;
-        $song->save();
-
-        return new SongResource($song);
-
+    	
+	    $song->artist = $request->artist;
+	    $song->track = $request->track;
+	    $song->link = $request->link;
+	
+	    $song->user_id = $request->user()->id;
+	    $song->save();
+	
+	    return new SongResource($song);
+	    
     }
 
     /**
@@ -75,6 +64,7 @@ class SongsController extends Controller
      */
     public function getUserData(Request $request)
     {
+
 	    $user_id = $request->user()->id;
 	    
         if (isset($user_id)) {
@@ -92,6 +82,7 @@ class SongsController extends Controller
 
                 return UserResource::collection($songs);
             }
+
 
             $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
             return SongResource::collection($songs);
@@ -164,38 +155,53 @@ class SongsController extends Controller
      */
     public function update(StoreSongRequest $request, $song_id)
     {
+	
+	    try {
+		    $song = Song::where('id', $song_id)->first();
+		    $song->artist = $request->artist;
+		    $song->track = $request->track;
+		    $song->link = $request->link;
+		    $song->update();
+		    return new SongResource($song);
+	    }
+	    catch (\Exception $e)
+	    {
+	    	return response()->json([
+			    'message' => 'You don\'t have permission to change this song.'
+		    ]);
+	    }
 
-        if (isset($song_id)) {
+//        if (isset($song_id)) {
+//
+//            $user = User::findOrFail($request->user()->id);
+//
+//            if ($user->hasRole('dj')) {
+//                $song = Song::where('id', $song_id)->first();
+//                $song->artist = $request->artist;
+//                $song->track = $request->track;
+//                $song->link = $request->link;
+//                $song->update();
+//                return new SongResource($song);
+//            }
+//
+//            if ($user->hasRole('party')) {
+//                $song = Song::where('id', $song_id)->first();
+//                if ($song->user_id == $user->id) {
+//                    $song = Song::where('id', $song_id)->first();
+//                    $song->artist = $request->artist;
+//                    $song->track = $request->track;
+//                    $song->link = $request->link;
+//                    $song->update();
+//                    return new SongResource($song);
+//                }
+//
+//            }
+//
+//            return response()->json([
+//                'message' => 'You don\'t have permission to change this song.'
+//            ]);
 
-            $user = User::findOrFail($request->user()->id);
-            
-            if ($user->hasRole('dj')) {
-                $song = Song::where('id', $song_id)->first();
-                $song->artist = $request->artist;
-                $song->track = $request->track;
-                $song->link = $request->link;
-                $song->update();
-                return new SongResource($song);
-            }
-
-            if ($user->hasRole('party')) {
-                $song = Song::where('id', $song_id)->first();
-                if ($song->user_id == $user->id) {
-                    $song = Song::where('id', $song_id)->first();
-                    $song->artist = $request->artist;
-                    $song->track = $request->track;
-                    $song->link = $request->link;
-                    $song->update();
-                    return new SongResource($song);
-                }
-
-            }
-
-            return response()->json([
-                'message' => 'You don\'t have permission to change this song.'
-            ]);
-
-        }
+//        }
 
     }
     
