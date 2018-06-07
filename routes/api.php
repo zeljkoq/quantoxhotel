@@ -22,13 +22,13 @@ Route::post('/registerUser', 'Auth\ApiRegisterController@register')->name('regis
 
 Route::group(['prefix' => 'auth', 'middleware' => 'api'], function(){
 	Route::post('me', 'Auth\AuthController@me')->name('login.me');
+	Route::post('getRoutes', 'Auth\AuthController@getRoutes')->name('get.routes');
 	Route::post('logout', 'Auth\AuthController@logout');
 });
 
 
 
 Route::group(['prefix' => 'song', 'middleware' => 'jwt'], function(){
-	
     Route::post('/add', 'SongsController@store')->name('song.store');
     Route::get('/edit/{song_id}', 'SongsController@editData')->name('song.edit.data');
     Route::get('/delete/{song_id}', 'SongsController@delete')->name('song.delete');

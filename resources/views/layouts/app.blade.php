@@ -26,6 +26,7 @@
     <div id="app">
         <nav class="navbar navbar-default navbar-fixed-top"">
             <div class="container">
+                {{--<div id="routes"></div>--}}
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -40,9 +41,9 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{route('song.index')}}">Songs</a></li>
-                        <li><a href="{{route('organization.index')}}">Party organization</a></li>
+                    <ul id="routes" class="nav navbar-nav">
+                        {{--<li><a href="{{route('song.index')}}">Songs</a></li>--}}
+                        {{--<li><a href="{{route('organization.index')}}">Party organization</a></li>--}}
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
 
@@ -94,20 +95,31 @@
     </script>
     <script>
         $(document).ready(function(){
-
-            // var items = localStorage.getItem('roles');
-            // var res = items.split(" ");
-
-
             $.ajax({
                 type: "POST",
-                url: '/api/auth/me',
+                url: '{{route('get.routes')}}',
+                headers: {
+                    "Accept" : "application/json",
+                    "Content-Type" : "application/json",
+                },
+                success: function (data) {
+                    var html = '';
+                    for (i=0; i<data.routes.length; i++)
+                    {
+                        html += '<li><a href="'+data.routes[i]+'">'+ucfirst(data.routes[i])+'</a></li>';
+                    }
+                    console.log(html);
+                    $('#routes').html(html);
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: '{{route('login.me')}}',
                 headers: {
                     "Accept" : "application/json",
                     "Content-Type" : "application/json",
                 },
                 success: function (response) {
-                    // console.log(response.name);
                     if (response.name)
                     {
                         $('#nLogin').css('display', 'none');

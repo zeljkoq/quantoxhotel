@@ -60,7 +60,7 @@
     <script>
         function getIndexData() {
             $.ajax({
-                url: "/api/song",
+                url: "{{route('song.get.user.data')}}",
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
@@ -114,7 +114,7 @@
             var items = localStorage.getItem('roles');
             var res = items.split(" ");
 
-            if (res.indexOf('dj') >= 0)
+            if (res.indexOf('songs') >= 0)
             {
                 $('#allSongs').css("display", 'block');
             }
@@ -133,7 +133,7 @@
 
             $.ajax({
                 type: "post",
-                url: '/api/song/add',
+                url: '{{route('song.store')}}',
                 data: ({artist: artist, track: track, link: link, user_id: user_id}),
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem('token'),

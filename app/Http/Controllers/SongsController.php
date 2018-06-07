@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\BaseRequest;
 use App\Http\Requests\RoleRequest;
 use App\Http\Resources\AdminResource;
 use App\Http\Resources\SongResource;
@@ -62,16 +63,16 @@ class SongsController extends Controller
 	 * @param Request $request
 	 * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
 	 */
-	public function getUserData(Request $request)
+	public function getUserData(BaseRequest $brequest, Request $request)
 	{
-		
+dd($brequest);
 		$user_id = $request->user()->id;
 		
 		if (isset($user_id)) {
 			
 			$user = User::find($user_id);
 			
-			if ($user->hasRole('dj')) {
+			if ($user->hasRole('songs')) {
 				$songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
 				
 				return AdminResource::collection($songs);
@@ -118,8 +119,8 @@ class SongsController extends Controller
 			
 			$user = User::findOrFail(auth()->user()->id);
 			
-			if ($user->hasRole('dj')) {
-				$song = Song::where('id', $song_id)->first();
+			if ($user->hasRole('songs')) {
+				$song = Song::where('songs', $song_id)->first();
 				$song->delete();
 				return new SongResource($song);
 			}
