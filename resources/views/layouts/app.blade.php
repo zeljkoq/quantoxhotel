@@ -41,34 +41,23 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        @guest
-                        @else
-                            @if (auth()->user()->hasRole('dj'))
-                                <li><a href="{{route('song.index')}}">Songs</a></li>
-                            @endif
-                                @if (auth()->user()->hasRole('party'))
-                                    <li><a href="{{route('organization.index')}}">Party organization</a></li>
-                                @endif
-                        @endguest
+                        <li><a href="{{route('song.index')}}">Songs</a></li>
+                        <li><a href="{{route('organization.index')}}">Party organization</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        @guest
-                            <li><a href="{{route('login')}}">Login</a></li>
-                        @else
+
+                            <li><a style="display: none;" id="nLogin" href="{{route('login')}}">Login</a></li>
+
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}
+                                <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <ul class="dropdown-menu">
-                                    <li><a href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a></li>
+                                    <li><a href="{{ route('logout') }}">Logout</a></a></li>
                                 </ul>
                             </li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
                             </form>
-                        @endguest
+
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -101,6 +90,38 @@
     <script type="text/javascript">
         $(function () {
             $('#datetimepicker4').datetimepicker();
+        });
+    </script>
+    <script>
+        $(document).ready(function(){
+
+            // var items = localStorage.getItem('roles');
+            // var res = items.split(" ");
+
+
+            $.ajax({
+                type: "POST",
+                url: '/api/auth/me',
+                headers: {
+                    "Accept" : "application/json",
+                    "Content-Type" : "application/json",
+                },
+                success: function (response) {
+                    // console.log(response.name);
+                    if (response.name)
+                    {
+                        $('#nLogin').css('display', 'none');
+                        $('#nLoginDrop').css('display', 'block');
+                        $('#nLoginDrop').text(response.name);
+                    }
+                    else
+                    {
+                        $('#nLogin').css('display', 'block');
+                        $('#nLoginDrop').css('display', 'none');
+                        $('#nLoginDrop').text(response.name);
+                    }
+                }
+            });
         });
     </script>
     @yield('scripts')

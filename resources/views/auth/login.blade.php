@@ -41,21 +41,26 @@
 
 @section('scripts')
 
-    <script>
-        $('#loginButton').click(function(){
-            let email = $('#email').val();
-            let password = $('#password').val();
-            $.ajax({
-                type: "POST",
-                url: '{{route('login.api')}}',
-                data: ({email: email, password: password}),
-                success: function (response) {
-                    console.log(response);
-                    // setCookie('token', response.access_token);
-                    localStorage.setItem('token', response.access_token);
+<script>
+    $('#loginButton').click(function(){
+        let email = $('#email').val();
+        let password = $('#password').val();
+        $.ajax({
+            type: "POST",
+            url: '{{route('login.api')}}',
+            data: ({email: email, password: password}),
+            success: function (response) {
+                localStorage.setItem('token', response.token);
+                var arr = [];
+                for (i = 0; i < response.user.roles.length; i++)
+                {
+                    arr += response.user.roles[i].name + ' ';
                 }
-            });
+                localStorage.setItem('roles', arr);
+                // window.location = "/";
+            }
         });
-    </script>
+    });
+</script>
 
 @endsection

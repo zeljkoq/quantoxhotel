@@ -15,13 +15,8 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'artist' => $this->artist,
-            'track' => $this->track,
-            'link' => $this->link,
-            'edit' => $this->edit_index,
-            'id' => $this->id,
-            'admin' => '0',
-            'user' => '1'
+        	'roles' => $this->roles,
+	        'routes' => $this->routes,
         ];
     }
 }

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BaseRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 
 class AuthController extends Controller
@@ -26,14 +29,17 @@ class AuthController extends Controller
 	 */
 	public function login()
 	{
-		
+//		dd($request->roles());
 		$credentials = request(['email', 'password']);
 		
 		if (! $token = auth()->attempt($credentials)) {
 			return response()->json(['error' => 'Unauthorized'], 401);
 		}
 		
-		return $this->respondWithToken($token);
+		JWTAuth::setToken($token);
+		$user = new UserResource(JWTAuth::authenticate());
+		
+		return response()->json(compact('token', 'user', 'routes'));
 		
 	}
 	

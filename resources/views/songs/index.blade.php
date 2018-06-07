@@ -65,7 +65,6 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (songs) {
-
                     var html = '';
                     for (i = 0; i < songs.data.length; i++) {
                         if (songs.data[i].admin === '1') {
@@ -112,6 +111,17 @@
         }
 
         $(document).ready(function () {
+            var items = localStorage.getItem('roles');
+            var res = items.split(" ");
+
+            if (res.indexOf('dj') >= 0)
+            {
+                $('#allSongs').css("display", 'block');
+            }
+            else {
+                $('#allSongs').css("display", 'block');
+                $('#allSongs').text('You don\'t have permission to view this page!');
+            }
             getIndexData();
         });
 
