@@ -22,19 +22,20 @@ class SongsController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-
+//		dd($request->user()->id);
 //	    dd(\Cookie::get('token'));
-//        if (auth()->user())
+//        if ($request->user())
 //        {
-//	        if (auth()->user()->hasRole('dj'))
+//	    dd($request->user()->id);
+//	        if ($request->user()->hasRole('dj'))
 //	        {
 		        return view('songs.index')->with([
 		        ]);
 //	        }
 //	        return redirect('/');
-//        }
+////        }
 //        return redirect('/');
     }
 
@@ -74,9 +75,6 @@ class SongsController extends Controller
      */
     public function getUserData(Request $request)
     {
-
-//dd('asd');
-//	    dd($request->user()->id);
 	    $user_id = $request->user()->id;
 	    
         if (isset($user_id)) {
@@ -94,7 +92,6 @@ class SongsController extends Controller
 
                 return UserResource::collection($songs);
             }
-
 
             $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
             return SongResource::collection($songs);

@@ -35,17 +35,3 @@ Route::group(['prefix' => 'song', 'middleware' => 'api'], function(){
     Route::post('/update/{song_id}', 'SongsController@update')->name('song.update');
     Route::get('/', 'SongsController@getUserData')->name('song.get.user.data');
 });
-
-//Route::group([
-//
-//	'middleware' => 'api',
-//	'prefix' => 'auth'
-//
-//], function ($router) {
-//
-//	Route::post('login', 'AuthController@login');
-//	Route::post('logout', 'AuthController@logout');
-//	Route::post('refresh', 'AuthController@refresh');
-//	Route::post('me', 'AuthController@me');
-//
-//});
