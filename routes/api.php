@@ -28,6 +28,7 @@ Route::group(['prefix' => 'auth', 'middleware' => 'api'], function(){
 
 
 Route::group(['prefix' => 'song', 'middleware' => 'jwt'], function(){
+	
     Route::post('/add', 'SongsController@store')->name('song.store');
     Route::get('/edit/{song_id}', 'SongsController@editData')->name('song.edit.data');
     Route::get('/delete/{song_id}', 'SongsController@delete')->name('song.delete');

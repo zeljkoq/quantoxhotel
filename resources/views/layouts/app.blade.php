@@ -98,6 +98,7 @@
                     "Content-Type" : "application/json",
                 },
                 success: function (response) {
+console.log(response);
                     var html = '';
                     for (i=0; i<response.routes.length; i++)
                     {
@@ -105,17 +106,18 @@
                     }
                     $('#routes').html(html);
 
-                    if (response.user.name)
-                    {
-                        $('#nLogin').css('display', 'none');
-                        $('#nLoginDrop').css('display', 'block');
-                        $('#nLoginDrop').text(response.user.name);
-                    }
-                    else
+                    if (response)
                     {
                         $('#nLogin').css('display', 'block');
                         $('#nLogin').text('Login');
                         $('#nLoginDrop').css('display', 'none');
+                        $('#nLoginDrop').text(response.user.name);
+
+                    }
+                    else
+                    {
+                        $('#nLogin').css('display', 'none');
+                        $('#nLoginDrop').css('display', 'block');
                         $('#nLoginDrop').text(response.user.name);
                     }
                 }
