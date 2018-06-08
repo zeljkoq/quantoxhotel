@@ -50,6 +50,7 @@ class SongsController extends Controller
 		$song->artist = $request->artist;
 		$song->track = $request->track;
 		$song->link = $request->link;
+		$song->duration = $request->duration;
 		
 		$song->user_id = $request->user()->id;
 		$song->save();

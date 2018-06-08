@@ -40,10 +40,7 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{{route('song.index')}}">Songs</a></li>
-                        <li><a href="{{route('organization.index')}}">Party organization</a></li>
-                    </ul>
+                    <ul id="routes" class="nav navbar-nav"></ul>
                     <ul class="nav navbar-nav navbar-right">
 
                             <li><a style="display: none;" id="nLogin" href="{{route('login')}}">Login</a></li>
@@ -73,8 +70,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="{{ asset('js/local.js') }}" defer></script>
-     {{--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>--}}
-    <!-- Latest compiled and minified JavaScript -->
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <script>
@@ -94,31 +90,32 @@
     </script>
     <script>
         $(document).ready(function(){
-
-            // var items = localStorage.getItem('roles');
-            // var res = items.split(" ");
-
-
             $.ajax({
                 type: "POST",
-                url: '/api/auth/me',
+                url: '{{route('login.me')}}',
                 headers: {
                     "Accept" : "application/json",
                     "Content-Type" : "application/json",
                 },
                 success: function (response) {
-                    // console.log(response.name);
-                    if (response.name)
+                    var html = '';
+                    for (i=0; i<response.routes.length; i++)
+                    {
+                        html += '<li><a href="'+response.routes[i]+'">'+ucfirst(response.routes[i])+'</a></li>';
+                    }
+                    $('#routes').html(html);
+
+                    if (response.user.name)
                     {
                         $('#nLogin').css('display', 'none');
                         $('#nLoginDrop').css('display', 'block');
-                        $('#nLoginDrop').text(response.name);
+                        $('#nLoginDrop').text(response.user.name);
                     }
                     else
                     {
                         $('#nLogin').css('display', 'block');
                         $('#nLoginDrop').css('display', 'none');
-                        $('#nLoginDrop').text(response.name);
+                        $('#nLoginDrop').text(response.user.name);
                     }
                 }
             });

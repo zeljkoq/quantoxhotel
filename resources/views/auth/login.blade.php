@@ -51,12 +51,12 @@
             data: ({email: email, password: password}),
             success: function (response) {
                 localStorage.setItem('token', response.token);
-                var arr = [];
-                for (i = 0; i < response.user.roles.length; i++)
-                {
-                    arr += response.user.roles[i].name + ' ';
-                }
-                localStorage.setItem('roles', arr);
+                // var arr = [];
+                // for (i = 0; i < response.user.roles.length; i++)
+                // {
+                //     arr += response.user.roles[i].name + ' ';
+                // }
+                // localStorage.setItem('roles', arr);
                 // window.location = "/";
             }
         });

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSongRequest extends FormRequest
+class PartyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StoreSongRequest extends FormRequest
      */
     public function authorize()
     {
-    	if (auth()->user()->hasRole('dj'))
+	    if (auth()->user()->hasRole('party'))
 	    {
 		    return true;
 	    }
@@ -28,10 +28,7 @@ class StoreSongRequest extends FormRequest
     public function rules()
     {
         return [
-            'artist' => 'required',
-            'track' => 'required',
-            'link' => 'required',
-	        'duration' => 'required'
+            //
         ];
     }
 }

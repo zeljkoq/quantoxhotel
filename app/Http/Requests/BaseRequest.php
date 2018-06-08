@@ -13,15 +13,15 @@ class BaseRequest extends FormRequest
      */
     public function authorize()
     {
-        $roles = auth()->user()->roles()->get();
-        
-        foreach ($roles as $role)
-        {
-        	if($roles->contains('name', $role->name))
-	        {
-//	        	return 123;
-	        }
-        }
+//        $roles = auth()->user()->roles()->get();
+//
+//        foreach ($roles as $role)
+//        {
+//        	if($roles->contains('name', $role->name))
+//	        {
+//	        	return true;
+//	        }
+//        }
     }
 
     /**

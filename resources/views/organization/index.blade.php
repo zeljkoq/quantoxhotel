@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div id="content" style="display: none;" class="row">
+    <div id="content" class="row">
         <div class="col-md-12">
             <form class="form-horizontal">
                 <div class="form-group">
@@ -30,19 +30,5 @@
 @endsection
 
 @section('scripts')
-    <script>
-        $(document).ready(function(){
-            var items = localStorage.getItem('roles');
-            var res = items.split(" ");
 
-            if (res.indexOf('party') >= 0)
-            {
-                $('#content').css("display", 'block');
-            }
-            else {
-                $('#content').css("display", 'block');
-                $('#content').text('You don\'t have permission to view this page!');
-            }
-        });
-    </script>
 @endsection

@@ -29,7 +29,6 @@ class AuthController extends Controller
 	 */
 	public function login()
 	{
-//		dd($request->roles());
 		$credentials = request(['email', 'password']);
 		
 		if (! $token = auth()->attempt($credentials)) {
@@ -39,7 +38,7 @@ class AuthController extends Controller
 		JWTAuth::setToken($token);
 		$user = new UserResource(JWTAuth::authenticate());
 		
-		return response()->json(compact('token', 'user', 'routes'));
+		return response()->json(compact( 'token', 'user', 'routes'));
 		
 	}
 	
@@ -50,7 +49,26 @@ class AuthController extends Controller
 	 */
 	public function me()
 	{
-		return response()->json(auth()->user());
+		$origin = auth()->user()->roles()->get()->pluck('name')->toArray();
+		$replace_map = [
+			'dj' => 'songs',
+			'party' => 'party',
+		];
+		
+		$user = auth()->user();
+		
+		$routes = array_map(function($i) use($replace_map) {
+			return preg_replace_callback('/^(-)*(.+)$/',
+				function($m) use($replace_map) {
+					if(!isset($replace_map[$m[2]]))
+						return($m[0]);
+					return $m[1] . $replace_map[$m[2]];
+				},$i);
+		}, $origin);
+		
+		
+		return response()->json(compact('user', 'routes'));
+		
 	}
 	
 	/**
