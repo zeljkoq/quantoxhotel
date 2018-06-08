@@ -43,7 +43,7 @@
                     <ul id="routes" class="nav navbar-nav"></ul>
                     <ul class="nav navbar-nav navbar-right">
 
-                            <li><a style="display: none;" id="nLogin" href="{{route('login')}}">Login</a></li>
+                            <li><a id="nLogin" href="{{route('login')}}">Login</a></li>
 
                             <li class="dropdown">
                                 <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -98,24 +98,14 @@
                     "Content-Type" : "application/json",
                 },
                 success: function (response) {
-console.log(response);
-                    var html = '';
-                    for (i=0; i<response.routes.length; i++)
+                    if (response.user !== null)
                     {
-                        html += '<li><a href="'+response.routes[i]+'">'+ucfirst(response.routes[i])+'</a></li>';
-                    }
-                    $('#routes').html(html);
-
-                    if (response)
-                    {
-                        $('#nLogin').css('display', 'block');
-                        $('#nLogin').text('Login');
-                        $('#nLoginDrop').css('display', 'none');
-                        $('#nLoginDrop').text(response.user.name);
-
-                    }
-                    else
-                    {
+                        var html = '';
+                        for (i=0; i<response.routes.length; i++)
+                        {
+                            html += '<li><a href="'+response.routes[i]+'">'+ucfirst(response.routes[i])+'</a></li>';
+                        }
+                        $('#routes').html(html);
                         $('#nLogin').css('display', 'none');
                         $('#nLoginDrop').css('display', 'block');
                         $('#nLoginDrop').text(response.user.name);

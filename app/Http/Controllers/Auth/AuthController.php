@@ -49,6 +49,7 @@ class AuthController extends Controller
 	 */
 	public function me()
 	{
+		
 		$origin = auth()->user()->roles()->get()->pluck('name')->toArray();
 		$replace_map = [
 			'dj' => 'songs',
@@ -66,8 +67,7 @@ class AuthController extends Controller
 				},$i);
 		}, $origin);
 		
-		
-		return response()->json(compact('user', 'routes'));
+		return response()->json(compact( 'user', 'routes'));
 		
 	}
 	
