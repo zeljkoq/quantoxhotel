@@ -16,8 +16,11 @@ class jwt
      */
     public function handle($request, Closure $next)
     {
-//    	dd('aa');
-    	JWTAuth::parseToken()->authenticate();
-        return $next($request);
+    	if($request->user() != null)
+	    {
+		    JWTAuth::parseToken()->authenticate();
+		    return $next($request);
+	    }
+    	return response()->json(false);
     }
 }

@@ -69,6 +69,7 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (songs) {
+                    console.log(songs);
                     if (!songs)
                     {
                         window.location.replace('/');
@@ -180,6 +181,7 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (response) {
+                    console.log(response);
                     // response = JSON.stringify(response);
                     console.log(response);
                     $('td:contains("' + response.data.id + '")').parent().css("display", "none");

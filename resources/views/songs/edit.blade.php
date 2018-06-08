@@ -42,11 +42,14 @@
         function getSongData()
         {
             $.ajax({
+                type: "GET",
                 url: '{{ route('song.edit.data', $song_id) }}',
-                contentType: "application/json",
+
                 success: function(data) {
-                    // console.log(data);
-                    // data = JSON.parse(data).model;
+                    if (!data)
+                    {
+                        window.location.replace('/');
+                    }
                     $('#artist').val(data.song.artist);
                     $('#track').val(data.song.track);
                     $('#link').val(data.song.link);

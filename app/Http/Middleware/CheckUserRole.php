@@ -16,13 +16,16 @@ class CheckUserRole
      */
     public function handle($request, Closure $next)
     {
-	
     	$role = $request->route()->getAction()['role'];
 
+    	
 	    if (auth()->user()->hasRole($role))
 	    {
 		    return $next($request);
 	    }
+	    
+    	
+
 	    return response()->json(false);
 	    
     }

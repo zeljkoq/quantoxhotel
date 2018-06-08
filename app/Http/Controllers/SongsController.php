@@ -149,12 +149,12 @@ class SongsController extends Controller
 	 */
 	public function update(StoreSongRequest $request, $song_id)
 	{
-		
 		try {
 			$song = Song::where('id', $song_id)->first();
 			$song->artist = $request->artist;
 			$song->track = $request->track;
 			$song->link = $request->link;
+			$song->duration = $request->duration;
 			$song->update();
 			return new SongResource($song);
 		} catch (\Exception $e) {

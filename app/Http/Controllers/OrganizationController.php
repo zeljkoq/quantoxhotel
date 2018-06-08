@@ -9,19 +9,15 @@ class OrganizationController extends Controller
 {
 	public function index()
 	{
-		
+
+		return view('organization.index')->with([
+			'currentUser' => auth()->user(),
+		]);
+
+	}
 	
-	
-//		if (auth()->user())
-//		{
-//			if (auth()->user()->hasRole('party'))
-//			{
-				return view('organization.index')->with([
-					'currentUser' => auth()->user(),
-				]);
-//			}
-//			return redirect('/');
-//		}
-//		return redirect('/');
+	public function getUserData(Request $request)
+	{
+		return 123;
 	}
 }
