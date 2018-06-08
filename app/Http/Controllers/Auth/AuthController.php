@@ -45,18 +45,9 @@ class AuthController extends Controller
 
 	public function getRoutes()
     {
-        $routes = auth()->user()->roles()->get()->pluck('name')->toArray();
 
-//dd($roles);
-//        $routesCollection = [
-//            'party',
-//            'songs',
-//        ];
 
-//        dd(array_search('dj', $roles));
-//        dd(array_diff($routesCollection, $roles));
-//        $routes = array_intersect_key($routesCollection, $roles);
-        return response()->json(compact('routes'));
+//        return response()->json(compact('routes'));
     }
 
 	/**
@@ -66,7 +57,27 @@ class AuthController extends Controller
 	 */
 	public function me()
 	{
-		return response()->json(auth()->user());
+
+        $user = new UserResource(auth()->user());
+
+        $origin = auth()->user()->roles()->get()->pluck('name')->toArray();
+
+        $replace_map = [
+            'dj' => 'songs',
+            'party' => 'party',
+        ];
+
+        $routes = array_map(function($i) use($replace_map) {
+            return preg_replace_callback('/^(-)*(.+)$/',
+                function($m) use($replace_map) {
+                    if(!isset($replace_map[$m[2]]))
+                        return($m[0]);
+                    return $m[1] . $replace_map[$m[2]];
+                },$i);
+        }, $origin);
+
+        return response()->json(compact('user', 'routes'));
+//		return response()->json(auth()->user());
 	}
 	
 	/**

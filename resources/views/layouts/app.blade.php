@@ -97,23 +97,6 @@
         $(document).ready(function(){
             $.ajax({
                 type: "POST",
-                url: '{{route('get.routes')}}',
-                headers: {
-                    "Accept" : "application/json",
-                    "Content-Type" : "application/json",
-                },
-                success: function (data) {
-                    var html = '';
-                    for (i=0; i<data.routes.length; i++)
-                    {
-                        html += '<li><a href="'+data.routes[i]+'">'+ucfirst(data.routes[i])+'</a></li>';
-                    }
-                    console.log(html);
-                    $('#routes').html(html);
-                }
-            });
-            $.ajax({
-                type: "POST",
                 url: '{{route('login.me')}}',
                 headers: {
                     "Accept" : "application/json",
@@ -132,6 +115,14 @@
                         $('#nLoginDrop').css('display', 'none');
                         $('#nLoginDrop').text(response.name);
                     }
+
+                    var html = '';
+                    for (i=0; i<response.routes.length; i++)
+                    {
+                        html += '<li><a href="'+response.routes[i]+'">'+ucfirst(response.routes[i])+'</a></li>';
+                    }
+                    console.log(html);
+                    $('#routes').html(html);
                 }
             });
         });
