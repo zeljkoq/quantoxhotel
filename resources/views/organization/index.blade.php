@@ -30,5 +30,19 @@
 @endsection
 
 @section('scripts')
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+                type: "POST",
+                url: '{{route('get.party.user')}}',
+                headers: {
+                    "Accept" : "application/json",
+                    "Content-Type" : "application/json",
+                },
+                success: function (response) {
 
+                }
+            });
+        });
+    </script>
 @endsection

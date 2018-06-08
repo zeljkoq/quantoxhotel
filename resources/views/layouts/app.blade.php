@@ -114,6 +114,7 @@
                     else
                     {
                         $('#nLogin').css('display', 'block');
+                        $('#nLogin').text('Login');
                         $('#nLoginDrop').css('display', 'none');
                         $('#nLoginDrop').text(response.user.name);
                     }

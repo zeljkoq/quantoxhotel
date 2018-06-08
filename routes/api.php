@@ -39,6 +39,11 @@ Route::group(['prefix' => 'song', 'middleware' => 'jwt'], function(){
 			'as' => 'song.get.user.data',
 			'role' => 'dj'
 		]);
+		Route::get('/party', [
+			'uses' => 'PartyController@getUserData',
+			'as' => 'get.party.user',
+			'role' => 'party'
+		]);
 	});
  
 });
