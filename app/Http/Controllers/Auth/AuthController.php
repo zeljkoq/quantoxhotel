@@ -7,6 +7,8 @@ use App\Http\Requests\BaseRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 
@@ -49,7 +51,7 @@ class AuthController extends Controller
 	 */
 	public function me()
 	{
-		
+		$baseUrl = URL::to('/');
 		$origin = auth()->user()->roles()->get()->pluck('name')->toArray();
 		$replace_map = [
 			'dj' => 'songs',
@@ -66,6 +68,7 @@ class AuthController extends Controller
 					return $m[1] . $replace_map[$m[2]];
 				},$i);
 		}, $origin);
+		
 		
 		return response()->json(compact( 'user', 'routes'));
 		

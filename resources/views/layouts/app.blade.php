@@ -90,6 +90,7 @@
     </script>
     <script>
         $(document).ready(function(){
+            var baseUrl = '{{\Illuminate\Support\Facades\URL::to('/')}}';
             $.ajax({
                 type: "POST",
                 url: '{{route('login.me')}}',
@@ -103,7 +104,7 @@
                         var html = '';
                         for (i=0; i<response.routes.length; i++)
                         {
-                            html += '<li><a href="'+response.routes[i]+'">'+ucfirst(response.routes[i])+'</a></li>';
+                            html += '<li><a href="'+baseUrl+'/'+response.routes[i]+'">'+ucfirst(response.routes[i])+'</a></li>';
                         }
                         $('#routes').html(html);
                         $('#nLogin').css('display', 'none');
