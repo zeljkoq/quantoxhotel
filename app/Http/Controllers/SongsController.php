@@ -34,7 +34,6 @@ class SongsController extends Controller
      */
     public function user($user_id)
     {
-
         return view('user.index')->with([
             'user' => $user_id,
         ]);

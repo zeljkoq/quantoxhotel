@@ -11,12 +11,12 @@ class ApiRegisterController extends Controller
 {
 	public function register(RegistrationRequest $request, User $user)
 	{
-		$user->email = $request->email;
-		$user->name = $request->name;
-		$user->password = bcrypt($request->password);
+		$user->email = $request->emailRegister;
+		$user->name = $request->nameRegister;
+		$user->password = bcrypt($request->passwordRegister);
 		$user->save();
 
-		$credentials = request(['email', 'password']);
+		$credentials = request(['emailRegister', 'passwordRegister']);
 		
 		if (!$token = auth()->attempt($credentials)) {
 			return response()->json([

@@ -43,8 +43,8 @@
                     <ul id="routes" class="nav navbar-nav"></ul>
                     <ul class="nav navbar-nav navbar-right">
 
-                            <li><a id="nLogin" href="{{route('login')}}">Login</a></li>
-                            <li><a id="nRegister" href="{{route('register')}}">Register</a></li>
+                            <li><a id="nLogin" href="#">Login</a></li>
+                            <li><a id="nRegister" href="#">Register</a></li>
 
                             <li class="dropdown">
                                 <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -60,6 +60,9 @@
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>
+
+        @include('auth.login')
+        @include('auth.register')
 
         <div class="container">
             @yield('content')
@@ -85,6 +88,13 @@
     <script src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
 
     <script type="text/javascript">
+        $('#nLogin').click(function(){
+            $('#mLogin').modal('show');
+        });
+        $('#nRegister').click(function(){
+            $('#mRegister').modal('show');
+        })
+
         $(function () {
             $('#partyDate').datetimepicker();
         });
