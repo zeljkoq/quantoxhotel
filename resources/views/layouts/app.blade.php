@@ -44,6 +44,7 @@
                     <ul class="nav navbar-nav navbar-right">
 
                             <li><a id="nLogin" href="{{route('login')}}">Login</a></li>
+                            <li><a id="nRegister" href="{{route('register')}}">Register</a></li>
 
                             <li class="dropdown">
                                 <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -96,7 +97,6 @@
                 url: '{{route('login.me')}}',
                 headers: {
                     "Accept" : "application/json",
-                    "Content-Type" : "application/json",
                 },
                 success: function (response) {
                     if (response.user !== null)
@@ -108,6 +108,7 @@
                         }
                         $('#routes').html(html);
                         $('#nLogin').css('display', 'none');
+                        $('#nRegister').css('display', 'none');
                         $('#nLoginDrop').css('display', 'block');
                         $('#nLoginDrop').text(response.user.name);
                     }

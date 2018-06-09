@@ -131,16 +131,16 @@
             var track = $('#track').val();
             var link = $('#link').val();
             var duration = $('#duration').val();
-            var user_id = '1';
 
             $.ajax({
                 type: "post",
-                url: '/api/song/add',
-                data: ({duration: duration, artist: artist, track: track, link: link, user_id: user_id}),
+                url: '{{route('song.store')}}',
+                data: ({duration: duration, artist: artist, track: track, link: link}),
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (response) {
+                    console.log(response);
                     $('#artist').val('');
                     $('#track').val('');
                     $('#link').val('');
@@ -170,11 +170,10 @@
         $('body').on('click', '#deleteSong', function () {
             var $row = $(this).closest("tr");
             var songId = $row.find(".songId").html();
-            // console.log(songId);
 
             $.ajax({
                 type: "GET",
-                url: '/api/song/delete/' + songId,
+                url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/song/delete/' + songId,
                 data: $(this).serialize(),
                 contentType: "application/json",
                 headers: {
