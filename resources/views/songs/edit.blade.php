@@ -22,6 +22,9 @@
                             <div class="col">
                                 <input type="text" id="link" name="link" class="form-control" placeholder="" value="">
                             </div>
+                            <div class="col">
+                                <input type="text" id="duration" name="duration" class="form-control" placeholder="" value="">
+                            </div>
                             <button class="btn btn-primary" type="button" id="updateSong">Update</button>
                         </div>
                         {{--</form>--}}
@@ -39,14 +42,18 @@
         function getSongData()
         {
             $.ajax({
+                type: "GET",
                 url: '{{ route('song.edit.data', $song_id) }}',
-                contentType: "application/json",
+
                 success: function(data) {
-                    // console.log(data);
-                    // data = JSON.parse(data).model;
+                    if (!data)
+                    {
+                        window.location.replace('/');
+                    }
                     $('#artist').val(data.song.artist);
                     $('#track').val(data.song.track);
                     $('#link').val(data.song.link);
+                    $('#duration').val(data.song.duration);
                 }
             });
         }
@@ -59,10 +66,12 @@
             var artist = $('#artist').val();
             var track = $('#track').val();
             var link = $('#link').val();
+            var duration = $('#duration').val();
+
             $.ajax({
                 type: "post",
                 url: '{{route('song.update', $song_id)}}',
-                data: ({artist: artist, track: track, link: link}),
+                data: ({duration: duration, artist: artist, track: track, link: link}),
                 headers: {
                     "Authorization" : "Bearer " + localStorage.getItem('token'),
                 },

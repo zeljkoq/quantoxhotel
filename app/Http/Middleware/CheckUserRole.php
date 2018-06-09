@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Route;
 
-class jwt
+class CheckUserRole
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,17 @@ class jwt
      */
     public function handle($request, Closure $next)
     {
-    	if($request->user() != null)
+    	$role = $request->route()->getAction()['role'];
+
+    	
+	    if (auth()->user()->hasRole($role))
 	    {
-		    JWTAuth::parseToken()->authenticate();
 		    return $next($request);
 	    }
-    	return response()->json(false);
+	    
+    	
+
+	    return response()->json(false);
+	    
     }
 }

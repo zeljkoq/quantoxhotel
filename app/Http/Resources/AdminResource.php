@@ -18,6 +18,7 @@ class AdminResource extends JsonResource
             'artist' => $this->artist,
             'track' => $this->track,
             'link' => $this->link,
+            'duration' => $this->duration,
             'edit' => $this->edit_index,
             'id' => $this->id,
             'admin' => '1',

@@ -26,7 +26,6 @@
     <div id="app">
         <nav class="navbar navbar-default navbar-fixed-top"">
             <div class="container">
-                {{--<div id="routes"></div>--}}
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -41,13 +40,10 @@
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul id="routes" class="nav navbar-nav">
-                        {{--<li><a href="{{route('song.index')}}">Songs</a></li>--}}
-                        {{--<li><a href="{{route('organization.index')}}">Party organization</a></li>--}}
-                    </ul>
+                    <ul id="routes" class="nav navbar-nav"></ul>
                     <ul class="nav navbar-nav navbar-right">
 
-                            <li><a style="display: none;" id="nLogin" href="{{route('login')}}">Login</a></li>
+                            <li><a id="nLogin" href="{{route('login')}}">Login</a></li>
 
                             <li class="dropdown">
                                 <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -74,8 +70,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="{{ asset('js/local.js') }}" defer></script>
-     {{--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>--}}
-    <!-- Latest compiled and minified JavaScript -->
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <script>
@@ -90,11 +85,12 @@
 
     <script type="text/javascript">
         $(function () {
-            $('#datetimepicker4').datetimepicker();
+            $('#partyDate').datetimepicker();
         });
     </script>
     <script>
         $(document).ready(function(){
+            var baseUrl = '{{\Illuminate\Support\Facades\URL::to('/')}}';
             $.ajax({
                 type: "POST",
                 url: '{{route('login.me')}}',
@@ -103,26 +99,18 @@
                     "Content-Type" : "application/json",
                 },
                 success: function (response) {
-                    if (response.name)
+                    if (response.user !== null)
                     {
+                        var html = '';
+                        for (i=0; i<response.routes.length; i++)
+                        {
+                            html += '<li><a href="'+baseUrl+'/'+response.routes[i]+'">'+ucfirst(response.routes[i])+'</a></li>';
+                        }
+                        $('#routes').html(html);
                         $('#nLogin').css('display', 'none');
                         $('#nLoginDrop').css('display', 'block');
-                        $('#nLoginDrop').text(response.name);
+                        $('#nLoginDrop').text(response.user.name);
                     }
-                    else
-                    {
-                        $('#nLogin').css('display', 'block');
-                        $('#nLoginDrop').css('display', 'none');
-                        $('#nLoginDrop').text(response.name);
-                    }
-
-                    var html = '';
-                    for (i=0; i<response.routes.length; i++)
-                    {
-                        html += '<li><a href="'+response.routes[i]+'">'+ucfirst(response.routes[i])+'</a></li>';
-                    }
-                    console.log(html);
-                    $('#routes').html(html);
                 }
             });
         });

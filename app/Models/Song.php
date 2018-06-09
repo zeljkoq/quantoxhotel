@@ -12,7 +12,8 @@ class Song extends Model
         'user_id',
         'artist',
         'track',
-        'link'
+        'link',
+	    'duration'
     ];
 
     public function user()

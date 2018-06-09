@@ -16,22 +16,48 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::post('/login', 'Auth\AuthController@login')->name('login.api');
-Route::post('/registerUser', 'Auth\ApiRegisterController@register')->name('register.api');
+	
+	Route::post('/login', 'Auth\AuthController@login')->name('login.api');
+	Route::post('/registerUser', 'Auth\ApiRegisterController@register')->name('register.api');
 
 Route::group(['prefix' => 'auth', 'middleware' => 'api'], function(){
 	Route::post('me', 'Auth\AuthController@me')->name('login.me');
-	Route::post('getRoutes', 'Auth\AuthController@getRoutes')->name('get.routes');
 	Route::post('logout', 'Auth\AuthController@logout');
 });
 
 
 
 Route::group(['prefix' => 'song', 'middleware' => 'jwt'], function(){
+
     Route::post('/add', 'SongsController@store')->name('song.store');
-    Route::get('/edit/{song_id}', 'SongsController@editData')->name('song.edit.data');
-    Route::get('/delete/{song_id}', 'SongsController@delete')->name('song.delete');
-    Route::post('/update/{song_id}', 'SongsController@update')->name('song.update');
-    Route::get('/', 'SongsController@getUserData')->name('song.get.user.data');
+
+	
+	Route::group(['middleware' => 'userRole'], function(){
+		Route::get('/', [
+			'uses' => 'SongsController@getUserData',
+			'as' => 'song.get.user.data',
+			'role' => 'dj'
+		]);
+		Route::get('/getParty', [
+			'uses' => 'OrganizationController@getUserData',
+			'as' => 'get.party.user',
+			'role' => 'party'
+		]);
+		Route::get('/edit/{song_id}', [
+			'uses' => 'SongsController@editData',
+			'as' => 'song.edit.data',
+			'role' => 'dj'
+		]);
+		Route::get('/delete/{song_id}', [
+			'uses' => 'SongsController@delete',
+			'as' => 'song.delete',
+			'role' => 'dj'
+		]);
+		Route::post('/update/{song_id}', [
+			'uses' => 'SongsController@update',
+			'as' => 'song.update',
+			'role' => 'dj'
+		]);
+	});
+ 
 });

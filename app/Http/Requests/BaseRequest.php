@@ -13,14 +13,15 @@ class BaseRequest extends FormRequest
      */
     public function authorize()
     {
-        $roles = auth()->user()->roles()->get()->pluck('name')->toArray();
-        $routesCollection = [
-            'songs',
-            'party',
-        ];
-        $routes = array_intersect_key($routesCollection, $roles);
-        return 13;
-        return false;
+//        $roles = auth()->user()->roles()->get();
+//
+//        foreach ($roles as $role)
+//        {
+//        	if($roles->contains('name', $role->name))
+//	        {
+//	        	return true;
+//	        }
+//        }
     }
 
     /**

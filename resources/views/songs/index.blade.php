@@ -18,6 +18,9 @@
                         <div class="form-group">
                             <input type="text" name="link" id="link" class="form-control" placeholder="Link">
                         </div>
+                        <div class="form-group">
+                            <input type="text" name="duration" id="duration" class="form-control" placeholder="Duration">
+                        </div>
                         <button class="btn btn-primary" type="button" id="addSong">Add</button>
                     </form>
                 </div>
@@ -36,6 +39,7 @@
                             <td>Artist</td>
                             <td>Track</td>
                             <td>Link</td>
+                            <td>Duration</td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -65,6 +69,11 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (songs) {
+                    console.log(songs);
+                    if (!songs)
+                    {
+                        window.location.replace('/');
+                    }
                     var html = '';
                     for (i = 0; i < songs.data.length; i++) {
                         if (songs.data[i].admin === '1') {
@@ -73,6 +82,7 @@
                                 '<td id="art">' + songs.data[i].artist + '</td>' +
                                 '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                                '<td id="drt">' + songs.data[i].duration + '</td>' +
                                 '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
                                 '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                                 '</tr>';
@@ -83,6 +93,7 @@
                                 '<td id="art">' + songs.data[i].artist + '</td>' +
                                 '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                                '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
                                 '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                                 '</tr>';
@@ -93,6 +104,7 @@
                                 '<td id="art">' + songs.data[i].artist + '</td>' +
                                 '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                                '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '</tr>';
                         }
                     }
@@ -111,17 +123,6 @@
         }
 
         $(document).ready(function () {
-            var items = localStorage.getItem('roles');
-            var res = items.split(" ");
-
-            if (res.indexOf('songs') >= 0)
-            {
-                $('#allSongs').css("display", 'block');
-            }
-            else {
-                $('#allSongs').css("display", 'block');
-                $('#allSongs').text('You don\'t have permission to view this page!');
-            }
             getIndexData();
         });
 
@@ -129,12 +130,13 @@
             var artist = $('#artist').val();
             var track = $('#track').val();
             var link = $('#link').val();
+            var duration = $('#duration').val();
             var user_id = '1';
 
             $.ajax({
                 type: "post",
-                url: '{{route('song.store')}}',
-                data: ({artist: artist, track: track, link: link, user_id: user_id}),
+                url: '/api/song/add',
+                data: ({duration: duration, artist: artist, track: track, link: link, user_id: user_id}),
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
@@ -142,12 +144,14 @@
                     $('#artist').val('');
                     $('#track').val('');
                     $('#link').val('');
+                    $('#duration').val('');
                     html = '';
                     html += '<tr>' +
                         '<td hidden class="songId">' + response.data.id + '</td>' +
                         '<td id="art">' + response.data.artist + '</td>' +
                         '<td id="trck">' + response.data.track + '</td>' +
                         '<td id="lnk"><a id="atr" target="_blank" href="' + response.data.link + '">' + response.data.link + '</a></td>' +
+                        '<td id="drt">' + response.data.duration + '</td>' +
                         '<td><a href="' + response.data.edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
                         '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                         '</tr>';
@@ -177,6 +181,7 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (response) {
+                    console.log(response);
                     // response = JSON.stringify(response);
                     console.log(response);
                     $('td:contains("' + response.data.id + '")').parent().css("display", "none");
@@ -214,6 +219,7 @@
                             '<td id="art">' + songs.data[i].artist + '</td>' +
                             '<td id="trck">' + songs.data[i].track + '</td>' +
                             '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                            '<td id="trck">' + songs.data[i].track + '</td>' +
                             '<td><a href="' + songs.data[i].edit + '" class="btn btn-light"><i class="fas fa-edit"></i></a></td>' +
                             '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
@@ -224,6 +230,7 @@
                             '<td id="art">' + songs.data[i].artist + '</td>' +
                             '<td id="trck">' + songs.data[i].track + '</td>' +
                             '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                            '<td id="trck">' + songs.data[i].track + '</td>' +
                             '</tr>';
                     }
                     else {
@@ -232,6 +239,7 @@
                             '<td id="art">' + songs.data[i].artist + '</td>' +
                             '<td id="trck">' + songs.data[i].track + '</td>' +
                             '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
+                            '<td id="trck">' + songs.data[i].track + '</td>' +
                             '</tr>';
                     }
                 }
