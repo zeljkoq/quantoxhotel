@@ -109,6 +109,7 @@
                 }),
                 success: function (data) {
                     localStorage.setItem('token', data.token);
+                    window.location = '/';
                 },
                 error: function (data) {
                     if (typeof data.responseJSON.errors !== 'undefined') {

@@ -14,15 +14,15 @@ class CreatePartiesTable extends Migration
     public function up()
     {
         Schema::create('parties', function (Blueprint $table) {
-	        $table->increments('id');
-	        $table->string('name');
-	        $table->string('date');
-	        $table->integer('duration');
-	        $table->integer('capacity');
-	        $table->string('description');
-	        $table->text('tags');
-	        $table->string('image');
-	        $table->timestamps();
+            $table->increments('id');
+            $table->string('name');
+            $table->string('date');
+            $table->integer('duration');
+            $table->integer('capacity');
+            $table->string('description');
+            $table->text('tags');
+            $table->string('image');
+            $table->timestamps();
         });
     }
 
