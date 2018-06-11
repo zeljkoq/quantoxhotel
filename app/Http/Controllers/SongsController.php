@@ -50,6 +50,7 @@ class SongsController extends Controller
         $song->track = $request->track;
         $song->link = $request->link;
         $song->duration = $request->duration;
+        $song->updated_by = $request->user()->id;
 
         $song->save();
 
@@ -146,7 +147,8 @@ class SongsController extends Controller
         $song->track = $request->track;
         $song->link = $request->link;
         $song->duration = $request->duration;
+        $song->updated_by = $request->user()->id;
         $song->update();
-        return new SongResource($song);
+        return new AdminResource($song);
     }
 }

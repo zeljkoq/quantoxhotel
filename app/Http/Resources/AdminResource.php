@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class AdminResource extends JsonResource
@@ -22,7 +23,9 @@ class AdminResource extends JsonResource
             'edit' => $this->edit_index,
             'id' => $this->id,
             'admin' => '1',
-            'user' => '0'
+            'user' => '0',
+            'updated_by' => User::where('id', $this->updated_by)->pluck('name')->first(),
+            'updated_at' => $this->updated_at->diffForHumans(),
         ];
     }
 }

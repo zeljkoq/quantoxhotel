@@ -43,8 +43,10 @@
                                 <td>Track</td>
                                 <td>Link</td>
                                 <td>Duration</td>
+                                <td>Updated by</td>
                                 <td></td>
                                 <td></td>
+
                             </tr>
                             </thead>
                             <tbody id="songsList">
@@ -84,6 +86,7 @@
                                 '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
                                 '<td id="drt">' + songs.data[i].duration + '</td>' +
+                                '<td><small><b>'+songs.data[i].updated_by+'</b></small><br><small>'+songs.data[i].updated_at+'</small></td>' +
                                 '<td><button id="editSong" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                                 '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                                 '</tr>';
@@ -94,7 +97,8 @@
                                 '<td id="art">' + songs.data[i].artist + '</td>' +
                                 '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '<td id="lnk"><a id="atr" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
-                                '<td id="trck">' + songs.data[i].track + '</td>' +
+                                '<td id="drt">' + songs.data[i].duration + '</td>' +
+                                '<td><small><b>'+songs.data[i].updated_by+'</b></small><br><small>'+songs.data[i].updated_at+'</small></td>' +
                                 '</tr>';
                         }
                     }
@@ -142,6 +146,7 @@
                         '<td id="trck">' + response.data.track + '</td>' +
                         '<td id="lnk"><a id="atr" target="_blank" href="' + response.data.link + '">' + response.data.link + '</a></td>' +
                         '<td id="drt">' + response.data.duration + '</td>' +
+                        '<td><small><b>'+response.data.updated_by+'</b></small><br><small>'+response.data.updated_at+'</small></td>' +
                         '<td><button id="editSong" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                         '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                         '</tr>';
@@ -256,11 +261,12 @@
                         '<td id="trck">' + response.data.track + '</td>' +
                         '<td id="lnk"><a id="atr" target="_blank" href="' + response.data.link + '">' + response.data.link + '</a></td>' +
                         '<td id="drt">' + response.data.duration + '</td>' +
+                        '<td><small><b>'+response.data.updated_by+'</b></small><br><small>'+response.data.updated_at+'</small></td>' +
                         '<td><button id="editSong" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                         '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                         '</tr>';
 
-                    $('#songsList').prepend(html);
+                    $('#songsList').append(html);
 
                     setMessage('success', 'Song has been updated');
                 },

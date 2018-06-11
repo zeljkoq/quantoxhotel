@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SongResource extends JsonResource
@@ -20,6 +21,8 @@ class SongResource extends JsonResource
             'track' => $this->track,
             'link' => $this->link,
             'duration' => $this->duration,
+            'updated_by' => User::where('id', $this->updated_by)->pluck('name')->first(),
+
         ];
     }
 }

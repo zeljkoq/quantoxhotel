@@ -19,6 +19,7 @@ class CreateSongsTable extends Migration
             $table->string('track', 255);
             $table->string('link', 255);
             $table->float('duration');
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }
