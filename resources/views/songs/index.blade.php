@@ -136,7 +136,7 @@
                     $('#link').val('');
                     $('#duration').val('');
                     html = '';
-                    html += '<tr id="'+ songs.data[i].id +'">' +
+                    html += '<tr id="'+ response.data.id +'">' +
                         '<td hidden class="songId">' + response.data.id + '</td>' +
                         '<td id="art">' + response.data.artist + '</td>' +
                         '<td id="trck">' + response.data.track + '</td>' +
