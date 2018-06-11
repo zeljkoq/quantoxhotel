@@ -18,6 +18,7 @@ class ApiRegisterController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
 
+
         if ($request->roles != null) {
             foreach ($request->roles as $role) {
                 DB::table('users_roles')->insert([
@@ -25,6 +26,10 @@ class ApiRegisterController extends Controller
                     'role_id' => $role,
                 ]);
             }
+            $roles = Role::whereIn('id', $request->roles)->get()->pluck('name')->toArray();
+        }
+        else {
+            $roles = [];
         }
 
 
@@ -36,7 +41,8 @@ class ApiRegisterController extends Controller
             ], 401);
         }
         return response()->json([
-            'token' => $token
+            'token' => $token,
+            'roles' => $roles,
         ]);
     }
 }

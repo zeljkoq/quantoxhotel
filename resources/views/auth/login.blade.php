@@ -85,7 +85,7 @@
                         arr += response.user.roles[i].name + ' ';
                     }
                     localStorage.setItem('routes', arr);
-                    window.location = '/';
+                    window.location = '{{route('home.index')}}';
                 },
                 error: function (response) {
 
@@ -120,7 +120,6 @@
             var passwordRegister = $('#passwordRegister').val();
             var passwordConfirm = $('#passwordConfirm').val();
             var userRoles = $('#userRoles').val();
-            console.log(userRoles);
             $.ajax({
                 url: '{{route('register.api')}}',
                 type: 'POST',
@@ -132,8 +131,15 @@
                     roles: userRoles,
                 }),
                 success: function (data) {
+
                     localStorage.setItem('token', data.token);
-                    window.location = '/';
+                    var arr2 = [];
+                    for (rs = 0; rs < data.roles.length; rs++) {
+                        arr2 += data.roles[rs] + ' ';
+                    }
+
+                    localStorage.setItem('routes', arr2);
+                    window.location = '{{route('home.index')}}';
                 },
                 error: function (data) {
                     if (typeof data.responseJSON.errors !== 'undefined') {

@@ -51,7 +51,6 @@ class SongsController extends Controller
         $song->link = $request->link;
         $song->duration = $request->duration;
 
-        $song->user_id = $request->user()->id;
         $song->save();
 
         return new AdminResource($song);

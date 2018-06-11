@@ -73,7 +73,7 @@
                 },
                 success: function (songs) {
                     if (!songs) {
-                        window.location.replace('/');
+                        window.location = '{{route('home.index')}}';
                     }
                     var html = '';
                     for (i = 0; i < songs.data.length; i++) {
@@ -317,7 +317,7 @@
 
         function getPosts(page) {
             $.ajax({
-                url: '/api/song/---------------?page=' + page,
+                url: '/api/song/?page=' + page,
                 dataType: 'json',
             }).done(function (songs) {
                 var html = '';

@@ -113,7 +113,7 @@
     $('#logout').click(function () {
         localStorage.removeItem('token');
         localStorage.removeItem('routes');
-        window.location = "/";
+        window.location = "{{route('home.index')}}";
     });
     var router = {
         routes: {

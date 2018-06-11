@@ -67,7 +67,7 @@
                     // console.log(response);
                     if(!response)
                     {
-                        window.location.replace('/');
+                        window.location = '{{route('home.index')}}';
                     }
                 }
             });
