@@ -120,13 +120,13 @@
             'dj': [
                 {
                     name: 'Songs',
-                    link: '/songs'
+                    link: 'songs'
                 },
             ],
             'party': [
                 {
                     name: 'Party',
-                    link: '/party'
+                    link: 'party'
                 }
             ]
         },
@@ -137,7 +137,6 @@
             })
         },
         showRoute: function (role) {
-            console.log(role);
             router.routes[role].forEach(function (t) {
                 $('#routes').append('<li><a href="'+t.link+'">'+ucfirst(t.name)+'</a></li>');
             });
