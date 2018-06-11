@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register API routes for your application. These
+| Here is where you can register API routes for your application. These    deleteFromStorage('Authorization');
+window.location = "/";
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
@@ -22,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'auth', 'middleware' => 'api'], function(){
 	Route::post('me', 'Auth\AuthController@me')->name('login.me');
-	Route::post('logout', 'Auth\AuthController@logout');
+	Route::post('logout', 'Auth\AuthController@logout')->name('logout.api');
 });
 
 
@@ -48,7 +49,7 @@ Route::group(['prefix' => 'song', 'middleware' => 'jwt'], function(){
 			'as' => 'song.edit.data',
 			'role' => 'dj'
 		]);
-		Route::get('/delete/{song_id}', [
+		Route::delete('/delete/{song_id}', [
 			'uses' => 'SongsController@delete',
 			'as' => 'song.delete',
 			'role' => 'dj'

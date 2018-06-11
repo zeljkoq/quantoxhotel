@@ -13,11 +13,10 @@ class StoreSongRequest extends FormRequest
      */
     public function authorize()
     {
-    	if (auth()->user()->hasRole('dj'))
-	    {
-		    return true;
-	    }
-	    return false;
+        if (auth()->user()->hasRole('dj')) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -31,7 +30,7 @@ class StoreSongRequest extends FormRequest
             'artist' => 'required',
             'track' => 'required',
             'link' => 'required',
-	        'duration' => 'required'
+            'duration' => 'required|regex:/^-?[0-9]+(?:\.[0-9]{1,2})?$/'
         ];
     }
 }

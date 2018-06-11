@@ -7,17 +7,16 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class OrganizationController extends Controller
 {
-	public function index()
-	{
+    public function index()
+    {
 
-		return view('organization.index')->with([
-			'currentUser' => auth()->user(),
-		]);
+        return view('organization.index')->with([
+            'currentUser' => auth()->user(),
+        ]);
+    }
 
-	}
-	
-	public function getUserData(Request $request)
-	{
-		return 123;
-	}
+    public function getUserData(Request $request)
+    {
+        return 123;
+    }
 }

@@ -13,11 +13,10 @@ class PartyRequest extends FormRequest
      */
     public function authorize()
     {
-	    if (auth()->user()->hasRole('party'))
-	    {
-		    return true;
-	    }
-	    return false;
+        if (auth()->user()->hasRole('party')) {
+            return true;
+        }
+        return false;
     }
 
     /**

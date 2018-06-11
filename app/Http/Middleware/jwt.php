@@ -10,18 +10,16 @@ class jwt
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-//        dd(12322);
-    	if($request->user() != null)
-	    {
-		    JWTAuth::parseToken()->authenticate();
-		    return $next($request);
-	    }
-    	return response()->json(false);
+        if ($request->user() != null) {
+            JWTAuth::parseToken()->authenticate();
+            return $next($request);
+        }
+        return response()->json(false);
     }
 }

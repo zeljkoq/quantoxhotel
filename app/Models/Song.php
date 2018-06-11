@@ -13,13 +13,14 @@ class Song extends Model
         'artist',
         'track',
         'link',
-	    'duration'
+        'duration'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+
     protected $appends = ['delete', 'edit_index'];
 
 

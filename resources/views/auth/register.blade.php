@@ -8,12 +8,13 @@
                 <h4 class="modal-title" id="myModalLabel">Modal title</h4>
             </div>
             <div class="modal-body">
+                <div id="registerMessages"></div>
                 <form class="form-signin">
                     <div class="form-group row">
                         <label for="nameRegister" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
 
                         <div class="col-md-6">
-                            <input id="nameRegister" type="name" class="form-control{{ $errors->has('nameRegister') ? ' is-invalid' : '' }}" name="nameRegister" value="{{ old('nameRegister') }}" required>
+                            <input id="nameRegister" id="nameRegister" type="text" class="form-control" name="name" value="{{ old('nameRegister') }}" required>
 
                         </div>
                     </div>
@@ -21,7 +22,7 @@
                         <label for="emailRegister" class="col-md-4 col-form-label text-md-right">{{ __('Email') }}</label>
 
                         <div class="col-md-6">
-                            <input id="emailRegister" type="emailRegister" class="form-control{{ $errors->has('emailRegister') ? ' is-invalid' : '' }}" name="emailRegister" value="{{ old('emailRegister') }}" required>
+                            <input id="emailRegister" id="emailRegister" type="emailRegister" class="form-control" name="email" value="{{ old('emailRegister') }}" required>
 
                         </div>
                     </div>
@@ -30,16 +31,15 @@
                         <label for="passwordRegister" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                         <div class="col-md-6">
-                            <input id="passwordRegister" type="password" class="form-control{{ $errors->has('passwordRegister') ? ' is-invalid' : '' }}" name="passwordRegister" required>
-
+                            <input id="passwordRegister" type="password" class="form-control" name="password" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+                        <label for="passwordConfirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
 
                         <div class="col-md-6">
-                            <input id="password-confirm" type="password" class="form-control"  required>
+                            <input id="passwordConfirm" name="passwordConfirm" type="password" class="form-control"  required>
                         </div>
                     </div>
 

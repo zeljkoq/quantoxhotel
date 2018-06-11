@@ -39,9 +39,4 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
-//    public function authenticated(Request $request, User $user)
-//    {
-//        $user->api_token = Hash::make(microtime());
-//        $user->save();
-//    }
 }

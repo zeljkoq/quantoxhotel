@@ -1,18 +1,33 @@
-function setMessage(type, data)
-{
-    if ('message' in data && type != null)
-    {
-        if (type === 'error')
-        {
-            type = 'danger';
-        }
+function setMessage(type, data) {
 
-        // $('#messages').after('<div id="messages" class=""></div>');
-        $('#messages').addClass('messages alert alert-'+type);
-        $('#messages').text(data.message);
-        window.setTimeout(function() {
+    if (type === 'error') {
+        type = 'danger';
+    }
+
+    $('#messages').addClass('messages alert alert-' + type);
+    $('#messages').append(data + '<br>');
+    if (data !== null) {
+        window.setTimeout(function () {
             $('#messages').empty();
-            $('#messages').removeClass('messages alert alert'+type);
+            $('#messages').removeClass('messages');
+            $('#messages').removeClass('alert');
+            $('#messages').removeClass('alert-' + type);
+        }, 3000);
+    }
+}
+
+function setModalMessage(field, type, data) {
+
+    if (type === 'error') {
+        type = 'danger';
+    }
+    $('#' + field).addClass('alert alert-' + type);
+    $('#' + field).append(data + '<br>');
+    if (data !== null) {
+        window.setTimeout(function () {
+            $('#' + field).empty();
+            $('#' + field).removeClass('alert');
+            $('#' + field).removeClass('alert-' + type);
         }, 3000);
     }
 }

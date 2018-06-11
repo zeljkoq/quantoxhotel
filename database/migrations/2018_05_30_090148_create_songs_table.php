@@ -19,7 +19,7 @@ class CreateSongsTable extends Migration
             $table->string('artist');
             $table->string('track');
             $table->string('link');
-            $table->string('duration');
+            $table->float('duration');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

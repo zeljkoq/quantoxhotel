@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\RoleRequest;
 use App\Http\Resources\AdminResource;
@@ -56,7 +55,6 @@ class SongsController extends Controller
         $song->save();
 
         return new AdminResource($song);
-
     }
 
     /**
@@ -68,7 +66,6 @@ class SongsController extends Controller
         $user_id = $request->user()->id;
 
         if (isset($user_id)) {
-
             $user = User::find($user_id);
 
             if ($user->hasRole('dj')) {
@@ -77,7 +74,7 @@ class SongsController extends Controller
                 return AdminResource::collection($songs);
             }
 
-            $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
+            $songs = Song::orderBy('id', 'desc')->paginate(5);
             return SongResource::collection($songs);
 
         }
@@ -105,7 +102,6 @@ class SongsController extends Controller
         return response()->json([
             'song' => $song
         ]);
-
     }
 
     /**
@@ -115,7 +111,6 @@ class SongsController extends Controller
     public function delete($song_id)
     {
         if (isset($song_id)) {
-
             $user = User::findOrFail(auth()->user()->id);
 
             if ($user->hasRole('dj')) {
@@ -137,7 +132,6 @@ class SongsController extends Controller
             ]);
 
         }
-
     }
 
 
@@ -148,20 +142,12 @@ class SongsController extends Controller
      */
     public function update(StoreSongRequest $request, $song_id)
     {
-        try {
-            $song = Song::where('id', $song_id)->first();
-            $song->artist = $request->artist;
-            $song->track = $request->track;
-            $song->link = $request->link;
-            $song->duration = $request->duration;
-            $song->update();
-            return new SongResource($song);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'You don\'t have permission to change this song.'
-            ]);
-        }
-
+        $song = Song::where('id', $song_id)->first();
+        $song->artist = $request->artist;
+        $song->track = $request->track;
+        $song->link = $request->link;
+        $song->duration = $request->duration;
+        $song->update();
+        return new SongResource($song);
     }
-
 }
