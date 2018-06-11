@@ -39,9 +39,9 @@
             </div>
 
             <div class="modal-footer">
-                <a class="btn btn-link" href="{{ route('password.request') }}">
-                    {{ __('Forgot Your Password?') }}
-                </a>
+                {{--<a class="btn btn-link" href="{{ route('password.request') }}">--}}
+                {{--{{ __('Forgot Your Password?') }}--}}
+                {{--</a>--}}
                 <button id="loginButton" type="button" class="btn btn-success">
                     {{ __('Login') }}
                 </button>
@@ -53,6 +53,22 @@
 
 @section('scripts')
     <script>
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: '{{route('get.roles')}}',
+                headers: {
+                    "Accept": "application/json",
+                },
+                success: function (response) {
+                    for (r = 0; r < response.roles.length; r++) {
+                        $('#userRoles').append('<option value="' + response.roles[r].id + '">' + ucfirst(response.roles[r].name) + '</option>');
+                    }
+                }
+            });
+        });
+
         $('#loginButton').click(function () {
             let email = $('#email').val();
             let password = $('#password').val();
@@ -62,7 +78,13 @@
                 url: '{{route('login.api')}}',
                 data: ({email: email, password: password}),
                 success: function (response) {
+                    console.log(response);
                     localStorage.setItem('token', response.token);
+                    var arr = [];
+                    for (i = 0; i < response.user.roles.length; i++) {
+                        arr += response.user.roles[i].name + ' ';
+                    }
+                    localStorage.setItem('routes', arr);
                     window.location = '/';
                 },
                 error: function (response) {
@@ -97,7 +119,8 @@
             var nameRegister = $('#nameRegister').val();
             var passwordRegister = $('#passwordRegister').val();
             var passwordConfirm = $('#passwordConfirm').val();
-
+            var userRoles = $('#userRoles').val();
+            console.log(userRoles);
             $.ajax({
                 url: '{{route('register.api')}}',
                 type: 'POST',
@@ -105,7 +128,8 @@
                     name: nameRegister,
                     email: emailRegister,
                     password: passwordRegister,
-                    passwordConfirm: passwordConfirm
+                    passwordConfirm: passwordConfirm,
+                    roles: userRoles,
                 }),
                 success: function (data) {
                     localStorage.setItem('token', data.token);

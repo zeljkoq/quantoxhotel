@@ -42,6 +42,14 @@
                             <input id="passwordConfirm" name="passwordConfirm" type="password" class="form-control"  required>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="roles" class="col-md-4 col-form-label text-md-right">{{ __('Choose Role') }}</label>
+
+                        <div class="col-md-6">
+                            <select id="userRoles" name="userRoles" class="form-control selectpicker" multiple>
+                            </select>
+                        </div>
+                    </div>
 
                 </form>
             </div>

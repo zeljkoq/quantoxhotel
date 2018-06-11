@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Requests\RegistrationRequest;
+use App\Models\Role;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ApiRegisterController extends Controller
 {
@@ -15,6 +17,16 @@ class ApiRegisterController extends Controller
         $user->name = $request->name;
         $user->password = bcrypt($request->password);
         $user->save();
+
+        if ($request->roles != null) {
+            foreach ($request->roles as $role) {
+                DB::table('users_roles')->insert([
+                    'user_id' => $user->id,
+                    'role_id' => $role,
+                ]);
+            }
+        }
+
 
         $credentials = request(['email', 'password']);
 

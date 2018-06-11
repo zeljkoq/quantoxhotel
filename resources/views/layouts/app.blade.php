@@ -23,6 +23,8 @@
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 </head>
 <body>
 <div id="app">
@@ -54,13 +56,11 @@
                     <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-haspopup="true" aria-expanded="false">
                         <ul class="dropdown-menu">
-                            <li><a href="#" id="logout">Logout</a>
-                    </a></li>
+                            <li><a href="#" id="logout">Logout</a></li>
+                    </a>
+                </li>
             </ul>
             </li>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
 
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -92,6 +92,8 @@
         },
     });
 </script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
 <script src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
 
@@ -110,10 +112,38 @@
 <script>
     $('#logout').click(function () {
         localStorage.removeItem('token');
+        localStorage.removeItem('routes');
         window.location = "/";
     });
+    var router = {
+        routes: {
+            'dj': [
+                {
+                    name: 'Songs',
+                    link: '/songs'
+                },
+            ],
+            'party': [
+                {
+                    name: 'Party',
+                    link: '/party'
+                }
+            ]
+        },
+        showRoutes: function (roles) {
+            roles.forEach(function (t) {
+                router.showRoute(t);
+
+            })
+        },
+        showRoute: function (role) {
+            console.log(role);
+            router.routes[role].forEach(function (t) {
+                $('#routes').append('<li><a href="'+t.link+'">'+ucfirst(t.name)+'</a></li>');
+            });
+        }
+    };
     $(document).ready(function () {
-        var baseUrl = '{{\Illuminate\Support\Facades\URL::to('/')}}';
         $.ajax({
             type: "POST",
             url: '{{route('login.me')}}',
@@ -121,16 +151,13 @@
                 "Accept": "application/json",
             },
             success: function (response) {
-                if (response.user !== null) {
-                    var html = '';
-                    for (i = 0; i < response.routes.length; i++) {
-                        html += '<li><a href="' + baseUrl + '/' + response.routes[i] + '">' + ucfirst(response.routes[i]) + '</a></li>';
-                    }
-                    $('#routes').html(html);
+                if (response.user.id !== false) {
+                    var rls = localStorage.getItem('routes');
                     $('#nLogin').css('display', 'none');
                     $('#nRegister').css('display', 'none');
                     $('#nLoginDrop').css('display', 'block');
                     $('#nLoginDrop').text(response.user.name);
+                    router.showRoutes(rls.split(" "));
                 }
             }
         });

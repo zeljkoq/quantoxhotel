@@ -16,7 +16,7 @@
 //});
 
 
-Auth::routes();
+//Auth::routes();
 
 Route::get('/songs', 'SongsController@index')->name('song.index');
 Route::get('/', 'HomeController@index')->name('home.index');

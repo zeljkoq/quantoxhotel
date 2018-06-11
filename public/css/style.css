@@ -6,6 +6,9 @@
     margin-left: 20px;
 }
 
+.selectpicker {
+    background-color: transparent;
+}
 
 body, html {
     /*height: 100%;*/

@@ -48,7 +48,7 @@ trait PermissionsTrait
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'users_roles');
+        return $this->belongsToMany('App\Models\Role', 'users_roles');
     }
 
     public function permissions()
