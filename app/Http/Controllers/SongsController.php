@@ -72,7 +72,7 @@ class SongsController extends Controller
             $user = User::find($user_id);
 
             if ($user->hasRole('dj')) {
-                $songs = Song::where('user_id', $user->id)->orderBy('id', 'desc')->paginate(5);
+                $songs = Song::orderBy('id', 'desc')->paginate(5);
 
                 return AdminResource::collection($songs);
             }
