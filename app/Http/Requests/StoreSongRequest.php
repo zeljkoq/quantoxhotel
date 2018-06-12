@@ -24,10 +24,10 @@ class StoreSongRequest extends FormRequest
     public function rules()
     {
         return [
-            'artist' => 'required',
-            'track' => 'required',
-            'link' => 'required',
-            'duration' => 'required|regex:/^-?[0-9]+(?:\.[0-9]{1,2})?$/'
+            'artist' => 'required|min:3',
+            'track' => 'required|min:3',
+            'link' => 'required|active_url',
+            'duration' => 'required|numeric'
         ];
     }
 }

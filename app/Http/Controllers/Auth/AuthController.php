@@ -53,24 +53,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-//        $routes = auth()->user()->roles()->get()->pluck('name')->toArray();
-//        $replace_map = [
-//            'dj' => 'songs',
-//            'party' => 'party',
-//        ];
-
         $user = auth()->user();
-
-//        $routes = array_map(function ($i) use ($replace_map) {
-//            return preg_replace_callback('/^(-)*(.+)$/',
-//                function ($m) use ($replace_map) {
-//                    if (!isset($replace_map[$m[2]])) {
-//                        return ($m[0]);
-//                    }
-//                    return $m[1] . $replace_map[$m[2]];
-//                }, $i);
-//        }, $origin);
-
 
         return response()->json(compact('user'));
     }
