@@ -1,60 +1,215 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# Quantox Hotel
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+> Application to manage party organizations in Quantox Hotel
 
-## About Laravel
+## Quick Start
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+``` bash
+# Install Dependencies
+composer install
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+# Run Migrations
+php artisan migrate
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+# Import User Roles
+php artisan db:seed
 
-## Learning Laravel
+# Add virtual host if using Apache
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+# If you get an error about an encryption key
+php artisan key:generate
+```
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+## Endpoints
 
-## Laravel Sponsors
+### User login
+``` bash
+POST api/login
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+{  
+	"email" : "mail@example.com",
+	"password" : "password"
+}
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
+### User registration
+``` bash
+POST api/register_user
 
-## Contributing
+{    
+	"name" : "Full Name",
+	"email" : "mail@example.com",
+	"password" : "password",
+	"passwordConfirm" : "password"
+}
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Get current user info
+``` bash
+POST api/auth/me
 
-## Security Vulnerabilities
+{
+    "user": {
+        "id": 1,
+        "name": "Full Name",
+        "email": "mail@wxample.com",
+        "created_at": "2018-06-12 07:08:25",
+        "updated_at": "2018-06-12 07:08:25"
+    }
+}
+```
+### Logout user
+``` bash
+POST api/auth/logout
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+{
+    "message": "Successfully logged out"
+}
+```
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Songs manipulation
+``` bash
+# Songs can be added only by DJs
+```
+
+### Add song
+``` bash
+POST api/song/add
+
+{
+	"artist" : "Artist Name",
+	"track" : "Track Name",
+	"link" : "Link",
+	"Duration" : "In minutes, only floats/integers"
+}
+
+You will receive this
+
+{
+    "data": {
+        "artist": "Artist Name",
+        "track": "Track Name",
+        "link": "Link",
+        "duration": "1.25",
+        "edit": "http://laravel.local/edit/1", # Edit link
+        "id": 1, # Song ID
+        "admin": "1", # If user is DJ you will receive this boolean
+        "user": "0",
+        "updated_by": "Users Full Name",
+        "updated_at": "1 second ago"
+    }
+}
+
+```
+
+### Edit song by it's ID
+
+``` bash
+GET api/song/edit/{song_id}
+
+This route will get song informations
+
+{
+    "song": {
+        "id": 1,
+        "artist": "Artist",
+        "track": "Track",
+        "link": "Link",
+        "duration": 1.25,
+        "updated_by": 1,
+        "created_at": "2018-06-12 07:08:33",
+        "updated_at": "2018-06-12 07:08:33",
+        "delete": "http://laravel.local/api/song/delete/1", # Delete link
+        "edit_index": "http://laravel.local/edit/1" # Edit link
+    }
+}
+
+```
+
+### Update song
+
+``` bash
+GET api/song/update/{song_id}
+
+# All fileds are required. In case you try to update with some empty field, you will receive this
+
+{
+    "message": "The given data was invalid.",
+    "errors": {
+        "artist": [
+            "The artist field is required."
+        ],
+        "track": [
+            "The track field is required."
+        ],
+        "link": [
+            "The link field is required."
+        ],
+        "duration": [
+            "The duration field is required."
+        ]
+    }
+}
+
+# Otherwise, you will get this
+
+{
+    "data": {
+        "artist": "Artist Name",
+        "track": "Track Name",
+        "link": "Link",
+        "duration": "1.22",
+        "edit": "http://laravel.local/edit/1",
+        "id": 1,
+        "admin": "1",
+        "user": "0",
+        "updated_by": "Full Name",
+        "updated_at": "1 second ago"
+    }
+}
+
+```
+
+### Delete song
+
+``` bash
+DEL api/song/delete/{song_id}
+
+# If song does not exists you will receive this message
+
+{
+    "message": "Song with ID of 333 does not exists"
+}
+
+# Otherwise, you will get this, which you can append into songs table
+
+{
+    "data": {
+        "artist": "Artist Name",
+        "track": "Track Name",
+        "link": "Link",
+        "duration": 1.22,
+        "edit": "http://laravel.local/edit/1",
+        "id": 1,
+        "admin": "1",
+        "user": "0",
+        "updated_by": "Full Name",
+        "updated_at": "9 minutes ago"
+    }
+}
+
+```
+
+```
+
+## App Info
+
+### Author
+
+Zeljko Marenovic
+Quantox Hotel
+
+### Version
+
+1.0.0

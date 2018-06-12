@@ -113,23 +113,29 @@ class SongsController extends Controller
         if (isset($song_id)) {
             $user = User::findOrFail(auth()->user()->id);
 
-            if ($user->hasRole('dj')) {
-                $song = Song::where('id', $song_id)->first();
-                $song->delete();
-                return new AdminResource($song);
-            }
+            $song = Song::find($song_id);
 
-            if ($user->hasRole('party')) {
-                $song = Song::where('id', $song_id)->first();
-                if ($song->user_id == $user->id) {
+            if ($song) {
+                if ($user->hasRole('dj')) {
                     $song->delete();
-                    return new SongResource($song);
+                    return new AdminResource($song);
                 }
 
+                if ($user->hasRole('party')) {
+                    if ($song->user_id == $user->id) {
+                        $song->delete();
+                        return new SongResource($song);
+                    }
+
+                }
+                return response()->json([
+                    'message' => 'You don\'t have permission to delete this song.'
+                ]);
             }
             return response()->json([
-                'message' => 'You don\'t have permission to delete this song.'
+                'message' => 'Song with ID of ' . $song_id . ' does not exists'
             ]);
+
 
         }
     }
