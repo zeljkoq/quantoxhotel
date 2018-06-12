@@ -34,7 +34,7 @@ POST api/login
 
 ### User registration
 ``` bash
-POST api/register_user
+POST api/register-user
 
 {    
 	"name" : "Full Name",
@@ -201,7 +201,6 @@ DEL api/song/delete/{song_id}
 
 ```
 
-```
 
 ## App Info
 
