@@ -8,7 +8,4 @@ class Party extends Model
 {
     protected $table = 'parties';
 
-    protected $fillable = [
-        ''
-    ];
 }

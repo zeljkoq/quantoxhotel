@@ -24,10 +24,10 @@ class PartyRequest extends FormRequest
     public function rules()
     {
         return [
-            'partyName' => 'required|min:6',
-            'partyDate' => 'required|min:6',
-            'partyDuration' => 'required|min:6',
-            'partyCapacity' => 'required|min:6',
+            'partyName' => 'required|min:5',
+            'partyDate' => 'required',
+            'partyDuration' => 'required|numeric',
+            'partyCapacity' => 'required|numeric',
             'partyDescription' => 'required|min:6',
             'partyTags' => 'required|min:6',
         ];

@@ -15,9 +15,9 @@ class CreatePartiesTable extends Migration
     {
         Schema::create('parties', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 5);
-            $table->string('date', 5);
-            $table->float('duration', 5);
+            $table->string('name', 20);
+            $table->timestamp('date');
+            $table->float('duration');
             $table->integer('capacity');
             $table->string('description', 255);
             $table->string('tags', 120);

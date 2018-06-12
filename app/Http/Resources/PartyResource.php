@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\User;
 
-class AdminResource extends JsonResource
+class PartyResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,15 +16,16 @@ class AdminResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'artist' => $this->artist,
-            'track' => $this->track,
-            'link' => $this->link,
-            'duration' => $this->duration,
             'id' => $this->id,
-            'admin' => '1',
-            'user' => '0',
+            'name' => $this->name,
+            'date' => \Carbon\Carbon::parse($this->date)->format('d/m/Y G:H'),
+            'duration' => $this->duration,
+            'capacity' => $this->capacity,
+            'description' => $this->description,
+            'tags' => $this->tags,
             'updated_by' => User::where('id', $this->updated_by)->pluck('name')->first(),
             'updated_at' => $this->updated_at->diffForHumans(),
+            'edit' => $this->edit_index,
         ];
     }
 }
