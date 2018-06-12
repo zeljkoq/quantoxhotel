@@ -24,7 +24,7 @@
                             </div>
                             <input style="display: none;" type="text" value="" name="songId" id="songId"
                                    class="form-control">
-                            <div id="controls">
+                            <div id="controls" class="btn-group" role="group" aria-label="...">
                                 <button class="btn btn-primary" type="button" id="addSong">Add song</button>
                             </div>
                         </form>
@@ -82,25 +82,25 @@
                     var html = '';
                     for (i = 0; i < songs.data.length; i++) {
                         if (songs.data[i].admin === '1') {
-                            html += '<tr id="'+ songs.data[i].id +'">' +
+                            html += '<tr id="' + songs.data[i].id + '">' +
                                 '<td hidden class="songId">' + songs.data[i].id + '</td>' +
                                 '<td id="art">' + songs.data[i].artist + '</td>' +
                                 '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '<td><a id="lnk" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
                                 '<td id="drt">' + songs.data[i].duration + '</td>' +
-                                '<td><small><b>'+songs.data[i].updated_by+'</b></small><br><small>'+songs.data[i].updated_at+'</small></td>' +
+                                '<td><small><b>' + songs.data[i].updated_by + '</b></small><br><small>' + songs.data[i].updated_at + '</small></td>' +
                                 '<td><button id="editSong" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                                 '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                                 '</tr>';
                         }
                         else {
-                            html += '<tr id="'+ songs.data[i].id +'">' +
+                            html += '<tr id="' + songs.data[i].id + '">' +
                                 '<td hidden class="songId">' + songs.data[i].id + '</td>' +
                                 '<td id="art">' + songs.data[i].artist + '</td>' +
                                 '<td id="trck">' + songs.data[i].track + '</td>' +
                                 '<td><a id="lnk" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
                                 '<td id="drt">' + songs.data[i].duration + '</td>' +
-                                '<td><small><b>'+songs.data[i].updated_by+'</b></small><br><small>'+songs.data[i].updated_at+'</small></td>' +
+                                '<td><small><b>' + songs.data[i].updated_by + '</b></small><br><small>' + songs.data[i].updated_at + '</small></td>' +
                                 '</tr>';
                         }
                     }
@@ -142,13 +142,13 @@
                     $('#link').val('');
                     $('#duration').val('');
                     html = '';
-                    html += '<tr id="'+ response.data.id +'">' +
+                    html += '<tr id="' + response.data.id + '">' +
                         '<td hidden class="songId">' + response.data.id + '</td>' +
                         '<td id="art">' + response.data.artist + '</td>' +
                         '<td id="trck">' + response.data.track + '</td>' +
                         '<td><a id="lnk" target="_blank" href="' + response.data.link + '">' + response.data.link + '</a></td>' +
                         '<td id="drt">' + response.data.duration + '</td>' +
-                        '<td><small><b>'+response.data.updated_by+'</b></small><br><small>'+response.data.updated_at+'</small></td>' +
+                        '<td><small><b>' + response.data.updated_by + '</b></small><br><small>' + response.data.updated_at + '</small></td>' +
                         '<td><button id="editSong" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                         '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                         '</tr>';
@@ -220,6 +220,9 @@
             $('#link').val($row.find('#lnk').attr('href'));
             $('#duration').val($row.find("#drt").html());
             $('#addSong').attr('id', 'updateSong');
+            if($('#cancel').length){
+                $('#cancel').remove();
+            }
             $('#controls').append('<button class="btn btn-warning" type="button" id="cancel">Cancel</button>')
         });
 
@@ -258,13 +261,13 @@
 
 
                     var html = '';
-                    html += '<tr id="'+ response.data.id +'">' +
+                    html += '<tr id="' + response.data.id + '">' +
                         '<td hidden class="songId">' + response.data.id + '</td>' +
                         '<td id="art">' + response.data.artist + '</td>' +
                         '<td id="trck">' + response.data.track + '</td>' +
                         '<td><a id="lnk" target="_blank" href="' + response.data.link + '">' + response.data.link + '</a></td>' +
                         '<td id="drt">' + response.data.duration + '</td>' +
-                        '<td><small><b>'+response.data.updated_by+'</b></small><br><small>'+response.data.updated_at+'</small></td>' +
+                        '<td><small><b>' + response.data.updated_by + '</b></small><br><small>' + response.data.updated_at + '</small></td>' +
                         '<td><button id="editSong" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                         '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                         '</tr>';
