@@ -20,6 +20,55 @@ php artisan db:seed
 php artisan key:generate
 ```
 
+## Additional informations
+
+#### This application uses JWT Auth as main authentication system. When you run  `composer install` you should be go to go, however, if you get some errors, you will need to make some changes 
+
+### JWT quick start
+
+``` bash
+php artisan vendor:publish --provider="Tymon\JWTAuth\Providers\LaravelServiceProvider"
+
+php artisan jwt:secret
+
+# config/auth.php file
+
+    'defaults' => [
+        'guard' => 'api',
+        'passwords' => 'users',
+    ],
+    
+    ---
+    
+        'guards' => [
+            'web' => [
+                'driver' => 'session',
+                'provider' => 'users',
+            ],
+    
+            'api' => [
+                'driver' => 'jwt',
+                'provider' => 'users',
+            ],
+        ],
+
+```
+
+``` bash
+# If above does not work, start with this
+# JWT Auth package that works with Laravel 5.6
+
+"tymon/jwt-auth": "^1.0.0-beta.3@dev"
+
+
+# Find jwt.php config file and in that file change this
+
+'jwt' => 'Tymon\JWTAuth\Providers\JWT\Namshi',
+'auth' => 'Tymon\JWTAuth\Providers\Auth\Illuminate',
+'storage' => 'Tymon\JWTAuth\Providers\Storage\Illuminate'
+
+```
+
 ## Endpoints
 
 ### User login
