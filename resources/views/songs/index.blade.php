@@ -257,6 +257,9 @@
                     $('#duration').val('');
                     $('#updateSong').attr('id', 'addSong');
                     $('#addSong').html('Add song');
+                    if($('#cancel').length){
+                        $('#cancel').remove();
+                    }
                     $('#' + response.data.id).hide();
 
 
