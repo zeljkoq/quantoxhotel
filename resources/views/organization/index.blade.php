@@ -46,8 +46,41 @@
                         <button type="button" class="btn btn-default">Save</button>
                     </div>
                 </div>
-
             </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">Parties</div>
+                <div class="panel-body">
+                    <div id="emptySongs" class="table-responsive">
+                        <table class="table table-striped">
+                            <thead style="background-color: #ddd; font-weight: bold;">
+                            <tr>
+                                <td>Name</td>
+                                <td>Date</td>
+                                <td>Duration (h)</td>
+                                <td>Capacity</td>
+                                <td>Description</td>
+                                <td>Tags</td>
+                                <td></td>
+                                <td></td>
+
+                            </tr>
+                            </thead>
+                            <tbody id="songsList">
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div id="pagination">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -64,7 +97,6 @@
                     "Content-Type" : "application/json",
                 },
                 success: function (response) {
-                    // console.log(response);
                     if(!response)
                     {
                         window.location = '{{route('home.index')}}';

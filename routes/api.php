@@ -80,8 +80,13 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'parties'], function () {
         Route::group(['middleware' => 'roles'], function () {
             Route::get('/', [
-                'uses' => 'OrganizationController@getUserData',
+                'uses' => 'PartyController@getUserData',
                 'as' => 'get.party.user',
+                'role' => 'party'
+            ]);
+            Route::post('/', [
+                'uses' => 'PartyController@store',
+                'as' => 'party.store',
                 'role' => 'party'
             ]);
         });

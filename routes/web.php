@@ -20,7 +20,6 @@
 
 Route::get('/songs', 'SongsController@index')->name('song.index');
 Route::get('/', 'HomeController@index')->name('home.index');
-Route::get('/party', 'OrganizationController@index')->name('organization.index');
+Route::get('/party', 'PartyController@index')->name('organization.index');
 Route::get('/edit/{song_id}', 'SongsController@editIndex')->name('song.edit.index');
 Route::get('/user/{user_id}', 'SongsController@user')->name('user.view');
-

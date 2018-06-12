@@ -13,10 +13,7 @@ class PartyRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->user()->hasRole('party')) {
-            return true;
-        }
-        return false;
+        return auth()->user()->hasRole('party');
     }
 
     /**
@@ -27,7 +24,12 @@ class PartyRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'partyName' => 'required|min:6',
+            'partyDate' => 'required|min:6',
+            'partyDuration' => 'required|min:6',
+            'partyCapacity' => 'required|min:6',
+            'partyDescription' => 'required|min:6',
+            'partyTags' => 'required|min:6',
         ];
     }
 }

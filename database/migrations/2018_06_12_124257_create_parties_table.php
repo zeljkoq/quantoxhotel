@@ -15,13 +15,13 @@ class CreatePartiesTable extends Migration
     {
         Schema::create('parties', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('date');
-            $table->integer('duration');
+            $table->string('name', 5);
+            $table->string('date', 5);
+            $table->float('duration', 5);
             $table->integer('capacity');
-            $table->string('description');
-            $table->text('tags');
-            $table->string('image');
+            $table->string('description', 255);
+            $table->string('tags', 120);
+            $table->integer('updated_by');
             $table->timestamps();
         });
     }
