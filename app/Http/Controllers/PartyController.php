@@ -8,8 +8,15 @@ use App\Models\Party;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+/**
+ * Class PartyController
+ * @package App\Http\Controllers
+ */
 class PartyController extends Controller
 {
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
 
@@ -18,6 +25,10 @@ class PartyController extends Controller
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
     public function getUserData(Request $request)
     {
         $user_id = $request->user()->id;
@@ -37,6 +48,11 @@ class PartyController extends Controller
         }
     }
 
+    /**
+     * @param PartyRequest $request
+     * @param Party $party
+     * @return PartyResource
+     */
     public function store(PartyRequest $request, Party $party)
     {
         $party->name = $request->partyName;
