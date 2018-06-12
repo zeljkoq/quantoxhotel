@@ -45,7 +45,6 @@ class SongsController extends Controller
      */
     public function store(StoreSongRequest $request, Song $song)
     {
-
         $song->artist = $request->artist;
         $song->track = $request->track;
         $song->link = $request->link;

@@ -38,47 +38,47 @@
 @endsection
 
 @section('scripts')
-    <script>
-        function getSongData()
-        {
-            $.ajax({
-                type: "GET",
-                url: '{{ route('song.edit.data', $song_id) }}',
+    {{--<script>--}}
+        {{--function getSongData()--}}
+        {{--{--}}
+            {{--$.ajax({--}}
+                {{--type: "GET",--}}
+                {{--url: '{{ route('song.edit.data', $song_id) }}',--}}
 
-                success: function(data) {
-                    if (!data)
-                    {
-                        window.location.replace('/');
-                    }
-                    $('#artist').val(data.song.artist);
-                    $('#track').val(data.song.track);
-                    $('#link').val(data.song.link);
-                    $('#duration').val(data.song.duration);
-                }
-            });
-        }
+                {{--success: function(data) {--}}
+                    {{--if (!data)--}}
+                    {{--{--}}
+                        {{--window.location.replace('/');--}}
+                    {{--}--}}
+                    {{--$('#artist').val(data.song.artist);--}}
+                    {{--$('#track').val(data.song.track);--}}
+                    {{--$('#link').val(data.song.link);--}}
+                    {{--$('#duration').val(data.song.duration);--}}
+                {{--}--}}
+            {{--});--}}
+        {{--}--}}
 
-        $(document).ready(function () {
-            getSongData();
-        });
+        {{--$(document).ready(function () {--}}
+            {{--getSongData();--}}
+        {{--});--}}
 
-        $('#updateSong').click(function() {
-            var artist = $('#artist').val();
-            var track = $('#track').val();
-            var link = $('#link').val();
-            var duration = $('#duration').val();
+        {{--$('#updateSong').click(function() {--}}
+            {{--var artist = $('#artist').val();--}}
+            {{--var track = $('#track').val();--}}
+            {{--var link = $('#link').val();--}}
+            {{--var duration = $('#duration').val();--}}
 
-            $.ajax({
-                type: "post",
-                url: '{{route('song.update', $song_id)}}',
-                data: ({duration: duration, artist: artist, track: track, link: link}),
-                headers: {
-                    "Authorization" : "Bearer " + localStorage.getItem('token'),
-                },
-                success: function(response) {
+            {{--$.ajax({--}}
+                {{--type: "post",--}}
+                {{--url: '{{route('song.update', $song_id)}}',--}}
+                {{--data: ({duration: duration, artist: artist, track: track, link: link}),--}}
+                {{--headers: {--}}
+                    {{--"Authorization" : "Bearer " + localStorage.getItem('token'),--}}
+                {{--},--}}
+                {{--success: function(response) {--}}
 
-                }
-            });
-        });
-    </script>
+                {{--}--}}
+            {{--});--}}
+        {{--});--}}
+    {{--</script>--}}
 @endsection

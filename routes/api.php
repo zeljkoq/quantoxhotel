@@ -18,45 +18,72 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/login', 'Auth\AuthController@login')->name('login.api');
-Route::post('/register-user', 'Auth\ApiRegisterController@register')->name('register.api');
 
-Route::group(['prefix' => 'auth', 'middleware' => 'api'], function () {
-    Route::post('me', 'Auth\AuthController@me')->name('login.me');
-    Route::post('logout', 'Auth\AuthController@logout')->name('logout.api');
-    Route::get('/getRoles', 'RoleController@getRoles')->name('get.roles');
-});
+Route::group(['prefix' => 'v1'], function () {
+
+    /*
+    Authentication
+    */
+
+    Route::post('/login', 'Auth\AuthController@login')->name('login.api');
+    Route::post('/register', 'Auth\ApiRegisterController@register')->name('register.api');
+    Route::get('/roles', 'RoleController@getRoles')->name('get.roles');
 
 
-Route::group(['prefix' => 'song', 'middleware' => 'jwt'], function () {
+    Route::group(['prefix' => 'auth', 'middleware' => 'jwt'], function () {
+        /*
+            Authenticated
+        */
 
-    Route::post('/add', 'SongsController@store')->name('song.store');
+        Route::post('me', 'Auth\AuthController@me')->name('login.me');
+        Route::post('logout', 'Auth\AuthController@logout')->name('logout.api');
+    });
+    /*
+        Songs
+    */
 
-    Route::group(['middleware' => 'userRole'], function () {
-        Route::get('/', [
-            'uses' => 'SongsController@getUserData',
-            'as' => 'song.get.user.data',
-            'role' => 'dj'
-        ]);
-        Route::get('/getParty', [
-            'uses' => 'OrganizationController@getUserData',
-            'as' => 'get.party.user',
-            'role' => 'party'
-        ]);
-        Route::get('/edit/{song_id}', [
-            'uses' => 'SongsController@editData',
-            'as' => 'song.edit.data',
-            'role' => 'dj'
-        ]);
-        Route::delete('/delete/{song_id}', [
-            'uses' => 'SongsController@delete',
-            'as' => 'song.delete',
-            'role' => 'dj'
-        ]);
-        Route::post('/update/{song_id}', [
-            'uses' => 'SongsController@update',
-            'as' => 'song.update',
-            'role' => 'dj'
-        ]);
+    Route::group(['prefix' => 'songs'], function () {
+        Route::group(['middleware' => 'roles'], function () {
+            Route::post('/', [
+                'uses' => 'SongsController@store',
+                'as' => 'song.store',
+                'role' => 'dj'
+            ]);
+
+            Route::get('/', [
+                'uses' => 'SongsController@getUserData',
+                'as' => 'song.get.user.data',
+                'role' => 'dj'
+            ]);
+            Route::get('/{song_id}', [
+                'uses' => 'SongsController@editData',
+                'as' => 'song.edit.data',
+                'role' => 'dj'
+            ]);
+            Route::delete('/{song_id}', [
+                'uses' => 'SongsController@delete',
+                'as' => 'song.delete',
+                'role' => 'dj'
+            ]);
+            Route::put('/{song_id}', [
+                'uses' => 'SongsController@update',
+                'as' => 'song.update',
+                'role' => 'dj'
+            ]);
+        });
+    });
+
+    /*
+     *      Parties --- Started/Not finished
+     */
+
+    Route::group(['prefix' => 'parties'], function () {
+        Route::group(['middleware' => 'roles'], function () {
+            Route::get('/', [
+                'uses' => 'OrganizationController@getUserData',
+                'as' => 'get.party.user',
+                'role' => 'party'
+            ]);
+        });
     });
 });

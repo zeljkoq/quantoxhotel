@@ -13,10 +13,7 @@ class StoreSongRequest extends FormRequest
      */
     public function authorize()
     {
-        if (auth()->user()->hasRole('dj')) {
-            return true;
-        }
-        return false;
+        return auth()->user()->hasRole('dj');
     }
 
     /**

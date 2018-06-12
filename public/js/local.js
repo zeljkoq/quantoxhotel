@@ -12,7 +12,7 @@ function setMessage(type, data) {
             $('#messages').removeClass('messages');
             $('#messages').removeClass('alert');
             $('#messages').removeClass('alert-' + type);
-        }, 3000);
+        }, 6000);
     }
 }
 
@@ -28,7 +28,7 @@ function setModalMessage(field, type, data) {
             $('#' + field).empty();
             $('#' + field).removeClass('alert');
             $('#' + field).removeClass('alert-' + type);
-        }, 3000);
+        }, 6000);
     }
 }
 

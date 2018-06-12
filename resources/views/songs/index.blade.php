@@ -144,7 +144,7 @@
                         '<td hidden class="songId">' + response.data.id + '</td>' +
                         '<td id="art">' + response.data.artist + '</td>' +
                         '<td id="trck">' + response.data.track + '</td>' +
-                        '<td id="lnk"><a id="atr" target="_blank" href="' + response.data.link + '">' + response.data.link + '</a></td>' +
+                        '<td><a id="lnk" target="_blank" href="' + response.data.link + '">' + response.data.link + '</a></td>' +
                         '<td id="drt">' + response.data.duration + '</td>' +
                         '<td><small><b>'+response.data.updated_by+'</b></small><br><small>'+response.data.updated_at+'</small></td>' +
                         '<td><button id="editSong" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
@@ -194,7 +194,7 @@
             if (confirm('Are you sure you want to delete this song?')) {
                 $.ajax({
                     type: "DELETE",
-                    url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/song/delete/' + songId,
+                    url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/v1/songs/' + songId,
                     data: $(this).serialize(),
                     contentType: "application/json",
                     headers: {
@@ -211,24 +211,13 @@
         $('body').on('click', '#editSong', function () {
             var $row = $(this).closest("tr");
             var songId = $row.find(".songId").html();
-            $.ajax({
-                type: "GET",
-                url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/song/edit/' + songId,
-                data: $(this).serialize(),
-                contentType: "application/json",
-                headers: {
-                    "Authorization": "Bearer " + localStorage.getItem('token'),
-                },
-                success: function (response) {
-                    $('#addSong').html('Update song');
-                    $('#artist').val(response.song.artist);
-                    $('#track').val(response.song.track);
-                    $('#link').val(response.song.link);
-                    $('#duration').val(response.song.duration);
-                    $('#songId').val(response.song.id);
-                    $('#addSong').attr('id', 'updateSong');
-                }
-            });
+            $('#addSong').html('Update song');
+            $('#artist').val($row.find("#art").html());
+            $('#songId').val(songId);
+            $('#track').val($row.find("#trck").html());
+            $('#link').val($row.find('#lnk').children()[0].getAttribute('href'));
+            $('#duration').val($row.find("#drt").html());
+            $('#addSong').attr('id', 'updateSong');
         });
 
         $('body').on('click', '#updateSong', function () {
@@ -238,8 +227,8 @@
             var duration = $('#duration').val();
             var songId = $('#songId').val();
             $.ajax({
-                type: "post",
-                url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/song/update/' + songId,
+                type: "PUT",
+                url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/v1/songs/' + songId,
                 data: ({duration: duration, artist: artist, track: track, link: link}),
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem('token'),
@@ -282,20 +271,20 @@
                         }
                     }
 
-                    else if (typeof errTrack !== 'undefined') {
+                    if (typeof errTrack !== 'undefined') {
                         for (t = 0; t < errTrack.length; t++) {
                             setMessage('error', errTrack[t]);
                         }
                     }
 
 
-                    else if (typeof errLink !== 'undefined') {
+                    if (typeof errLink !== 'undefined') {
                         for (l = 0; l < errLink.length; l++) {
                             setMessage('error', errLink[l]);
                         }
                     }
 
-                    else if (typeof errDuration !== 'undefined') {
+                    if (typeof errDuration !== 'undefined') {
                         for (d = 0; d < errDuration.length; d++) {
                             setMessage('error', errDuration[d]);
                         }
@@ -323,7 +312,7 @@
 
         function getPosts(page) {
             $.ajax({
-                url: '/api/song/?page=' + page,
+                url: '/api/v1/songs/?page=' + page,
                 dataType: 'json',
             }).done(function (songs) {
                 var html = '';
