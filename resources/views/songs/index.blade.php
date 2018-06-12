@@ -24,7 +24,9 @@
                             </div>
                             <input style="display: none;" type="text" value="" name="songId" id="songId"
                                    class="form-control">
-                            <button class="btn btn-primary" type="button" id="addSong">Add song</button>
+                            <div id="controls">
+                                <button class="btn btn-primary" type="button" id="addSong">Add song</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -218,6 +220,18 @@
             $('#link').val($row.find('#lnk').attr('href'));
             $('#duration').val($row.find("#drt").html());
             $('#addSong').attr('id', 'updateSong');
+            $('#controls').append('<button class="btn btn-warning" type="button" id="cancel">Cancel</button>')
+        });
+
+        $('body').on('click', '#cancel', function () {
+            $('#artist').val('');
+            $('#track').val('');
+            $('#link').val('');
+            $('#duration').val('');
+            $('#songId').val(songId);
+            $('#updateSong').html('Add song');
+            $('#updateSong').attr('id', 'addSong');
+            $('#cancel').remove();
         });
 
         $('body').on('click', '#updateSong', function () {
