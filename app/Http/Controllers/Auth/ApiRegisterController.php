@@ -9,8 +9,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class ApiRegisterController
+ * @package App\Http\Controllers\Auth
+ */
 class ApiRegisterController extends Controller
 {
+    /**
+     * @param RegistrationRequest $request
+     * @param User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(RegistrationRequest $request, User $user)
     {
         $user->email = $request->email;
