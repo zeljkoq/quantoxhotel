@@ -41,10 +41,6 @@ class PartyController extends Controller
 
                 return PartyResource::collection($songs);
             }
-
-//            $songs = Song::orderBy('id', 'desc')->paginate(5);
-//            return SongResource::collection($songs);
-
         }
     }
 
