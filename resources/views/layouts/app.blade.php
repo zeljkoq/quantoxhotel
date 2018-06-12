@@ -24,48 +24,47 @@
     <link rel="stylesheet"
           href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css">
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css">
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-default navbar-fixed-top"
-    ">
-    <div class="container">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Quantox Hotel') }}
-            </a>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul id="routes" class="nav navbar-nav"></ul>
-            <ul class="nav navbar-nav navbar-right">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Quantox Hotel') }}
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul id="routes" class="nav navbar-nav"></ul>
+                    <ul class="nav navbar-nav navbar-right">
 
-                <li><a id="nLogin" href="#">Login</a></li>
-                <li><a id="nRegister" href="#">Register</a></li>
+                        <li><a id="nLogin" href="#">Login</a></li>
+                        <li><a id="nRegister" href="#">Register</a></li>
 
-                <li class="dropdown">
-                    <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                       aria-haspopup="true" aria-expanded="false">
-                        <ul class="dropdown-menu">
-                            <li><a href="#" id="logout">Logout</a></li>
-                    </a>
-                </li>
-            </ul>
-            </li>
-
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+                        <li class="dropdown">
+                            <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="logout">Logout</a></li>
+                                </ul>
+                            </a>
+                        </li>
+                    </ul>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
     </nav>
 
     @include('auth.login')
@@ -117,6 +116,7 @@
         localStorage.removeItem('routes');
         window.location = "{{route('home.index')}}";
     });
+
     var router = {
         routes: {
             'dj': [
@@ -139,6 +139,9 @@
             })
         },
         showRoute: function (role) {
+            if (!router.routes[role]) {
+                return;
+            }
             router.routes[role].forEach(function (t) {
                 $('#routes').append('<li><a href="'+t.link+'">'+ucfirst(t.name)+'</a></li>');
             });
@@ -152,13 +155,16 @@
                 "Accept": "application/json",
             },
             success: function (response) {
-                if (response.user.id !== false) {
-                    var rls = localStorage.getItem('routes');
-                    $('#nLogin').css('display', 'none');
-                    $('#nRegister').css('display', 'none');
-                    $('#nLoginDrop').css('display', 'block');
-                    $('#nLoginDrop').text(response.user.name);
-                    router.showRoutes(rls.split(" "));
+                if (typeof response.user !== 'undefined')
+                {
+                    if (response.user.id !== false) {
+                        var rls = localStorage.getItem('routes');
+                        $('#nLogin').css('display', 'none');
+                        $('#nRegister').css('display', 'none');
+                        $('#nLoginDrop').css('display', 'block');
+                        $('#nLoginDrop').text(response.user.name);
+                        router.showRoutes(rls.split(" "));
+                    }
                 }
             }
         });
