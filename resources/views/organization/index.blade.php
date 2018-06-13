@@ -4,7 +4,7 @@
 
     <div id="content" class="row">
         <div class="col-md-12">
-            <form class="form-horizontal">
+            <form method="post" enctype="multipart/form-data" class="form-horizontal">
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">Name</label>
                     <div class="col-sm-8">
@@ -35,25 +35,22 @@
                         <input type="text" class="form-control" id="partyDescription" name="partyDescription" placeholder="Description">
                     </div>
                 </div>
-                {{--<div class="form-group">--}}
-                    {{--<label for="partyTags" class="col-sm-2 control-label">Tags</label>--}}
-                    {{--<div class="col-sm-8">--}}
-                        {{--<input type="text" class="form-control" id="partyTags" name="partyTags" placeholder="Tags">--}}
-                    {{--</div>--}}
-                {{--</div>--}}
                 <input type="text" id="partyId" hidden>
                 <div class="form-group">
                     <label for="partyTags" class="col-sm-2 control-label">Tags</label>
                     <div class="col-sm-8">
-                        {{--<select class="form-control" name="partyTags" id="partyTags">--}}
-
-                        {{--</select>--}}
-                        <select id="partyTags" name="partyTags" data-style="btn-primary" class="form-control selectpicker" multiple>
+                        <select id="partyTags" name="partyTags[]" data-style="btn-primary" class="form-control selectpicker" multiple>
                             <option value="Quantox">Quantox</option>
                             <option value="Zurka">Zurka</option>
                             <option value="Karaoke">Karaoke</option>
                             <option value="Pikado">Pikado</option>
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="coverImage" class="col-sm-2 control-label">Cover image</label>
+                    <div class="col-sm-8">
+                        <input type="file" class="form-control" id="coverImage" name="coverImage" placeholder="Cover image">
                     </div>
                 </div>
                 <div class="form-group">
@@ -148,25 +145,22 @@
             getIndexData();
         });
 
+
         $('body').on('click', '#addParty', function () {
-            var name = $('#partyName').val();
-            var date = $('#partyDate').val();
-            var duration = $('#partyDuration').val();
-            var capacity = $('#partyCapacity').val();
-            var description = $('#partyDescription').val();
+
+            var form_data = new FormData(document.forms[2]);
+
             var tags = $('#partyTags').val();
 
-            if (tags !== null)
-            {
-                tags = tags.join(', ');
-            }
-            else {
-                tags = '';
-            }
+            var tagsNew = tags.join(', ');
+
+            form_data.append('partyTags', tagsNew);
             $.ajax({
                 type: "POST",
                 url: '{{route('party.store')}}',
-                data: ({partyName: name, partyDate: date, partyDuration: duration, partyCapacity: capacity, partyDescription: description, partyTags: tags}),
+                data: form_data,
+                contentType: false,
+                processData: false,
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
@@ -178,6 +172,7 @@
                     $('#partyCapacity').val('');
                     $('#partyDescription').val('');
                     $('.selectpicker').selectpicker('val', []);
+                    $('#coverImage').val('');
                     var html = '';
                         html += '<tr id="' + response.data.id + '">' +
                             '<td hidden class="partyId">' + response.data.id + '</td>' +

@@ -60,11 +60,32 @@ class PartyController extends Controller
         $party->tags = $request->partyTags;
         $party->updated_by = $request->user()->id;
 
+        if ($request->hasFile('coverImage')) {
+            // Get filename with the extension
+            $filenameExt = $request->file('coverImage')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('coverImage')->getClientOriginalExtension();
+            // Filename to store
+            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+            // Upload Image
+            $path = $request->file('coverImage')->storeAs('public/cover_images', $fileNameToStore);
+        } else {
+            $fileNameToStore = 'no-image.png';
+        }
+
+        $party->cover_image = $fileNameToStore;
+
         $party->save();
 
         return new PartyResource($party);
     }
 
+    /**
+     * @param $party_id
+     * @return PartyResource|\Illuminate\Http\JsonResponse
+     */
     public function delete($party_id)
     {
         if (isset($party_id)) {
@@ -89,9 +110,14 @@ class PartyController extends Controller
         }
     }
 
+    /**
+     * @param PartyRequest $request
+     * @param $party_id
+     * @return PartyResource
+     */
     public function update(PartyRequest $request, $party_id)
     {
-//        dd();
+
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
         $party->date = \Carbon\Carbon::parse(strtotime($request->partyDate));

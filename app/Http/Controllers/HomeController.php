@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Party;
 
 class HomeController extends Controller
 {
@@ -14,6 +15,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('welcome');
+
+        $parties = Party::whereDate('updated_at', '>=', \Carbon\Carbon::today()->toDateString())
+            ->get();
+
+        return view('welcome')->with([
+            'parties' => $parties,
+        ]);
     }
 }
