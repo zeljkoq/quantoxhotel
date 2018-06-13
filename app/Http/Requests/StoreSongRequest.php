@@ -27,7 +27,7 @@ class StoreSongRequest extends FormRequest
             'artist' => 'required|min:3',
             'track' => 'required|min:3',
             'link' => 'required|active_url',
-            'duration' => 'required|numeric|max:5'
+            'duration' => 'required|numeric|max:30'
         ];
     }
 }

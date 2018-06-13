@@ -64,4 +64,44 @@ class PartyController extends Controller
 
         return new PartyResource($party);
     }
+
+    public function delete($party_id)
+    {
+        if (isset($party_id)) {
+            $user = User::findOrFail(auth()->user()->id);
+
+            $party = Party::find($party_id);
+
+            if ($party) {
+                if ($user->hasRole('party')) {
+                    $party->delete();
+                    return new PartyResource($party);
+                }
+                return response()->json([
+                    'message' => 'You don\'t have permission to delete this song.'
+                ]);
+            }
+            return response()->json([
+                'message' => 'Party with ID of ' . $party_id . ' does not exists'
+            ]);
+
+
+        }
+    }
+
+    public function update(PartyRequest $request, $party_id)
+    {
+//        dd();
+        $party = Party::where('id', $party_id)->first();
+        $party->name = $request->partyName;
+        $party->date = \Carbon\Carbon::parse(strtotime($request->partyDate));
+
+        $party->duration = $request->partyDuration;
+        $party->capacity = $request->partyCapacity;
+        $party->description = $request->partyDescription;
+        $party->tags = $request->partyTags;
+        $party->updated_by = $request->user()->id;
+        $party->update();
+        return new PartyResource($party);
+    }
 }

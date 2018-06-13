@@ -35,16 +35,28 @@
                         <input type="text" class="form-control" id="partyDescription" name="partyDescription" placeholder="Description">
                     </div>
                 </div>
+                {{--<div class="form-group">--}}
+                    {{--<label for="partyTags" class="col-sm-2 control-label">Tags</label>--}}
+                    {{--<div class="col-sm-8">--}}
+                        {{--<input type="text" class="form-control" id="partyTags" name="partyTags" placeholder="Tags">--}}
+                    {{--</div>--}}
+                {{--</div>--}}
+                <input type="text" id="partyId" hidden>
                 <div class="form-group">
                     <label for="partyTags" class="col-sm-2 control-label">Tags</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="partyTags" name="partyTags" placeholder="Tags">
+                        {{--<select class="form-control" name="partyTags" id="partyTags">--}}
+
+                        {{--</select>--}}
+                        <select id="partyTags" name="partyTags" data-style="btn-primary" class="form-control selectpicker" multiple>
+                            <option value="Quantox">Quantox</option>
+                            <option value="Zurka">Zurka</option>
+                            <option value="Karaoke">Karaoke</option>
+                            <option value="Pikado">Pikado</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    {{--<div class="col-sm-offset-2 col-sm-10">--}}
-                        {{--<button type="button" class="btn btn-default" id="addParty">Save</button>--}}
-                    {{--</div>--}}
                     <div id="controls" class="btn-group" role="group" aria-label="...">
                         <button class="btn btn-primary" type="button" id="addParty">Add song</button>
                     </div>
@@ -114,7 +126,7 @@
                                 '<td id="pTags">' + response.data[i].tags + '</td>' +
                                 '<td><small><b>' + response.data[i].updated_by + '</b></small><br><small>' + response.data[i].updated_at + '</small></td>' +
                                 '<td><button id="editParty" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
-                                '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                                '<td><button id="deleteParty" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                                 '</tr>';
                     }
 
@@ -143,6 +155,14 @@
             var capacity = $('#partyCapacity').val();
             var description = $('#partyDescription').val();
             var tags = $('#partyTags').val();
+
+            if (tags !== null)
+            {
+                tags = tags.join(', ');
+            }
+            else {
+                tags = '';
+            }
             $.ajax({
                 type: "POST",
                 url: '{{route('party.store')}}',
@@ -157,8 +177,7 @@
                     $('#partyDuration').val('');
                     $('#partyCapacity').val('');
                     $('#partyDescription').val('');
-                    $('#partyTags').val('');
-
+                    $('.selectpicker').selectpicker('val', []);
                     var html = '';
                         html += '<tr id="' + response.data.id + '">' +
                             '<td hidden class="partyId">' + response.data.id + '</td>' +
@@ -170,7 +189,7 @@
                             '<td id="pTags">' + response.data.tags + '</td>' +
                             '<td><small><b>' + response.data.updated_by + '</b></small><br><small>' + response.data.updated_at + '</small></td>' +
                             '<td><button id="editParty" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
-                            '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                            '<td><button id="deleteParty" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
 
                     $('#partiesList').prepend(html);
@@ -230,8 +249,8 @@
             $('#partyDuration').val($row.find("#pDuration").html());
             $('#partyCapacity').val($row.find("#pCapacity").html());
             $('#partyDescription').val($row.find("#pDescription").html());
-            $('#partyTags').val($row.find("#pTags").html());
-
+            var tagSplit = $row.find("#pTags").html().split(', ');
+            $('.selectpicker').selectpicker('val', tagSplit);
 
             $('#addParty').attr('id', 'updateParty');
             if($('#cancel').length){
@@ -251,6 +270,123 @@
             $('#updateParty').html('Add party');
             $('#updateParty').attr('id', 'addParty');
             $('#cancel').remove();
+            $('.selectpicker').selectpicker('val', []);
+        });
+
+        $('body').on('click', '#deleteParty', function () {
+            var $row = $(this).closest("tr");
+            var partyId = $row.find(".partyId").html();
+            if (confirm('Are you sure you want to delete this song?')) {
+                $.ajax({
+                    type: "DELETE",
+                    url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/v1/parties/' + partyId,
+                    data: $(this).serialize(),
+                    contentType: "application/json",
+                    headers: {
+                        "Authorization": "Bearer " + localStorage.getItem('token'),
+                    },
+                    success: function (response) {
+                        setMessage('success', 'Song has been deleted.');
+                        $('#'+partyId).css('display', 'none');
+                    }
+                });
+            }
+        });
+
+        $('body').on('click', '#updateParty', function () {
+            var name = $('#partyName').val();
+            var date = $('#partyDate').val();
+            var duration = $('#partyDuration').val();
+            var capacity = $('#partyCapacity').val();
+            var description = $('#partyDescription').val();
+            var tags = $('#partyTags').val();
+
+            var tagsNew = tags.join(', ');
+
+            var partyId = $('#partyId').val();
+            $.ajax({
+                type: "PUT",
+                url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/v1/parties/' + partyId,
+                data: ({partyName: name, partyDate: date, partyDuration: duration, partyCapacity: capacity, partyDescription: description, partyTags: tagsNew}),
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token'),
+                },
+                success: function (response) {
+                    $('.selectpicker').selectpicker('val', []);
+                    $('#partyName').val('');
+                    $('#partyId').val('');
+                    $('#partyDate').val('');
+                    $('#partyDuration').val('');
+                    $('#partyCapacity').val('');
+                    $('#partyDescription').val('');
+                    $('#partyTags').val('Quantox');
+                    $('#updateParty').html('Add party');
+                    $('#updateParty').attr('id', 'addParty');
+                    $('#cancel').remove();
+
+                    $('#' + response.data.id).remove();
+
+                    var html = '';
+                    html += '<tr id="' + response.data.id + '">' +
+                        '<td hidden class="partyId">' + response.data.id + '</td>' +
+                        '<td id="pName">' + response.data.name + '</td>' +
+                        '<td id="pDate">' + response.data.date + '</td>' +
+                        '<td id="pDuration">' + response.data.duration + '</td>' +
+                        '<td id="pCapacity">' + response.data.capacity + '</td>' +
+                        '<td id="pDescription">' + response.data.description + '</td>' +
+                        '<td id="pTags">' + response.data.tags + '</td>' +
+                        '<td><small><b>' + response.data.updated_by + '</b></small><br><small>' + response.data.updated_at + '</small></td>' +
+                        '<td><button id="editParty" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
+                        '<td><button id="deleteParty" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                        '</tr>';
+
+                    $('#partiesList').prepend(html);
+
+                    setMessage('success', 'Song has been updated');
+                },
+                error: function (response) {
+                    var errName = response.responseJSON.errors.partyName;
+                    var errDate = response.responseJSON.errors.partyDate;
+                    var errDuration = response.responseJSON.errors.partyDuration;
+                    var errCapacity = response.responseJSON.errors.partyCapacity;
+                    var errDescription = response.responseJSON.errors.partyDescription;
+                    var errTags = response.responseJSON.errors.partyTags;
+
+                    if (typeof errName !== 'undefined') {
+                        for (a = 0; a < errName.length; a++) {
+                            setMessage('error', errName[a]);
+                        }
+                    }
+
+                    if (typeof errDate !== 'undefined') {
+                        for (b = 0; b < errDate.length; b++) {
+                            setMessage('error', errDate[b]);
+                        }
+                    }
+
+                    if (typeof errDuration !== 'undefined') {
+                        for (c = 0; c < errDuration.length; c++) {
+                            setMessage('error', errDuration[c]);
+                        }
+                    }
+
+                    if (typeof errCapacity !== 'undefined') {
+                        for (d = 0; d < errCapacity.length; d++) {
+                            setMessage('error', errCapacity[d]);
+                        }
+                    }
+                    if (typeof errDescription !== 'undefined') {
+                        for (e = 0; e < errDescription.length; e++) {
+                            setMessage('error', errDescription[e]);
+                        }
+                    }
+                    if (typeof errTags !== 'undefined') {
+                        for (f = 0; f < errTags.length; f++) {
+                            setMessage('error', errTags[f]);
+                        }
+                    }
+                }
+            });
         });
     </script>
 @endsection

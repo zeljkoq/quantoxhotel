@@ -204,7 +204,7 @@
                     },
                     success: function (response) {
                         setMessage('success', 'Song has been deleted.');
-                        $('td:contains("' + response.data.id + '")').parent().css("display", "none");
+                        $('#'+songId).css('display', 'none');
                     }
                 });
             }

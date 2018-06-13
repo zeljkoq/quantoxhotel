@@ -25,11 +25,11 @@ class PartyRequest extends FormRequest
     {
         return [
             'partyName' => 'required|min:5',
-            'partyDate' => 'required',
-            'partyDuration' => 'required|numeric',
-            'partyCapacity' => 'required|numeric',
+            'partyDate' => 'required|date',
+            'partyDuration' => 'required|numeric|max:2',
+            'partyCapacity' => 'required|numeric|min:1',
             'partyDescription' => 'required|min:6',
-            'partyTags' => 'required|min:6',
+            'partyTags' => 'required|min:5',
         ];
     }
 }

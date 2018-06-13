@@ -89,6 +89,16 @@ Route::group(['prefix' => 'v1'], function () {
                 'as' => 'party.store',
                 'role' => 'party'
             ]);
+            Route::delete('/{party_id}', [
+                'uses' => 'PartyController@delete',
+                'as' => 'party.delete',
+                'role' => 'party'
+            ]);
+            Route::put('/{party_id}', [
+                'uses' => 'PartyController@update',
+                'as' => 'party.update',
+                'role' => 'party'
+            ]);
         });
     });
 });
