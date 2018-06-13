@@ -117,7 +117,6 @@ class PartyController extends Controller
      */
     public function update(PartyRequest $request, $party_id)
     {
-
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
         $party->date = \Carbon\Carbon::parse(strtotime($request->partyDate));
