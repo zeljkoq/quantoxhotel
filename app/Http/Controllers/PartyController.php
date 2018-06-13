@@ -117,9 +117,10 @@ class PartyController extends Controller
      */
     public function update(PartyRequest $request, $party_id)
     {
+
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
-        $party->date = \Carbon\Carbon::parse(strtotime($request->partyDate));
+        $party->date = date('Y-m-d H:i', strtotime($request->partyDate));
 
         $party->duration = $request->partyDuration;
         $party->capacity = $request->partyCapacity;
