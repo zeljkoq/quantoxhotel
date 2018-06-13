@@ -55,7 +55,7 @@
                 </div>
                 <div class="form-group">
                     <div id="controls" class="btn-group" role="group" aria-label="...">
-                        <button class="btn btn-primary" type="button" id="addParty">Add song</button>
+                        <button class="btn btn-primary" type="button" id="addParty">Add party</button>
                     </div>
                 </div>
             </form>
@@ -152,7 +152,14 @@
 
             var tags = $('#partyTags').val();
 
-            var tagsNew = tags.join(', ');
+            if (tags !== null)
+            {
+                var tagsNew = tags.join(', ');
+            }
+            else {
+                tagsNew = '';
+            }
+
 
             form_data.append('partyTags', tagsNew);
             $.ajax({
