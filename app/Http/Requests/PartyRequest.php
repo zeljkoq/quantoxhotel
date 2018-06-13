@@ -29,7 +29,7 @@ class PartyRequest extends FormRequest
             'partyDuration' => 'required|numeric|max:24',
             'partyCapacity' => 'required|numeric|min:1',
             'partyDescription' => 'required|min:6',
-//            'partyTags' => 'required|min:5',
+            'partyTags' => 'required|min:5',
             'coverImage' => 'file',
         ];
     }
