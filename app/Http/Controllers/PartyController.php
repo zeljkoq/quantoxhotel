@@ -103,7 +103,7 @@ class PartyController extends Controller
         } else {
             if ($songsDuration < $partyDuration) {
                 do {
-                    $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->get()->toArray();
+                    $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
                     $song = Song::inRandomOrder()->first();
 
                     if ($songsFromLastParty !== $newSongs) {
