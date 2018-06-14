@@ -107,8 +107,7 @@
 
     $(function () {
         $('#partyDate').datetimepicker({
-            enabledHours: false,
-            format: 'DD/MM/YYYY'
+            format: 'DD/MM/YYYY HH:mm'
         });
     });
 

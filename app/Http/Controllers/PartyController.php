@@ -181,8 +181,10 @@ class PartyController extends Controller
 //        dd($request->partyDate);
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
-        $party->date = date('Y-m-d', strtotime($request->partyDate));
 
+        $date1 = strtr($request->partyDate, '/', '-');
+        $date1 = date('Y-m-d H:i', strtotime($date1));
+        $party->date = $date1;
         $party->duration = $request->partyDuration;
         $party->capacity = $request->partyCapacity;
         $party->description = $request->partyDescription;
