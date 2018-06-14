@@ -168,6 +168,10 @@
                         router.showRoutes(rls.split(" "));
                     }
                 }
+                else {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('routes');
+                }
             }
         });
     });

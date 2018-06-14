@@ -172,6 +172,10 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (response) {
+                    if (!response)
+                    {
+                        window.location = '{{route('home.index')}}';
+                    }
                     $('#partyName').val('');
                     $('#partyId').val('');
                     $('#partyDate').val('');
@@ -288,6 +292,10 @@
                         "Authorization": "Bearer " + localStorage.getItem('token'),
                     },
                     success: function (response) {
+                        if (!response)
+                        {
+                            window.location = '{{route('home.index')}}';
+                        }
                         setMessage('success', 'Song has been deleted.');
                         $('#'+partyId).css('display', 'none');
                     }
@@ -320,6 +328,10 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (response) {
+                    if (!response)
+                    {
+                        window.location = '{{route('home.index')}}';
+                    }
                     $('.selectpicker').selectpicker('val', []);
                     $('#partyName').val('');
                     $('#partyId').val('');

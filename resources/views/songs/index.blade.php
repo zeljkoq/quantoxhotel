@@ -137,6 +137,10 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (response) {
+                    if (!response)
+                    {
+                        window.location = '{{route('home.index')}}';
+                    }
                     $('#artist').val('');
                     $('#track').val('');
                     $('#link').val('');
@@ -203,9 +207,12 @@
                         "Authorization": "Bearer " + localStorage.getItem('token'),
                     },
                     success: function (response) {
+                        if (!response)
+                        {
+                            window.location = '{{route('home.index')}}';
+                        }
                         setMessage('success', 'Song has been deleted.');
                         $('tr:contains("' + response.data.id + '")').css("display", "none");
-                        // $('#'+songId).css('display', 'none');
                     }
                 });
             }
@@ -252,6 +259,10 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (response) {
+                    if (!response)
+                    {
+                        window.location = '{{route('home.index')}}';
+                    }
                     $('#artist').val('');
                     $('#track').val('');
                     $('#link').val('');
