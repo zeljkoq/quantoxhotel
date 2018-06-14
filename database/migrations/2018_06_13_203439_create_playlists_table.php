@@ -21,6 +21,9 @@ class CreatePlaylistsTable extends Migration
             $table->unsignedInteger('song_id');
             $table->unsignedInteger('party_id');
             $table->timestamps();
+
+            $table->foreign('song_id')->references('id')->on('songs')->onDelete('cascade');
+            $table->foreign('party_id')->references('id')->on('parties')->onDelete('cascade');
         });
     }
 
