@@ -118,7 +118,6 @@ class PartyController extends Controller
                 do {
                     $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
                     $song = Song::inRandomOrder()->first();
-//                    dd($songsFromLastParty);
                     if ($songsFromLastParty !== $newSongs) {
                         if (!in_array($song->id, $newSongs)) {
                             array_push($duration, $song->duration);
