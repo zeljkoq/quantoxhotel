@@ -53,93 +53,102 @@ class PartyController extends Controller
      */
     public function store(PartyRequest $request, Party $party)
     {
-        $lastParty = Party::orderBy('created_at', 'desc')->first();
 
-        $party->name = $request->partyName;
-        $party->date = \Carbon\Carbon::createFromTimestamp(strtotime($request->partyDate));
-        $party->duration = $request->partyDuration;
-        $party->capacity = $request->partyCapacity;
-        $party->description = $request->partyDescription;
-        $party->tags = $request->partyTags;
-        $party->updated_by = $request->user()->id;
-        if ($request->hasFile('coverImage')) {
-            $filenameExt = $request->file('coverImage')->getClientOriginalName();
-            $filename = pathinfo($filenameExt, PATHINFO_FILENAME);
-            $extension = $request->file('coverImage')->getClientOriginalExtension();
-            $fileNameToStore = $filename . '_' . time() . '.' . $extension;
-            $path = $request->file('coverImage')->storeAs('public/cover_images', $fileNameToStore);
-        } else {
-            $fileNameToStore = 'no-image.png';
-        }
-        $party->cover_image = $fileNameToStore;
-        $party->save();
-
-        $partyDuration = $party->duration * 60;
         $songs = Song::all()->pluck('duration')->toArray();
-        $songsDuration = array_sum($songs);
 
-        $newSongs = [];
-        $duration = [];
+        if ($songs) {
+            $lastParty = Party::orderBy('created_at', 'desc')->first();
 
-        if (!$lastParty) {
-            if ($songsDuration < $partyDuration) {
-                $sum = $songsDuration + $partyDuration;
-                do {
-                    $song = Song::inRandomOrder()->first();
-                    array_push($newSongs, $song->id);
-                    $songsDuration += $song->duration;
-                } while ($songsDuration < $sum);
+            $party->name = $request->partyName;
+            $party->date = \Carbon\Carbon::createFromTimestamp(strtotime($request->partyDate));
+            $party->duration = $request->partyDuration;
+            $party->capacity = $request->partyCapacity;
+            $party->description = $request->partyDescription;
+            $party->tags = $request->partyTags;
+            $party->updated_by = $request->user()->id;
+            if ($request->hasFile('coverImage')) {
+                $filenameExt = $request->file('coverImage')->getClientOriginalName();
+                $filename = pathinfo($filenameExt, PATHINFO_FILENAME);
+                $extension = $request->file('coverImage')->getClientOriginalExtension();
+                $fileNameToStore = $filename . '_' . time() . '.' . $extension;
+                $path = $request->file('coverImage')->storeAs('public/cover_images', $fileNameToStore);
             } else {
-                do {
-                    $song = Song::inRandomOrder()->first();
-                    if (!in_array($song->id, $newSongs)) {
-                        array_push($duration, $song->duration);
-                        $dur = array_sum($duration);
-                        array_push($newSongs, $song->id);
-                        continue;
-                    }
-                } while ($dur < $partyDuration);
+                $fileNameToStore = 'no-image.png';
             }
-        } else {
-            if ($songsDuration < $partyDuration) {
-                do {
-                    $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
-                    $song = Song::inRandomOrder()->first();
+            $party->cover_image = $fileNameToStore;
+            $party->save();
 
-                    if ($songsFromLastParty !== $newSongs) {
-                        array_push($duration, $song->duration);
-                        $dur = array_sum($duration);
+            $partyDuration = $party->duration * 60;
+
+            $songsDuration = array_sum($songs);
+
+            $newSongs = [];
+            $duration = [];
+
+            if (!$lastParty) {
+                if ($songsDuration < $partyDuration) {
+                    $sum = $songsDuration + $partyDuration;
+                    do {
+                        $song = Song::inRandomOrder()->first();
                         array_push($newSongs, $song->id);
-
-                        continue;
-                    }
-                } while ($dur < $partyDuration);
-            } else {
-                do {
-                    $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
-                    $song = Song::inRandomOrder()->first();
-                    if ($songsFromLastParty !== $newSongs) {
+                        $songsDuration += $song->duration;
+                    } while ($songsDuration < $sum);
+                } else {
+                    do {
+                        $song = Song::inRandomOrder()->first();
                         if (!in_array($song->id, $newSongs)) {
                             array_push($duration, $song->duration);
                             $dur = array_sum($duration);
                             array_push($newSongs, $song->id);
                             continue;
                         }
-                    }
-                } while ($dur < $partyDuration);
+                    } while ($dur < $partyDuration);
+                }
+            } else {
+                if ($songsDuration < $partyDuration) {
+                    do {
+                        $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
+                        $song = Song::inRandomOrder()->first();
+
+                        if ($songsFromLastParty !== $newSongs) {
+                            array_push($duration, $song->duration);
+                            $dur = array_sum($duration);
+                            array_push($newSongs, $song->id);
+
+                            continue;
+                        }
+                    } while ($dur < $partyDuration);
+                } else {
+                    do {
+                        $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
+                        $song = Song::inRandomOrder()->first();
+                        if ($songsFromLastParty !== $newSongs) {
+                            if (!in_array($song->id, $newSongs)) {
+                                array_push($duration, $song->duration);
+                                $dur = array_sum($duration);
+                                array_push($newSongs, $song->id);
+                                continue;
+                            }
+                        }
+                    } while ($dur < $partyDuration);
+                }
             }
+
+            $max = count($newSongs);
+
+            for ($i = 0; $i < $max; $i++) {
+                $playlist = new Playlist();
+                $playlist->song_id = $newSongs[$i];
+                $playlist->party_id = $party->id;
+                $playlist->save();
+            }
+
+            return new PartyResource($party);
         }
 
-        $max = count($newSongs);
-
-        for ($i = 0; $i < $max; $i++) {
-            $playlist = new Playlist();
-            $playlist->song_id = $newSongs[$i];
-            $playlist->party_id = $party->id;
-            $playlist->save();
-        }
-
-        return new PartyResource($party);
+        return response()->json([
+            'message' => 'Add some songs first..',
+        ]);
     }
 
     /**
@@ -179,7 +188,6 @@ class PartyController extends Controller
 //        dd($request->partyDate);
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
-
 
 
         $date1 = strtr($request->partyDate, '/', '-');

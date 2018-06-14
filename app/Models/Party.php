@@ -15,4 +15,14 @@ class Party extends Model
      */
     protected $table = 'parties';
 
+    public function hasSongs($party_id)
+    {
+        $songs = Playlist::where('party_id', $party_id)->get();
+
+        if ($songs) {
+            return true;
+        }
+        return false;
+    }
+
 }
