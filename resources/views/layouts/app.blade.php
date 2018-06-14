@@ -106,7 +106,10 @@
     })
 
     $(function () {
-        $('#partyDate').datetimepicker();
+        $('#partyDate').datetimepicker({
+            enabledHours: false,
+            format: 'DD/MM/YYYY'
+        });
     });
 
 </script>

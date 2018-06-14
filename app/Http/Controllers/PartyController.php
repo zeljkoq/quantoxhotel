@@ -140,6 +140,8 @@ class PartyController extends Controller
             $playlist->party_id = $party->id;
             $playlist->save();
         }
+
+        return new PartyResource($party);
     }
 
     /**
@@ -176,9 +178,10 @@ class PartyController extends Controller
      */
     public function update(PartyRequest $request, $party_id)
     {
+//        dd($request->partyDate);
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
-        $party->date = date('Y-m-d H:i', strtotime($request->partyDate));
+        $party->date = date('Y-m-d', strtotime($request->partyDate));
 
         $party->duration = $request->partyDuration;
         $party->capacity = $request->partyCapacity;
