@@ -125,7 +125,6 @@ class PartyController extends Controller
                             array_push($newSongs, $song->id);
                             continue;
                         }
-                        continue;
                     }
                 } while ($dur < $partyDuration);
             }
