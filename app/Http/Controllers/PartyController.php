@@ -132,7 +132,6 @@ class PartyController extends Controller
             }
         }
 
-        shuffle($newSongs);
         $max = count($newSongs);
 
         for ($i = 0; $i < $max; $i++) {
