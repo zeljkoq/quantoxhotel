@@ -182,6 +182,8 @@ class PartyController extends Controller
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
 
+
+
         $date1 = strtr($request->partyDate, '/', '-');
         $date1 = date('Y-m-d H:i', strtotime($date1));
         $party->date = $date1;
