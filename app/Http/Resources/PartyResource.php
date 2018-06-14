@@ -18,7 +18,7 @@ class PartyResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'date' => \Carbon\Carbon::parse($this->date)->format('d/m/Y G:H'),
+            'date' => \Carbon\Carbon::parse($this->date)->format('d/m/Y H:i'),
             'duration' => $this->duration,
             'capacity' => $this->capacity,
             'description' => $this->description,

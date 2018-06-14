@@ -107,6 +107,7 @@
 
     $(function () {
         $('#partyDate').datetimepicker({
+            format: 'DD-MM-YYYY HH:mm',
         });
     });
 
