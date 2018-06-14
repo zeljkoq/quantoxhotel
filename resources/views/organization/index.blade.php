@@ -303,7 +303,13 @@
             var description = $('#partyDescription').val();
             var tags = $('#partyTags').val();
 
-            var tagsNew = tags.join(', ');
+            if (tags !== null)
+            {
+                var tagsNew = tags.join(', ');
+            }
+            else {
+                tagsNew = '';
+            }
 
             var partyId = $('#partyId').val();
             $.ajax({

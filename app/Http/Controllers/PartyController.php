@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PartyRequest;
 use App\Http\Resources\PartyResource;
 use App\Models\Party;
+use App\Models\Playlist;
+use App\Models\Song;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -51,35 +53,93 @@ class PartyController extends Controller
      */
     public function store(PartyRequest $request, Party $party)
     {
+        $lastParty = Party::orderBy('created_at', 'desc')->first();
+
         $party->name = $request->partyName;
         $party->date = \Carbon\Carbon::createFromTimestamp(strtotime($request->partyDate));
-
         $party->duration = $request->partyDuration;
         $party->capacity = $request->partyCapacity;
         $party->description = $request->partyDescription;
         $party->tags = $request->partyTags;
         $party->updated_by = $request->user()->id;
-
         if ($request->hasFile('coverImage')) {
-
             $filenameExt = $request->file('coverImage')->getClientOriginalName();
-
             $filename = pathinfo($filenameExt, PATHINFO_FILENAME);
-
             $extension = $request->file('coverImage')->getClientOriginalExtension();
-
             $fileNameToStore = $filename . '_' . time() . '.' . $extension;
-
             $path = $request->file('coverImage')->storeAs('public/cover_images', $fileNameToStore);
         } else {
             $fileNameToStore = 'no-image.png';
         }
-
         $party->cover_image = $fileNameToStore;
-
         $party->save();
 
-        return new PartyResource($party);
+        $partyDuration = $party->duration * 60;
+        $songs = Song::all()->pluck('duration')->toArray();
+        $songsDuration = array_sum($songs);
+
+        $newSongs = [];
+//        $max = count()
+
+        if (!$lastParty) {
+            if ($songsDuration < $partyDuration) {
+                for ($i = 0; $i < $partyDuration; ($i+$songsDuration)) {
+                    $playlist = new Playlist();
+                    $playlist->song_id = $songs[$i];
+                    $playlist->party_id = $party->id;
+                    $playlist->save();
+//                    $i++;
+                }
+            }
+        }
+
+//            if ($songsDuration < $partyDuration)
+//            {
+//                $sum = $partyDuration + $songsDuration;
+//                do {
+//                    $song = Song::inRandomOrder()->first();
+//                    array_push($newSongs, $song->id);
+//                    $songsDuration += $song->duration;
+//                } while ($songsDuration < $sum);
+//
+//                shuffle($newSongs);
+//                $max = count($newSongs);
+//
+//                for ($i = 0; $i<$max; $i++)
+//                {
+//                    $playlist = new Playlist();
+//                    $playlist->song_id = $newSongs[$i];
+//                    $playlist->party_id = $party->id;
+//                    $playlist->save();
+//                }
+//            }
+//            else if ($songsDuration > $partyDuration) {
+//                do {
+//                    $song = Song::inRandomOrder()->first();
+//                    if (!in_array($song->id, $newSongs))
+//                    {
+//                        array_push($newSongs, $song->id);
+//                    }
+////                    else {
+////                        return response()->json([
+////                            'message' => 'Not enough songs.',
+////                        ]);
+////                    }
+//                    $songsDuration -= $song->duration;
+//                } while ($songsDuration > $partyDuration);
+//
+//                shuffle($newSongs);
+//                $max = count($newSongs);
+//
+//                for ($i = 0; $i<$max; $i++)
+//                {
+//                    $playlist = new Playlist();
+//                    $playlist->song_id = $newSongs[$i];
+//                    $playlist->party_id = $party->id;
+//                    $playlist->save();
+//                }
+//            }
+
     }
 
     /**
@@ -106,9 +166,9 @@ class PartyController extends Controller
                 'message' => 'Party with ID of ' . $party_id . ' does not exists'
             ]);
 
-
         }
     }
+
 
     /**
      * @param PartyRequest $request
@@ -117,7 +177,6 @@ class PartyController extends Controller
      */
     public function update(PartyRequest $request, $party_id)
     {
-
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
         $party->date = date('Y-m-d H:i', strtotime($request->partyDate));
@@ -130,4 +189,6 @@ class PartyController extends Controller
         $party->update();
         return new PartyResource($party);
     }
+
+
 }
