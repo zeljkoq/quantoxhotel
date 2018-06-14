@@ -79,67 +79,68 @@ class PartyController extends Controller
         $songsDuration = array_sum($songs);
 
         $newSongs = [];
-//        $max = count()
+        $duration = [];
 
         if (!$lastParty) {
             if ($songsDuration < $partyDuration) {
-                for ($i = 0; $i < $partyDuration; ($i+$songsDuration)) {
-                    $playlist = new Playlist();
-                    $playlist->song_id = $songs[$i];
-                    $playlist->party_id = $party->id;
-                    $playlist->save();
-//                    $i++;
-                }
+                $sum = $songsDuration + $partyDuration;
+                do {
+                    $song = Song::inRandomOrder()->first();
+                    array_push($newSongs, $song->id);
+                    $songsDuration += $song->duration;
+                } while ($songsDuration < $sum);
+            } else {
+                do {
+                    $song = Song::inRandomOrder()->first();
+                    if (!in_array($song->id, $newSongs)) {
+                        array_push($duration, $song->duration);
+                        $dur = array_sum($duration);
+                        array_push($newSongs, $song->id);
+                        continue;
+                    }
+                } while ($dur < $partyDuration);
+            }
+        } else {
+            if ($songsDuration < $partyDuration) {
+                do {
+                    $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->get()->toArray();
+                    $song = Song::inRandomOrder()->first();
+
+                    if ($songsFromLastParty !== $newSongs) {
+                        array_push($duration, $song->duration);
+                        $dur = array_sum($duration);
+                        array_push($newSongs, $song->id);
+
+                        continue;
+                    }
+                } while ($dur < $partyDuration);
+            } else {
+                do {
+                    $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->get()->toArray();
+                    $song = Song::inRandomOrder()->first();
+
+                    if ($songsFromLastParty !== $newSongs) {
+                        if (!in_array($song->id, $newSongs)) {
+                            array_push($duration, $song->duration);
+                            $dur = array_sum($duration);
+                            array_push($newSongs, $song->id);
+                            continue;
+                        }
+                        continue;
+                    }
+                } while ($dur < $partyDuration);
             }
         }
 
-//            if ($songsDuration < $partyDuration)
-//            {
-//                $sum = $partyDuration + $songsDuration;
-//                do {
-//                    $song = Song::inRandomOrder()->first();
-//                    array_push($newSongs, $song->id);
-//                    $songsDuration += $song->duration;
-//                } while ($songsDuration < $sum);
-//
-//                shuffle($newSongs);
-//                $max = count($newSongs);
-//
-//                for ($i = 0; $i<$max; $i++)
-//                {
-//                    $playlist = new Playlist();
-//                    $playlist->song_id = $newSongs[$i];
-//                    $playlist->party_id = $party->id;
-//                    $playlist->save();
-//                }
-//            }
-//            else if ($songsDuration > $partyDuration) {
-//                do {
-//                    $song = Song::inRandomOrder()->first();
-//                    if (!in_array($song->id, $newSongs))
-//                    {
-//                        array_push($newSongs, $song->id);
-//                    }
-////                    else {
-////                        return response()->json([
-////                            'message' => 'Not enough songs.',
-////                        ]);
-////                    }
-//                    $songsDuration -= $song->duration;
-//                } while ($songsDuration > $partyDuration);
-//
-//                shuffle($newSongs);
-//                $max = count($newSongs);
-//
-//                for ($i = 0; $i<$max; $i++)
-//                {
-//                    $playlist = new Playlist();
-//                    $playlist->song_id = $newSongs[$i];
-//                    $playlist->party_id = $party->id;
-//                    $playlist->save();
-//                }
-//            }
+        shuffle($newSongs);
+        $max = count($newSongs);
 
+        for ($i = 0; $i < $max; $i++) {
+            $playlist = new Playlist();
+            $playlist->song_id = $newSongs[$i];
+            $playlist->party_id = $party->id;
+            $playlist->save();
+        }
     }
 
     /**
@@ -168,7 +169,6 @@ class PartyController extends Controller
 
         }
     }
-
 
     /**
      * @param PartyRequest $request
