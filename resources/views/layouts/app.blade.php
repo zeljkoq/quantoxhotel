@@ -67,8 +67,7 @@
         </div><!-- /.container-fluid -->
     </nav>
 
-    @include('auth.login')
-    @include('auth.register')
+
 
     <div class="container">
         @yield('content')

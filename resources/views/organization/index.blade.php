@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="coverImage" class="col-sm-2 control-label">Cover image</label>
+                    <label id="labelCoverImage" for="coverImage" class="col-sm-2 control-label">Cover image</label>
                     <div class="col-sm-8">
                         <input type="file" class="form-control" id="coverImage" name="coverImage" placeholder="Cover image">
                     </div>
@@ -71,6 +71,8 @@
                         <table class="table table-striped">
                             <thead style="background-color: #ddd; font-weight: bold;">
                             <tr>
+                                <td>No.</td>
+                                <td></td>
                                 <td>Name</td>
                                 <td>Date</td>
                                 <td>Duration (h)</td>
@@ -114,7 +116,8 @@
                     var html = '';
                     for (i = 0; i < response.data.length; i++) {
                             html += '<tr id="' + response.data[i].id + '">' +
-                                '<td hidden class="partyId">' + response.data[i].id + '</td>' +
+                                '<td class="partyId">' + response.data[i].id + '</td>' +
+                                '<td><img class="img" src="storage/cover_images/'+response.data[i].cover_image+'" ></td>' +
                                 '<td id="pName">' + response.data[i].name + '</td>' +
                                 '<td id="pDate">' + response.data[i].date + '</td>' +
                                 '<td id="pDuration">' + response.data[i].duration + '</td>' +
@@ -148,7 +151,7 @@
 
         $('body').on('click', '#addParty', function () {
 
-            var form_data = new FormData(document.forms[2]);
+            var form_data = new FormData(document.forms[0]);
 
             var tags = $('#partyTags').val();
 
@@ -176,15 +179,20 @@
                     {
                         window.location = '{{route('home.index')}}';
                     }
-                    $('#partyName').val('');
-                    $('#partyId').val('');
-                    $('#partyDate').val('');
-                    $('#partyDuration').val('');
-                    $('#partyCapacity').val('');
-                    $('#partyDescription').val('');
-                    $('.selectpicker').selectpicker('val', []);
-                    $('#coverImage').val('');
-                    var html = '';
+                    else if (response.message != null)
+                    {
+                        setMessage('error', response.message);
+                    }
+                    else {
+                        $('#partyName').val('');
+                        $('#partyId').val('');
+                        $('#partyDate').val('');
+                        $('#partyDuration').val('');
+                        $('#partyCapacity').val('');
+                        $('#partyDescription').val('');
+                        $('.selectpicker').selectpicker('val', []);
+                        $('#coverImage').val('');
+                        var html = '';
                         html += '<tr id="' + response.data.id + '">' +
                             '<td hidden class="partyId">' + response.data.id + '</td>' +
                             '<td id="pName">' + response.data.name + '</td>' +
@@ -198,7 +206,9 @@
                             '<td><button id="deleteParty" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
 
-                    $('#partiesList').prepend(html);
+                        $('#partiesList').prepend(html);
+                    }
+
                 },
                 error: function (response) {
                     var errName = response.responseJSON.errors.partyName;
@@ -248,6 +258,8 @@
             var $row = $(this).closest("tr");
             var partyId = $row.find(".partyId").html();
             $('#addParty').html('Update party');
+            $('#coverImage').hide();
+            $('#labelCoverImage').hide();
 
             $('#partyName').val($row.find("#pName").html());
             $('#partyId').val(partyId);
@@ -277,6 +289,8 @@
             $('#updateParty').attr('id', 'addParty');
             $('#cancel').remove();
             $('.selectpicker').selectpicker('val', []);
+            $('#coverImage').show();
+            $('#labelCoverImage').show();
         });
 
         $('body').on('click', '#deleteParty', function () {
@@ -343,6 +357,8 @@
                     $('#updateParty').html('Add party');
                     $('#updateParty').attr('id', 'addParty');
                     $('#cancel').remove();
+                    $('#coverImage').show();
+                    $('#labelCoverImage').show();
 
                     $('#' + response.data.id).remove();
 

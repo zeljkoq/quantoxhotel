@@ -94,7 +94,13 @@
             </p>
         </div>
     </div>
+    @include('auth.login')
+    @include('auth.register')
 
+
+@endsection
+
+@section ('scripts')
     <script>
         // Initialize and add the map
         function initMap() {
@@ -114,6 +120,26 @@
     -->
     <script async defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALARLm-WgtNQeiopz5NojxYjhHHPtT9HI&callback=initMap">
+    </script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                url: '{{route('get.party.user')}}',
+                headers: {
+                    "Accept": "application/json",
+                },
+                success: function (response) {
+                    console.log(response);
+                    if (typeof response.user !== 'undefined')
+                    {
+                        if (response.user.id !== false) {
+
+                        }
+                    }
+                }
+            });
+        });
     </script>
 
 @endsection

@@ -25,7 +25,7 @@ class PartyResource extends JsonResource
             'tags' => $this->tags,
             'updated_by' => User::where('id', $this->updated_by)->pluck('name')->first(),
             'updated_at' => $this->updated_at->diffForHumans(),
-            'cover-image' => $this->cover_image
+            'cover_image' => $this->cover_image
         ];
     }
 }

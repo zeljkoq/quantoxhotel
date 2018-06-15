@@ -53,14 +53,11 @@ class PartyController extends Controller
      */
     public function store(PartyRequest $request, Party $party)
     {
-//dd($request->partyDate);
         $songs = Song::all()->pluck('duration')->toArray();
-
-        if ($songs) {
+        if (array_sum($songs) > 0) {
             $lastParty = Party::orderBy('created_at', 'desc')->first();
 
             $party->name = $request->partyName;
-//            $party->date = \Carbon\Carbon::createFromTimestamp(strtotime($request->partyDate));
             $party->date = date('Y-m-d H:i:s', strtotime($request->partyDate));
             $party->duration = $request->partyDuration;
             $party->capacity = $request->partyCapacity;
@@ -77,7 +74,6 @@ class PartyController extends Controller
                 $fileNameToStore = 'no-image.png';
             }
             $party->cover_image = $fileNameToStore;
-//            dd($party->date);
             $party->save();
 
             $partyDuration = $party->duration * 60;
