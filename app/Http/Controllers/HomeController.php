@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Party;
 
+/**
+ * Class HomeController
+ * @package App\Http\Controllers
+ */
 class HomeController extends Controller
 {
 
@@ -15,7 +19,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-
         $parties = Party::whereDate('updated_at', '>=', \Carbon\Carbon::today()->toDateString())
             ->get();
 

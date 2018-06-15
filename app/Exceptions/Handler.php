@@ -10,6 +10,10 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+/**
+ * Class Handler
+ * @package App\Exceptions
+ */
 class Handler extends ExceptionHandler
 {
     /**
@@ -62,9 +66,7 @@ class Handler extends ExceptionHandler
         if ($exception instanceof JWTException) {
             return response()->json(['error' => 'Problem with token', 400]);
         }
-//
-//        // the token is valid and we have found the user via the sub claim
-//        return response()->json(compact('user'));
+
         return parent::render($request, $exception);
     }
 }

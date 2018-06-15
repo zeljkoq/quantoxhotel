@@ -6,6 +6,10 @@ use App\Models\Permission;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class PermissionsServiceProvider
+ * @package App\Providers
+ */
 class PermissionsServiceProvider extends ServiceProvider
 {
     /**
@@ -15,16 +19,15 @@ class PermissionsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-	    try {
-		    Permission::get()->map(function($permission){
-			    Gate::define($permission->name, function($user) use ($permission) {
-				    return $user->hasPermissionTo($permission);
-			    });
-		    });
-	    } catch (\Exception $e) {
-		    return [];
-	    }
-
+        try {
+            Permission::get()->map(function ($permission) {
+                Gate::define($permission->name, function ($user) use ($permission) {
+                    return $user->hasPermissionTo($permission);
+                });
+            });
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     /**

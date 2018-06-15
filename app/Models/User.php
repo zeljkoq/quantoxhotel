@@ -8,6 +8,10 @@ use App\Permissions\PermissionsTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 
+/**
+ * Class User
+ * @package App\Models
+ */
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, PermissionsTrait;

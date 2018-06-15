@@ -5,6 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
+/**
+ * Class jwt
+ * @package App\Http\Middleware
+ */
 class jwt
 {
     /**

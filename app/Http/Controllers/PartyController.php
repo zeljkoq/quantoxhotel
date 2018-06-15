@@ -206,6 +206,11 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
+    /**
+     * @param Playlist $playlist
+     * @param $party_id
+     * @return PartyResource|\Illuminate\Http\JsonResponse
+     */
     public function start(Playlist $playlist, $party_id)
     {
         $qband = User::where('email', 'qband@local.loc')->first();
@@ -234,6 +239,10 @@ class PartyController extends Controller
         ]);
     }
 
+    /**
+     * @param $party_id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function join($party_id)
     {
         $playlist = new Playlist();
@@ -279,15 +288,17 @@ class PartyController extends Controller
                 'error' => 1,
                 'message' => 'You cannot join, party is full!'
             ]);
-
         }
-
         return response()->json([
             'error' => 1,
             'message' => 'You already joined this party!',
         ]);
     }
 
+    /**
+     * @param $arr
+     * @return bool
+     */
     public function isHomogenous($arr)
     {
         $firstValue = current($arr);
@@ -298,5 +309,4 @@ class PartyController extends Controller
         }
         return true;
     }
-
 }

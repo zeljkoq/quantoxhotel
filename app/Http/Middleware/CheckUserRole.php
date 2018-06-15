@@ -5,6 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Route;
 
+/**
+ * Class CheckUserRole
+ * @package App\Http\Middleware
+ */
 class CheckUserRole
 {
     /**

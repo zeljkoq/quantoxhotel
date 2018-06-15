@@ -4,6 +4,10 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class UserResource
+ * @package App\Http\Resources
+ */
 class UserResource extends JsonResource
 {
     /**
@@ -15,7 +19,7 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-             'roles' => $this->roles,
+            'roles' => $this->roles,
         ];
     }
 }

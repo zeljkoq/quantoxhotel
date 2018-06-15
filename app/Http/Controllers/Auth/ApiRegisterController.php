@@ -36,8 +36,7 @@ class ApiRegisterController extends Controller
                 ]);
             }
             $roles = Role::whereIn('id', $request->roles)->get()->pluck('name')->toArray();
-        }
-        else {
+        } else {
             $roles = [];
         }
 

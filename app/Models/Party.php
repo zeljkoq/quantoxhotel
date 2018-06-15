@@ -15,10 +15,17 @@ class Party extends Model
      */
     protected $table = 'parties';
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'user_id',
     ];
 
+    /**
+     * @param $party_id
+     * @return bool
+     */
     public function hasSongs($party_id)
     {
         $songs = Playlist::where('party_id', $party_id)->get();

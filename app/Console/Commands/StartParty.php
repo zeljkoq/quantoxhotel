@@ -3,8 +3,14 @@
 namespace App\Console\Commands;
 
 use App\Models\Party;
+use App\Models\Playlist;
+use App\Models\User;
 use Illuminate\Console\Command;
 
+/**
+ * Class StartParty
+ * @package App\Console\Commands
+ */
 class StartParty extends Command
 {
     /**
@@ -39,16 +45,25 @@ class StartParty extends Command
     public function handle()
     {
         $parties = Party::all();
+        $playlist = new Playlist();
+        $qband = User::where('email', 'qband@local.loc')->first();
 
         foreach ($parties as $party) {
-            if ($party->start == 0) {
-                date_default_timezone_set('Europe/Belgrade');
+            date_default_timezone_set('Europe/Belgrade');
 
-                if (date('Y-m-d H:i') >= date('Y-m-d H:i', strtotime($party->date))) {
+            if (date('Y-m-d H:i') >= date('Y-m-d H:i', strtotime($party->date))) {
+                $checkPlaylist = $playlist->where('party_id', $party->id)->where('user_id', null)->get();
+                if (count($checkPlaylist) > 0) {
+                    $playlist->where('user_id', null)->update(['user_id' => $qband->id]);
+                    $party->start = 1;
+                    $party->update();
+                } else {
                     $party->start = 1;
                     $party->update();
                 }
+
             }
+
         }
     }
 }

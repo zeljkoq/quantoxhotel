@@ -5,6 +5,10 @@ namespace App\Http\Resources;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * Class AdminResource
+ * @package App\Http\Resources
+ */
 class AdminResource extends JsonResource
 {
     /**
