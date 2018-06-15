@@ -82,6 +82,7 @@
                                 <td>Updated by</td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
 
                             </tr>
                             </thead>
@@ -127,6 +128,7 @@
                                 '<td><small><b>' + response.data[i].updated_by + '</b></small><br><small>' + response.data[i].updated_at + '</small></td>' +
                                 '<td><button id="editParty" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                                 '<td><button id="deleteParty" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                                '<td><button id="startParty" class="btn btn-success" href=""><i class="fas fa-play"></i></button></td>' +
                                 '</tr>';
                     }
 
@@ -205,6 +207,7 @@
                             '<td><small><b>' + response.data.updated_by + '</b></small><br><small>' + response.data.updated_at + '</small></td>' +
                             '<td><button id="editParty" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                             '<td><button id="deleteParty" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                            '<td><button id="startParty" class="btn btn-success" href=""><i class="fas fa-play"></i></button></td>' +
                             '</tr>';
 
                         $('#partiesList').prepend(html);
@@ -312,11 +315,45 @@
                         {
                             window.location = '{{route('home.index')}}';
                         }
-                        setMessage('success', 'Song has been deleted.');
+                        setMessage('success', 'Party has been deleted.');
                         $('#'+partyId).css('display', 'none');
                     }
                 });
             }
+        });
+
+        $('body').on('click', '#startParty', function () {
+            var $row = $(this).closest("tr");
+            var partyId = $row.find(".partyId").html();
+
+            $.ajax({
+                type: "PUT",
+                url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/v1/parties/start/' + partyId,
+                data: $(this).serialize(),
+                contentType: "application/json",
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token'),
+                },
+                success: function (response) {
+                    if (!response)
+                    {
+                        window.location = '{{route('home.index')}}';
+                    }
+                    else {
+                        console.log(response);
+                        if (response.message !== '')
+                        {
+                            setMessage('error', response.message);
+
+                        }
+                        if (response.data === true) {
+                            setMessage('success', 'Party started!');
+                        }
+                    }
+
+
+                }
+            });
         });
 
         $('body').on('click', '#updateParty', function () {
@@ -377,6 +414,7 @@
                         '<td><small><b>' + response.data.updated_by + '</b></small><br><small>' + response.data.updated_at + '</small></td>' +
                         '<td><button id="editParty" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                         '<td><button id="deleteParty" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
+                        '<td><button id="startParty" class="btn btn-success" href=""><i class="fas fa-play"></i></button></td>' +
                         '</tr>';
 
                     $('#partiesList').prepend(html);

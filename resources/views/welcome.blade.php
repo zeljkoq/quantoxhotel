@@ -41,21 +41,7 @@
         </div>
     </div>
 
-    <div class="row pt-5">
-
-        @foreach($parties as $party)
-            <div class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <img src="{{asset('storage/cover_images/'.$party->cover_image)}}" alt="">
-                        <div class="pull-right">asdadadas</div>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div>
-                </div>
-            </div>
-        @endforeach
+    <div id="parties" class="row pt-5">
 
     </div>
 

@@ -188,12 +188,41 @@
                 "Accept": "application/json",
             },
             success: function (response) {
-                console.log(response);
-                if (typeof response.user !== 'undefined')
+                if (!response) {
+                    $('#parties').html('Please login or register to see parties!');
+                }
+                else if (response.data == '')
                 {
-                    if (response.user.id !== false) {
+                    $('#parties').html('No parties!')
+                }
+                else {
+                    var html = '';
 
+                    for (i=0; i<response.data.length; i++)
+                    {
+                         html += '<div class="col-md-4">' +
+                                    '<div class="panel panel-default">' +
+                                        '<div class="panel-heading">' +
+                                            '<h3 class="panel-title">'+response.data[i].name+'</h3>'+
+                                        '</div>'+
+                                        '<div class="panel-body">'+
+                                            '<img src="storage/cover_images/'+response.data[i].cover_image +'"<br><br>' +
+                                            'Tags: ' +response.data[i].tags + '<br>' +
+                                            'Description: ' +response.data[i].description+ '<br>' +
+                                            'Date: ' +response.data[i].date+ '<br>' +
+                                            'Duration: ' +response.data[i].duration+ 'h<br>' +
+                                        '</div>'+
+                                         '<div class="panel-footer text-center">' +
+                                             '<div class="btn-group" role="group" aria-label="...">'+
+                                             '</div>'+
+                                         '</div>'+
+                                    '</div>'+
+                                '</div>';
                     }
+
+
+
+                    $("#parties").html(html);
                 }
             }
         });

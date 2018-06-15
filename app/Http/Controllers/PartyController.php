@@ -67,6 +67,7 @@ class PartyController extends Controller
             $party->description = $request->partyDescription;
             $party->tags = $request->partyTags;
             $party->updated_by = $request->user()->id;
+            $party->start = 0;
             if ($request->hasFile('coverImage')) {
                 $filenameExt = $request->file('coverImage')->getClientOriginalName();
                 $filename = pathinfo($filenameExt, PATHINFO_FILENAME);
@@ -186,7 +187,6 @@ class PartyController extends Controller
      */
     public function update(PartyRequest $request, $party_id)
     {
-//        dd($request->partyDate);
         $party = Party::where('id', $party_id)->first();
         $party->name = $request->partyName;
 
@@ -203,5 +203,24 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
+    public function start($party_id)
+    {
 
+        if (isset($party_id)) {
+            $party = Party::where('id', $party_id)->first();
+            date_default_timezone_set('Europe/Belgrade');
+
+            if (date('Y-m-d H:i') >= date('Y-m-d H:i', strtotime($party->date))) {
+                $party->start = 1;
+                $party->update();
+                return new PartyResource($party);
+            }
+            return response()->json([
+                'message' => 'Cannot start party before it\'s time.',
+            ]);
+        }
+        return response()->json([
+            'message' => 'Party does not exist',
+        ]);
+    }
 }
