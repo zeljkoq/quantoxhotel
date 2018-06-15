@@ -22,7 +22,8 @@ class RegularPartyResource extends JsonResource
             'capacity' => $this->capacity,
             'description' => $this->description,
             'tags' => $this->tags,
-            'cover_image' => $this->cover_image
+            'cover_image' => $this->cover_image,
+            'start' => $this->start
         ];
     }
 }

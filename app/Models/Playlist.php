@@ -9,7 +9,8 @@ class Playlist extends Model
     protected $table = 'playlists';
     protected $fillable = [
         'song_id',
-        'party_id'
+        'party_id',
+        'user_id'
     ];
 
     public function songs()

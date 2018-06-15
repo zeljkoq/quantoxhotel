@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PartyRequest;
 use App\Http\Resources\PartyResource;
 use App\Http\Resources\RegularPartyResource;
+use App\Models\JoinedParties;
 use App\Models\Party;
 use App\Models\Playlist;
 use App\Models\Song;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * Class PartyController
@@ -102,7 +102,7 @@ class PartyController extends Controller
                         $dur = array_sum($duration);
                         if (!in_array($song->id, $newSongs)) {
                             array_push($newSongs, $song->id);
-                            continue;
+//                            continue;
                         }
                     } while ($dur < $partyDuration);
                 }
@@ -116,7 +116,7 @@ class PartyController extends Controller
                         if ($songsFromLastParty !== $newSongs) {
                             array_push($newSongs, $song->id);
 
-                            continue;
+//                            continue;
                         }
                     } while ($dur < $partyDuration);
                 } else {
@@ -129,10 +129,10 @@ class PartyController extends Controller
                         if ($songsFromLastParty !== $newSongs) {
                             if (!in_array($song->id, $newSongs)) {
                                 array_push($newSongs, $song->id);
-                                continue;
+//                                continue;
                             }
                         }
-                    } while ($dur < $partyDuration);
+                    } while ($dur <= $partyDuration);
                 }
             }
 
@@ -224,8 +224,61 @@ class PartyController extends Controller
         ]);
     }
 
-    public function join()
+    public function join($party_id)
     {
 
+        $playlist = new Playlist();
+
+        $joined = JoinedParties::where('user_id', auth()->user()->id)->where('party_id', $party_id)->first();
+
+        if ($joined == null) {
+            $party = Party::where('id', $party_id)->first();
+            $partyCapacity = JoinedParties::where('party_id', $party_id)->pluck('user_id')->toArray();
+
+
+            $capacity = count($partyCapacity);
+
+
+            if ($party->capacity > $capacity) {
+                // Party not full, join
+                JoinedParties::create(['user_id' => auth()->user()->id, 'party_id' => $party_id]);
+
+                if ($party->capacity == 1) {
+                    $playlist->where('party_id', $party_id)->update(['user_id' => auth()->user()->id]);
+                } else {
+                    $songs = Song::pluck('id')->toArray();
+//                    $stop = false;
+
+                    $prevSong = Playlist::inRandomOrder()->where('user_id', auth()->user()->id)
+                        ->where('party_id', '!=', $party_id)->first();
+                    if ($prevSong == null) {
+                        $playlist->where('party_id', $party_id)
+                            ->where('song_id', null)->update(['user_id' => auth()->user()->id]);
+//                        $stop = true;
+
+                    } elseif (!in_array($prevSong->id, $songs)) {
+                        $playlist->where('party_id', $party_id)
+                            ->where('song_id', null)->update(['user_id' => auth()->user()->id]);
+//                        $stop = true;
+                    }
+
+                }
+                return response()->json([
+                    'error' => 0,
+                    'message' => 'Joined!'
+                ]);
+            }
+            return response()->json([
+                'error' => 1,
+                'message' => 'You cannot join, party is full!'
+            ]);
+
+        }
+
+        return response()->json([
+            'error' => 1,
+            'message' => 'You already joined this party!',
+        ]);
     }
+
 }
