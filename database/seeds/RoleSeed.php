@@ -18,5 +18,8 @@ class RoleSeed extends Seeder
         Role::create([
             'name' => 'party',
         ]);
+        Role::create([
+            'name' => 'regular',
+        ]);
     }
 }

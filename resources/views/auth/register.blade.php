@@ -46,7 +46,7 @@
                         <label for="roles" class="col-md-4 col-form-label text-md-right">{{ __('Choose Role') }}</label>
 
                         <div class="col-md-6">
-                            <select id="userRoles" name="userRoles" class="form-control selectpicker" multiple>
+                            <select id="userRoles" name="userRoles" class="form-control selectpicker" data-style="btn-outline-primary" multiple>
                             </select>
                         </div>
                     </div>

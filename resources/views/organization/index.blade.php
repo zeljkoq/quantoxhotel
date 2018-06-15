@@ -194,7 +194,8 @@
                         $('#coverImage').val('');
                         var html = '';
                         html += '<tr id="' + response.data.id + '">' +
-                            '<td hidden class="partyId">' + response.data.id + '</td>' +
+                            '<td class="partyId">' + response.data.id + '</td>' +
+                            '<td><img class="img" src="storage/cover_images/'+response.data.cover_image+'" ></td>' +
                             '<td id="pName">' + response.data.name + '</td>' +
                             '<td id="pDate">' + response.data.date + '</td>' +
                             '<td id="pDuration">' + response.data.duration + '</td>' +
@@ -211,6 +212,7 @@
 
                 },
                 error: function (response) {
+                    console.log(response);
                     var errName = response.responseJSON.errors.partyName;
                     var errDate = response.responseJSON.errors.partyDate;
                     var errDuration = response.responseJSON.errors.partyDuration;
@@ -364,7 +366,8 @@
 
                     var html = '';
                     html += '<tr id="' + response.data.id + '">' +
-                        '<td hidden class="partyId">' + response.data.id + '</td>' +
+                        '<td class="partyId">' + response.data.id + '</td>' +
+                        '<td><img class="img" src="storage/cover_images/'+response.data.cover_image+'" ></td>' +
                         '<td id="pName">' + response.data.name + '</td>' +
                         '<td id="pDate">' + response.data.date + '</td>' +
                         '<td id="pDuration">' + response.data.duration + '</td>' +

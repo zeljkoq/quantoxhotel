@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PartyRequest;
 use App\Http\Resources\PartyResource;
+use App\Http\Resources\RegularPartyResource;
 use App\Models\Party;
 use App\Models\Playlist;
 use App\Models\Song;
@@ -40,10 +41,11 @@ class PartyController extends Controller
 
             if ($user->hasRole('party')) {
                 $songs = Party::orderBy('id', 'desc')->paginate(5);
-
                 return PartyResource::collection($songs);
             }
         }
+        $songs = Party::orderBy('id', 'desc')->get();
+        return RegularPartyResource::collection($songs);
     }
 
     /**
@@ -107,10 +109,9 @@ class PartyController extends Controller
                     do {
                         $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
                         $song = Song::inRandomOrder()->first();
-
+                        array_push($duration, $song->duration);
+                        $dur = array_sum($duration);
                         if ($songsFromLastParty !== $newSongs) {
-                            array_push($duration, $song->duration);
-                            $dur = array_sum($duration);
                             array_push($newSongs, $song->id);
 
                             continue;

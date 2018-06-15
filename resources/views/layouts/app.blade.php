@@ -131,6 +131,12 @@
                     name: 'Party',
                     link: 'party'
                 }
+            ],
+            'regular': [
+                {
+                    name: 'Profile',
+                    link: 'profile'
+                }
             ]
         },
         showRoutes: function (roles) {
@@ -170,6 +176,24 @@
                 else {
                     localStorage.removeItem('token');
                     localStorage.removeItem('routes');
+                }
+            }
+        });
+
+
+        $.ajax({
+            type: "POST",
+            url: '{{route('get.regular.party.user')}}',
+            headers: {
+                "Accept": "application/json",
+            },
+            success: function (response) {
+                console.log(response);
+                if (typeof response.user !== 'undefined')
+                {
+                    if (response.user.id !== false) {
+
+                    }
                 }
             }
         });
