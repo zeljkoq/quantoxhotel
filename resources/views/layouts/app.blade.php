@@ -212,10 +212,15 @@
                             '<div class="panel-footer text-center">' +
                             '<div id="buttons" class="btn-group" role="group" aria-label="...">';
 
-                        if (response.data[i].start === 1) {
+                        if (response.data[i].start === 0) {
                             html += '<button id="joinParty" type="button" class="btn btn-success">Join</button>';
-                            html += '<input hidden class="partyId" type="text" value="'+response.data[i].id+'">';
-                            html += '<button disabled type="button" class="btn btn-warning">Party started</button>';
+                            html += '<input hidden class="partyId" type="text" value="' + response.data[i].id + '">';
+                            html += '<button disabled type="button" class="btn btn-warning">Party not yet started</button>';
+                        }
+                        else if (response.data[i].start === 1) {
+                            html += '<button id="joinParty" type="button" class="btn btn-success">Join</button>';
+                            html += '<input hidden class="partyId" type="text" value="' + response.data[i].id + '">';
+                            html += '<button disabled type="button" class="btn btn-danger">Party started</button>';
                         }
 
                         html += '</div>' +
@@ -223,7 +228,6 @@
                             '</div>' +
                             '</div>';
                     }
-
 
                     $("#parties").html(html);
                 }

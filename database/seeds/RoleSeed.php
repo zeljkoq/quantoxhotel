@@ -21,5 +21,23 @@ class RoleSeed extends Seeder
         Role::create([
             'name' => 'regular',
         ]);
+        Role::create([
+            'name' => 'band',
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Quantox Band',
+            'email' => 'qband@local.loc',
+            'password' => bcrypt('testiranje'),
+        ]);
+
+        $band = \Illuminate\Support\Facades\DB::table('users')->where('email', 'qband@local.loc')->first();
+
+        $roleBand = \Illuminate\Support\Facades\DB::table('roles')->where('name', 'band')->first();
+
+        \Illuminate\Support\Facades\DB::table('users_roles')->insert([
+            'role_id' => $roleBand->id,
+            'user_id' => $band->id,
+        ]);
     }
 }
