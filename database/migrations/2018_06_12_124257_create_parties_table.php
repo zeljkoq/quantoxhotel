@@ -25,6 +25,7 @@ class CreatePartiesTable extends Migration
             $table->string('description', 255);
             $table->string('tags', 120);
             $table->integer('updated_by');
+            $table->boolean('start');
             $table->string('cover_image', 255);
             $table->timestamps();
         });

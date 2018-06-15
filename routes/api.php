@@ -38,8 +38,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('logout', 'Auth\AuthController@logout')->name('logout.api');
         Route::post('/infos', [
             'uses' => 'PartyController@getUserData',
-            'as' => 'get.regular.party.user',
-            'role' => 'party'
+            'as' => 'get.regular.party.user'
+        ]);
+        Route::post('/join/{party_id}', [
+            'uses' => 'PartyController@join',
+            'as' => 'party.join'
         ]);
     });
 

@@ -49,24 +49,24 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul id="routes" class="nav navbar-nav"></ul>
-                    <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right">
 
-                        <li><a id="nLogin" href="#">Login</a></li>
-                        <li><a id="nRegister" href="#">Register</a></li>
+                    <li><a id="nLogin" href="#">Login</a></li>
+                    <li><a id="nRegister" href="#">Register</a></li>
 
-                        <li class="dropdown">
-                            <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <ul class="dropdown-menu">
-                                    <li><a href="#" id="logout">Logout</a></li>
-                                </ul>
-                            </a>
-                        </li>
-                    </ul>
+                    <li class="dropdown">
+                        <a id="nLoginDrop" href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            <ul class="dropdown-menu">
+                                <li><a href="#" id="logout">Logout</a></li>
+                            </ul>
+                        </a>
+                    </li>
+                </ul>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-
 
 
     <div class="container">
@@ -150,7 +150,7 @@
                 return;
             }
             router.routes[role].forEach(function (t) {
-                $('#routes').append('<li><a href="'+t.link+'">'+ucfirst(t.name)+'</a></li>');
+                $('#routes').append('<li><a href="' + t.link + '">' + ucfirst(t.name) + '</a></li>');
             });
         }
     };
@@ -162,8 +162,7 @@
                 "Accept": "application/json",
             },
             success: function (response) {
-                if (typeof response.user !== 'undefined')
-                {
+                if (typeof response.user !== 'undefined') {
                     if (response.user.id !== false) {
                         var rls = localStorage.getItem('routes');
                         $('#nLogin').css('display', 'none');
@@ -191,39 +190,55 @@
                 if (!response) {
                     $('#parties').html('Please login or register to see parties!');
                 }
-                else if (response.data == '')
-                {
+                else if (response.data == '') {
                     $('#parties').html('No parties!')
                 }
                 else {
                     var html = '';
 
-                    for (i=0; i<response.data.length; i++)
-                    {
-                         html += '<div class="col-md-4">' +
-                                    '<div class="panel panel-default">' +
-                                        '<div class="panel-heading">' +
-                                            '<h3 class="panel-title">'+response.data[i].name+'</h3>'+
-                                        '</div>'+
-                                        '<div class="panel-body">'+
-                                            '<img src="storage/cover_images/'+response.data[i].cover_image +'"<br><br>' +
-                                            'Tags: ' +response.data[i].tags + '<br>' +
-                                            'Description: ' +response.data[i].description+ '<br>' +
-                                            'Date: ' +response.data[i].date+ '<br>' +
-                                            'Duration: ' +response.data[i].duration+ 'h<br>' +
-                                        '</div>'+
-                                         '<div class="panel-footer text-center">' +
-                                             '<div class="btn-group" role="group" aria-label="...">'+
-                                             '</div>'+
-                                         '</div>'+
-                                    '</div>'+
-                                '</div>';
-                    }
+                    for (i = 0; i < response.data.length; i++) {
+                        html += '<div class="col-md-4">' +
+                            '<div class="panel panel-default">' +
+                            '<div class="panel-heading">' +
+                            '<h3 class="panel-title">' + response.data[i].name + '</h3>' +
+                            '</div>' +
+                            '<div class="panel-body">' +
+                            '<img src="storage/cover_images/' + response.data[i].cover_image + '"<br><br>' +
+                            'Tags: ' + response.data[i].tags + '<br>' +
+                            'Description: ' + response.data[i].description + '<br>' +
+                            'Date: ' + response.data[i].date + '<br>' +
+                            'Duration: ' + response.data[i].duration + 'h<br>' +
+                            '</div>' +
+                            '<div class="panel-footer text-center">' +
+                            '<div id="buttons" class="btn-group" role="group" aria-label="...">';
 
+                        if (response.data[i].start === 1) {
+                            html += '<button id="joinParty" type="button" class="btn btn-success">Join</button>';
+                            html += '<input hidden class="partyId" type="text" value="'+response.data[i].id+'">';
+                            html += '<button disabled type="button" class="btn btn-warning">Party started</button>';
+                        }
+
+                        html += '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                    }
 
 
                     $("#parties").html(html);
                 }
+            }
+        });
+    });
+    $('body').on('click', '#joinParty', function () {
+        var $object = $(this).closest("#buttons");
+        var partyId = $object.find(".partyId").val();
+        console.log(partyId);
+        $.ajax({
+            url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/v1/auth/join/' + partyId,
+            type: 'POST',
+            success: function (response) {
+
             }
         });
     });

@@ -346,12 +346,10 @@
                             setMessage('error', response.message);
 
                         }
-                        if (response.data === true) {
+                        if (response.data.start = 1) {
                             setMessage('success', 'Party started!');
                         }
                     }
-
-
                 }
             });
         });

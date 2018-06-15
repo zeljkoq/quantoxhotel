@@ -223,4 +223,9 @@ class PartyController extends Controller
             'message' => 'Party does not exist',
         ]);
     }
+
+    public function join()
+    {
+
+    }
 }
