@@ -98,11 +98,12 @@ class PartyController extends Controller
                 } else {
                     do {
                         $song = Song::inRandomOrder()->first();
-                        array_push($duration, $song->duration);
-                        $dur = array_sum($duration);
+
                         if (!in_array($song->id, $newSongs)) {
+                            array_push($duration, $song->duration);
+                            $dur = array_sum($duration);
                             array_push($newSongs, $song->id);
-//                            continue;
+                            continue;
                         }
                     } while ($dur < $partyDuration);
                 }
@@ -110,13 +111,14 @@ class PartyController extends Controller
                 if ($songsDuration < $partyDuration) {
                     do {
                         $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
-                        $song = Song::inRandomOrder()->first();
-                        array_push($duration, $song->duration);
+
                         $dur = array_sum($duration);
                         if ($songsFromLastParty !== $newSongs) {
+                            $song = Song::inRandomOrder()->first();
+                            array_push($duration, $song->duration);
                             array_push($newSongs, $song->id);
 
-//                            continue;
+                            continue;
                         }
                     } while ($dur < $partyDuration);
                 } else {
@@ -124,15 +126,16 @@ class PartyController extends Controller
                         $songsFromLastParty = Playlist::where('party_id', $lastParty->id)->pluck('song_id')->toArray();
                         $song = Song::inRandomOrder()->first();
 
-                        array_push($duration, $song->duration);
-                        $dur = array_sum($duration);
+
                         if ($songsFromLastParty !== $newSongs) {
                             if (!in_array($song->id, $newSongs)) {
+                                array_push($duration, $song->duration);
+                                $dur = array_sum($duration);
                                 array_push($newSongs, $song->id);
-//                                continue;
+                                continue;
                             }
                         }
-                    } while ($dur <= $partyDuration);
+                    } while ($dur < $partyDuration);
                 }
             }
 
