@@ -62,6 +62,7 @@
                     "Accept": "application/json",
                 },
                 success: function (response) {
+                    // console.log(response);
                     for (r = 0; r < response.roles.length; r++) {
                         $('#userRoles').append('<option value="' + response.roles[r].id + '">' + ucfirst(response.roles[r].name) + '</option>');
                     }

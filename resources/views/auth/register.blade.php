@@ -47,6 +47,11 @@
 
                         <div class="col-md-6">
                             <select id="userRoles" name="userRoles" class="form-control selectpicker" data-style="btn-outline-primary" multiple>
+
+                                {{--<option value="1">DJ</option>--}}
+                                {{--<option value="2">Party</option>--}}
+                                {{--<option value="3">Regular</option>--}}
+
                             </select>
                         </div>
                     </div>

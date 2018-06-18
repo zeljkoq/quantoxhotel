@@ -137,6 +137,12 @@
                     name: 'Profile',
                     link: 'profile'
                 }
+            ],
+            'band': [
+                {
+                    name: 'Band',
+                    link: 'band'
+                }
             ]
         },
         showRoutes: function (roles) {
