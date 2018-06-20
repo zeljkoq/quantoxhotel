@@ -261,34 +261,26 @@ class PartyController extends Controller
             $capacity = count($partyCapacity);
 
             $playlistCapacity = Playlist::where('party_id', $party_id)->where('user_id', null)->get();
-            if ($party->capacity > $capacity) {
-                if (count($playlistCapacity) > 0) {
-                    // Party not full, join
-                    JoinedParties::create(['user_id' => auth()->user()->id, 'party_id' => $party_id]);
-
-                    do {
-                        $stop = false;
-                        $prevSongs = Playlist::where('party_id', '!=', $party_id)
-                            ->where('user_id', auth()->user()->id)->pluck('song_id')->toArray();
-                        array_unique($prevSongs);
-                        $playlistId = Playlist::inRandomOrder()->where('user_id', null)->pluck('id')->first();
-                        $newSong = Playlist::where('id', $playlistId)->first();
-                        if (!in_array($newSong->song_id, $prevSongs)) {
-                            $playlist->where('song_id', $newSong->song_id)
-                                ->where('id', $playlistId)->update(['user_id' => auth()->user()->id]);
-                            $stop = true;
-                        }
-                    } while ($stop == false);
-                    return response()->json([
-                        'error' => 0,
-                        'message' => 'Joined!'
-                    ]);
-                }
+            if ($party->capacity > $capacity || count($playlistCapacity) > 0) {
+                // Party not full, join
+                JoinedParties::create(['user_id' => auth()->user()->id, 'party_id' => $party_id]);
+                do {
+                    $stop = false;
+                    $prevSongs = Playlist::where('party_id', '!=', $party_id)
+                        ->where('user_id', auth()->user()->id)->pluck('song_id')->toArray();
+                    array_unique($prevSongs);
+                    $playlistId = Playlist::inRandomOrder()->where('user_id', null)->pluck('id')->first();
+                    $newSong = Playlist::where('id', $playlistId)->first();
+                    if (!in_array($newSong->song_id, $prevSongs)) {
+                        $playlist->where('song_id', $newSong->song_id)
+                            ->where('id', $playlistId)->update(['user_id' => auth()->user()->id]);
+                        $stop = true;
+                    }
+                } while ($stop == false);
                 return response()->json([
-                    'error' => 1,
-                    'message' => 'You cannot join, party is full.'
+                    'error' => 0,
+                    'message' => 'Joined!'
                 ]);
-
             }
             return response()->json([
                 'error' => 1,
