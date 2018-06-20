@@ -218,21 +218,27 @@ class PartyController extends Controller
             $party = Party::where('id', $party_id)->first();
             date_default_timezone_set('Europe/Belgrade');
 
-            if (date('Y-m-d H:i') >= date('Y-m-d H:i', strtotime($party->date))) {
-                $checkPlaylist = $playlist->where('party_id', $party_id)->where('user_id', null)->get();
-                if (count($checkPlaylist) > 0) {
-                    $playlist->where('user_id', null)->update(['user_id' => $qband->id]);
+            if ($party->start == 0) {
+                if (date('Y-m-d H:i') >= date('Y-m-d H:i', strtotime($party->date))) {
+                    $checkPlaylist = $playlist->where('party_id', $party_id)->where('user_id', null)->get();
+                    if (count($checkPlaylist) > 0) {
+                        $playlist->where('user_id', null)->update(['user_id' => $qband->id]);
+                        $party->start = 1;
+                        $party->update();
+                        return new PartyResource($party);
+                    }
                     $party->start = 1;
                     $party->update();
                     return new PartyResource($party);
                 }
-                $party->start = 1;
-                $party->update();
-                return new PartyResource($party);
+                return response()->json([
+                    'message' => 'Cannot start party before it\'s time.',
+                ]);
             }
             return response()->json([
-                'message' => 'Cannot start party before it\'s time.',
+                'message' => 'Party already started.'
             ]);
+
         }
         return response()->json([
             'message' => 'Party does not exist',

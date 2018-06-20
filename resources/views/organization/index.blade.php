@@ -215,7 +215,6 @@
 
                 },
                 error: function (response) {
-                    console.log(response);
                     var errName = response.responseJSON.errors.partyName;
                     var errDate = response.responseJSON.errors.partyDate;
                     var errDuration = response.responseJSON.errors.partyDuration;
@@ -335,17 +334,15 @@
                     "Authorization": "Bearer " + localStorage.getItem('token'),
                 },
                 success: function (response) {
+                    console.log(response);
                     if (!response)
                     {
                         window.location = '{{route('home.index')}}';
                     }
+                    else if (typeof response.data === 'undefined') {
+                        setMessage('error', response.message);
+                    }
                     else {
-                        console.log(response);
-                        if (response.message !== '')
-                        {
-                            setMessage('error', response.message);
-
-                        }
                         if (response.data.start = 1) {
                             setMessage('success', 'Party started!');
                         }
