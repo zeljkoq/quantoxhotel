@@ -24,7 +24,10 @@ Route::group(['prefix' => 'v1'], function () {
     /*
     Authentication
     */
-
+    Route::post('/infos', [
+        'uses' => 'PartyController@getUserData',
+        'as' => 'get.regular.party.user'
+    ]);
     Route::post('/login', 'Auth\AuthController@login')->name('login.api');
     Route::post('/register', 'Auth\ApiRegisterController@register')->name('register.api');
     Route::get('/roles', 'RoleController@getRoles')->name('get.roles');
@@ -36,10 +39,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::post('me', 'Auth\AuthController@me')->name('login.me');
         Route::post('logout', 'Auth\AuthController@logout')->name('logout.api');
-        Route::post('/infos', [
-            'uses' => 'PartyController@getUserData',
-            'as' => 'get.regular.party.user'
-        ]);
+
         Route::post('/join/{party_id}', [
             'uses' => 'PartyController@join',
             'as' => 'party.join'

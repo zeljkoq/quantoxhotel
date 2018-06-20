@@ -7,6 +7,7 @@ use App\Http\Requests\BaseRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
+use App\Models\JoinedParties;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -59,7 +60,9 @@ class AuthController extends Controller
     {
         $user = auth()->user();
 
-        return response()->json(compact('user'));
+        $parties = JoinedParties::where('user_id', $user->id)->get();
+
+        return response()->json(compact('user', 'parties'));
     }
 
     /**

@@ -96,6 +96,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
 <script src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+<script src="{{asset('js/pagination.js')}}"></script>
 <script type="text/javascript">
     $('#nLogin').click(function () {
         $('#mLogin').modal('show');
@@ -243,11 +244,22 @@
     $('body').on('click', '#joinParty', function () {
         var $object = $(this).closest("#buttons");
         var partyId = $object.find(".partyId").val();
-        console.log(partyId);
         $.ajax({
             url: '{{\Illuminate\Support\Facades\URL::to('/')}}/api/v1/auth/join/' + partyId,
             type: 'POST',
             success: function (response) {
+                if (!response)
+                {
+                    setMessage('error', 'You need to login to join party.')
+                }
+                if (response.error === 1)
+                {
+                    setMessage('error', response.message);
+                }
+                if (response.error === 0)
+                {
+                    setMessage('success', response.message);
+                }
 
             }
         });

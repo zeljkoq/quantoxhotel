@@ -29,7 +29,7 @@ class PartyRequest extends FormRequest
     {
         return [
             'partyName' => 'required|min:5',
-            'partyDate' => 'required',
+            'partyDate' => 'required|after_or_equal:today',
             'partyDuration' => 'required|numeric|max:24|min:1',
             'partyCapacity' => 'required|numeric|min:1',
             'partyDescription' => 'required|min:6',

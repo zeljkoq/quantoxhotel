@@ -114,6 +114,7 @@
                         '</nav>';
                     $('#songsList').html(html);
                     $('#pagination').html(pagination);
+
                 },
 
             });
@@ -212,7 +213,8 @@
                             window.location = '{{route('home.index')}}';
                         }
                         setMessage('success', 'Song has been deleted.');
-                        $('tr:contains("' + response.data.id + '")').css("display", "none");
+                        $('#'+response.data.id).hide();
+                        // $('tr:contains("' + response.data.id + '")').css("display", "none");
                     }
                 });
             }
@@ -272,7 +274,7 @@
                     if($('#cancel').length){
                         $('#cancel').remove();
                     }
-                    $('#' + response.data.id).hide();
+                    // $('#' + response.data.id).hide();
 
 
                     var html = '';
@@ -287,7 +289,7 @@
                         '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                         '</tr>';
 
-                    $('#songsList').append(html);
+                    $('#'+response.data.id).replaceWith(html);
 
                     setMessage('success', 'Song has been updated');
                 },
@@ -347,15 +349,17 @@
                 url: '/api/v1/songs/?page=' + page,
                 dataType: 'json',
             }).done(function (songs) {
+                console.log(songs);
                 var html = '';
                 for (i = 0; i < songs.data.length; i++) {
                     if (songs.data[i].admin === '1') {
-                        html += '<tr>' +
+                        html += '<tr id="' + songs.data[i].id + '">' +
                             '<td hidden class="songId">' + songs.data[i].id + '</td>' +
                             '<td id="art">' + songs.data[i].artist + '</td>' +
                             '<td id="trck">' + songs.data[i].track + '</td>' +
                             '<td><a id="lnk" target="_blank" href="' + songs.data[i].link + '">' + songs.data[i].link + '</a></td>' +
-                            '<td id="trck">' + songs.data[i].track + '</td>' +
+                            '<td id="drt">' + songs.data[i].duration + '</td>' +
+                            '<td><small><b>' + songs.data[i].updated_by + '</b></small><br><small>' + songs.data[i].updated_at + '</small></td>' +
                             '<td><button id="editSong" class="btn btn-warning"><i class="fas fa-edit"></i></button></td>' +
                             '<td><button id="deleteSong" class="btn btn-danger" href=""><i class="fas fa-trash-alt"></i></button></td>' +
                             '</tr>';
@@ -371,7 +375,6 @@
                     }
                 }
                 $('#songsList').html(html);
-                location.hash = page;
             }).fail(function () {
                 alert('Posts could not be loaded.');
             });

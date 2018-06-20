@@ -417,7 +417,7 @@
 
                     $('#partiesList').prepend(html);
 
-                    setMessage('success', 'Song has been updated');
+                    setMessage('success', 'Party has been updated');
                 },
                 error: function (response) {
                     var errName = response.responseJSON.errors.partyName;

@@ -35,9 +35,9 @@ class PartyController extends Controller
      */
     public function getUserData(Request $request)
     {
-        $user_id = $request->user()->id;
 
-        if (isset($user_id)) {
+        if (isset($request->user()->id)) {
+            $user_id = $request->user()->id;
             $user = User::find($user_id);
 
             if ($user->hasRole('party')) {
@@ -57,7 +57,7 @@ class PartyController extends Controller
     public function store(PartyRequest $request, Party $party)
     {
         $songs = Song::all()->pluck('duration')->toArray();
-        if (array_sum($songs) > 0) {
+        if (array_sum($songs) > 10) {
             $lastParty = Party::orderBy('created_at', 'desc')->first();
 
             $party->name = $request->partyName;
@@ -152,7 +152,7 @@ class PartyController extends Controller
         }
 
         return response()->json([
-            'message' => 'Add some songs first..',
+            'message' => 'You need at least 10 songs to start party...',
         ]);
     }
 
